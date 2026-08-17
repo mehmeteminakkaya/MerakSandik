@@ -1461,46 +1461,9 @@ function renderCategoryTabs() {
   return `<div class="tabs-scroll-area"><div class="category-tabs" role="group" aria-label="Kategori seç">${tabs}</div></div>`;
 }
 
-function getGreeting() {
-  const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return { text: "Günaydın! ☕ Kahveni aldın mı?", sub: "Bugün zihnini taze ve ilham verici bir kavramla besleyelim." };
-  if (hour >= 12 && hour < 18) return { text: "İyi günler! 🌿 Tatlı bir zihin molası", sub: "Günün koşturmacasına 15 dakika ara ver, yeni bir kavram keşfet." };
-  if (hour >= 18 && hour < 23) return { text: "İyi akşamlar! 🕯️ Dinlenme vakti", sub: "Günün yorgunluğunu yeni bir kavramla dinlendir; sakin ve derin bir keşif." };
-  return { text: "Gece kuşu! 🌙 Sakin saatler", sub: "Gecenin sessizliğinde zihnine yeni bir kavram tohumu ekelim." };
-}
-
 function renderDeskGreeting() {
-  const g = getGreeting();
   const quote = CURIOSITY_QUOTES[currentQuoteIndex % CURIOSITY_QUOTES.length];
   return `
-    <div class="desk-greeting-bar">
-      <div class="desk-greeting-content">
-        <span class="desk-greeting-title">${g.text}</span>
-        <span class="desk-greeting-sub">${g.sub}</span>
-      </div>
-      <div class="cozy-coffee-widget" id="cozyCoffeeBtn" role="button" tabindex="0" title="Sıcak Kahve — bir yudum al ☕">
-        <span class="coffee-steam-burst" aria-hidden="true">✨</span>
-        <svg viewBox="0 0 52 56" class="coffee-svg" xmlns="http://www.w3.org/2000/svg">
-          <!-- Buharlar -->
-          <path d="M18 10 C16 6, 20 2, 18 -2" stroke="var(--steam-color,rgba(255,255,255,0.65))" stroke-width="2" fill="none" stroke-linecap="round" class="steam-1"/>
-          <path d="M26 8 C24 4, 28 0, 26 -4" stroke="var(--steam-color,rgba(255,255,255,0.65))" stroke-width="2" fill="none" stroke-linecap="round" class="steam-2"/>
-          <path d="M34 10 C32 6, 36 2, 34 -2" stroke="var(--steam-color,rgba(255,255,255,0.65))" stroke-width="2" fill="none" stroke-linecap="round" class="steam-3"/>
-          <!-- Fincan tabağı / ahşap altlık -->
-          <ellipse cx="26" cy="50" rx="19" ry="4" fill="var(--cup-plate,rgba(0,0,0,0.35))"/>
-          <ellipse cx="26" cy="49" rx="16" ry="2.8" fill="var(--cup-plate-inner,#8a542a)"/>
-          <!-- Seramik fincan gövdesi -->
-          <path d="M11 20 L14 46 C14 48, 38 48, 38 46 L41 20 Z" fill="var(--cup-color,#f4ece1)" stroke="var(--surface-border,rgba(255,255,255,0.2))" stroke-width="1.2"/>
-          <!-- Kahve yüzeyi -->
-          <ellipse cx="26" cy="22" rx="13.5" ry="4" fill="#3a1c0a"/>
-          <ellipse cx="26" cy="22" rx="11" ry="3" fill="#c47f42"/>
-          <!-- Latte kalbi -->
-          <path d="M23 21 C23 19.5, 24.5 19, 26 20.5 C27.5 19, 29 19.5, 29 21 C29 22.5, 26 24, 26 24 C26 24, 23 22.5, 23 21 Z" fill="#faebd7" opacity="0.85"/>
-          <!-- Fincan kulpu -->
-          <path d="M40 24 C46 24, 47 34, 44 38 C42 41, 39 39, 39 38" stroke="var(--cup-color,#f4ece1)" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-        </svg>
-      </div>
-    </div>
-
     <!-- Günün İlham Parşömeni -->
     <div class="curiosity-parchment-card" id="quoteCard">
       <div class="parchment-header">

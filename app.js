@@ -366,12 +366,14 @@ function applyTheme(theme = settings.theme || "dark") {
 }
 
 function syncSoundIcons() {
-  if (settings.sound) {
-    soundIconOn.classList.remove("is-hidden");
-    soundIconOff.classList.add("is-hidden");
-  } else {
-    soundIconOn.classList.add("is-hidden");
-    soundIconOff.classList.remove("is-hidden");
+  if (soundIconOn && soundIconOff) {
+    if (settings.sound) {
+      soundIconOn.classList.remove("is-hidden");
+      soundIconOff.classList.add("is-hidden");
+    } else {
+      soundIconOn.classList.add("is-hidden");
+      soundIconOff.classList.remove("is-hidden");
+    }
   }
 }
 
@@ -1154,7 +1156,6 @@ function renderIdle() {
   const remainingCount = fullPool.filter((t) => !researched.has(`${t.tr}|${t.en}`)).length;
   const isAllCompleted = remainingCount === 0;
   const cat = CATEGORIES.find((c) => c.id === activeCategory()) || CATEGORIES[0];
-  const greeting = getGreeting();
 
   const wheelItems = generateWheelItems(pool);
   const items = wheelItems.map(
@@ -1163,18 +1164,10 @@ function renderIdle() {
 
   const initialOffset = getWheelInitialOffset(pool);
   const badgeText = isAllCompleted ? "Tümü Keşfedildi 🏆" : `${remainingCount} / ${fullPool.length} Merak`;
-  const note = isAllCompleted
-    ? "Bu çekmecedeki tüm güzellikleri keşfettin! Yeniden çekip hafızanı tazeleyebilirsin."
-    : `Günde sadece 15 dakika · Kahveni al ve öğrenmenin tadını çıkar ☕`;
 
   return `
     ${renderRecall()}
     <div class="catalog-wrapper">
-      <div class="cozy-greeting-card">
-        <h3>${greeting.text}</h3>
-        <p>${greeting.sub}</p>
-      </div>
-
       ${renderCategoryTabs()}
       <section class="roulette-card">
         <div class="roulette-header">
@@ -1200,7 +1193,6 @@ function renderIdle() {
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
             ${state.spinning ? "🌿 Sandık Açılıyor…" : "✨ Rastgele Bir Fikir Çek"}
           </button>
-          <p class="roulette-status">${note}</p>
         </div>
       </section>
     </div>
@@ -1545,11 +1537,13 @@ soundToggle.addEventListener("change", () => {
   saveSettings();
 });
 
-soundQuickToggle.addEventListener("click", () => {
-  settings.sound = !settings.sound;
-  saveSettings();
-  showToast(settings.sound ? "Ses efektleri açıldı" : "Ses kapatıldı");
-});
+if (soundQuickToggle) {
+  soundQuickToggle.addEventListener("click", () => {
+    settings.sound = !settings.sound;
+    saveSettings();
+    showToast(settings.sound ? "Ses efektleri açıldı" : "Ses kapatıldı");
+  });
+}
 
 // ---------- Profile & Catalog UI ----------
 function getRankInfo(total) {

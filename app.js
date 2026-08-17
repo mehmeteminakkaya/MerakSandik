@@ -1924,8 +1924,50 @@ function bindStageEvents() {
   const spinBtn = document.querySelector("#spinBtn");
   if (spinBtn) spinBtn.addEventListener("click", spin);
 
+  const categoryTabs = document.querySelector(".category-tabs");
+  let hasDragged = false;
+  if (categoryTabs) {
+    // Fare tekerleğiyle yatay kaydırma
+    categoryTabs.addEventListener("wheel", (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        categoryTabs.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // Fareyle tıklayıp sürükleyerek kaydırma (Desktop Drag-to-Scroll)
+    let isDown = false;
+    let startX = 0;
+    let scrollStart = 0;
+
+    categoryTabs.addEventListener("mousedown", (e) => {
+      isDown = true;
+      hasDragged = false;
+      startX = e.pageX - categoryTabs.offsetLeft;
+      scrollStart = categoryTabs.scrollLeft;
+    });
+
+    window.addEventListener("mouseup", () => {
+      isDown = false;
+    });
+
+    categoryTabs.addEventListener("mousemove", (e) => {
+      if (!isDown) return;
+      const x = e.pageX - categoryTabs.offsetLeft;
+      const walk = (x - startX) * 1.4;
+      if (Math.abs(walk) > 5) {
+        hasDragged = true;
+      }
+      categoryTabs.scrollLeft = scrollStart - walk;
+    });
+  }
+
   document.querySelectorAll(".cat-pill").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (e) => {
+      if (hasDragged) {
+        hasDragged = false;
+        return;
+      }
       if (state.spinning) return;
       sfx.playTick();
       settings.category = btn.dataset.category;

@@ -503,22 +503,28 @@ body {
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y;
-  padding: 4px 2px 2px;
-  scrollbar-width: none !important;
-  -ms-overflow-style: none !important;
+  padding: 4px 2px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 122, 62, 0.45) transparent;
 }
 
 .category-tabs::-webkit-scrollbar {
-  display: none !important;
-  width: 0 !important;
-  height: 0 !important;
-  background: transparent !important;
+  height: 4px;
+  display: block;
 }
 
-.category-tabs::-webkit-scrollbar-track,
+.category-tabs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
 .category-tabs::-webkit-scrollbar-thumb {
-  display: none !important;
-  background: transparent !important;
+  background: rgba(201, 122, 62, 0.45);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+
+.category-tabs::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 122, 62, 0.8);
 }
 
 .cat-pill {

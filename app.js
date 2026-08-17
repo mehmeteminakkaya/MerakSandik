@@ -1247,9 +1247,9 @@ function renderCategoryTabs() {
 function getGreeting() {
   const hour = new Date().getHours();
   if (hour >= 5 && hour < 12) return { text: "Günaydın! ☕ Kahveni aldın mı?", sub: "Bugün zihnini taze ve ilham verici bir kavramla besleyelim." };
-  if (hour >= 12 && hour < 18) return { text: "İyi günler! 🌿 Tatlı bir zihin molası", sub: "Günün koşturmacasına 15 dakika ara ver, yeni bir merak keşfet." };
-  if (hour >= 18 && hour < 23) return { text: "İyi akşamlar! 🕯️ Dinlenme vakti", sub: "Günün yorgunluğunu merakla dinlendir; sakin ve derin bir keşif." };
-  return { text: "Gece kuşu! 🌙 Sakin saatler", sub: "Gecenin sessizliğinde zihnine yeni bir tohum ekelim." };
+  if (hour >= 12 && hour < 18) return { text: "İyi günler! 🌿 Tatlı bir zihin molası", sub: "Günün koşturmacasına 15 dakika ara ver, yeni bir kavram keşfet." };
+  if (hour >= 18 && hour < 23) return { text: "İyi akşamlar! 🕯️ Dinlenme vakti", sub: "Günün yorgunluğunu yeni bir kavramla dinlendir; sakin ve derin bir keşif." };
+  return { text: "Gece kuşu! 🌙 Sakin saatler", sub: "Gecenin sessizliğinde zihnine yeni bir kavram tohumu ekelim." };
 }
 
 function renderDeskGreeting() {
@@ -1331,7 +1331,7 @@ function renderCozyDecorations() {
           <path d="M 60 15 Q 58 22 56 27" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
           <path d="M 70 18 Q 68 25 65 29" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
 
-          <!-- Göbek (nefes alıp verirken şişen yumuşak göbek) -->
+          <!-- Göbek (nefes alıp verirken yumuşakça şişip inen göbek) -->
           <ellipse class="cat-belly" cx="54" cy="36" rx="17" ry="9.5" fill="#fff5ea" opacity="0.8"/>
 
           <!-- Kafa (patilerin üzerine yatmış dinleniyor) -->
@@ -1375,24 +1375,6 @@ function renderCozyDecorations() {
         </svg>
       </div>
 
-      <!-- Sonbahar Yaprağı / Kitap Ayracı: Sol üst köşeye tutturulmuş zarif yaprak ayracı -->
-      <div class="cozy-item cozy-leaf-box" id="cozyLeafBtn" role="button" tabindex="0" title="Sonbahar Yaprağı Ayracı — dokun 🍁">
-        <svg viewBox="0 0 46 50" class="leaf-svg" xmlns="http://www.w3.org/2000/svg">
-          <path d="M22 42 C22 42, 8 38, 4 28 C2 22, 6 18, 10 20 C8 14, 4 10, 8 6 C12 2, 16 8, 18 12 C18 8, 16 2, 22 2 C28 2, 26 8, 26 12 C28 8, 32 2, 36 6 C40 10, 36 14, 34 20 C38 18, 42 22, 40 28 C36 38, 22 42, 22 42 Z" fill="#d97736"/>
-          <path d="M22 42 C22 42, 8 38, 4 28 C2 22, 6 18, 10 20 C14 22, 18 28, 22 42 Z" fill="#b8581e" opacity="0.45"/>
-          <line x1="22" y1="8" x2="22" y2="42" stroke="#8a3c0a" stroke-width="1.6" stroke-linecap="round"/>
-          <line x1="22" y1="14" x2="10" y2="20" stroke="#8a3c0a" stroke-width="1.1" stroke-linecap="round"/>
-          <line x1="22" y1="20" x2="8" y2="24" stroke="#8a3c0a" stroke-width="1" stroke-linecap="round"/>
-          <line x1="22" y1="26" x2="10" y2="29" stroke="#8a3c0a" stroke-width="0.9" stroke-linecap="round"/>
-          <line x1="22" y1="14" x2="34" y2="20" stroke="#8a3c0a" stroke-width="1.1" stroke-linecap="round"/>
-          <line x1="22" y1="20" x2="36" y2="24" stroke="#8a3c0a" stroke-width="1" stroke-linecap="round"/>
-          <line x1="22" y1="26" x2="34" y2="29" stroke="#8a3c0a" stroke-width="0.9" stroke-linecap="round"/>
-          <path d="M22 42 Q21 46, 20 48" stroke="#6a2c06" stroke-width="2" fill="none" stroke-linecap="round"/>
-          <circle cx="10" cy="19" r="1.5" fill="#f0a060" opacity="0.7"/>
-          <circle cx="34" cy="19" r="1.5" fill="#f0a060" opacity="0.7"/>
-        </svg>
-      </div>
-
     </div>
   `;
 }
@@ -1412,7 +1394,7 @@ function renderIdle() {
   ).join("");
 
   const initialOffset = getWheelInitialOffset(pool);
-  const badgeText = isAllCompleted ? "Tümü Keşfedildi 🏆" : `${remainingCount} / ${fullPool.length} Merak`;
+  const badgeText = isAllCompleted ? "Tümü Keşfedildi 🏆" : `${remainingCount} / ${fullPool.length} Kavram`;
 
   return `
     ${renderRecall()}
@@ -1660,7 +1642,7 @@ function bindStageEvents() {
       const coffeeMsgs = [
         "☕ Sıcak bir yudum aldın... Zihninde yeni kıvılcımlar çaktı!",
         "☕ Mis gibi kahve kokusu... Odaklanma seviyesi +%100!",
-        "☕ Şifa olsun! Masandaki kahveyle yeni bir meraka dalmaya hazırsın."
+        "☕ Şifa olsun! Masandaki kahveyle yeni bir kavrama dalmaya hazırsın."
       ];
       showToast(coffeeMsgs[Math.floor(Math.random() * coffeeMsgs.length)]);
     };
@@ -1669,28 +1651,6 @@ function bindStageEvents() {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         handleCoffeeSip();
-      }
-    });
-  }
-
-  const cozyLeafBtn = document.querySelector("#cozyLeafBtn");
-  if (cozyLeafBtn) {
-    const handleLeafTouch = () => {
-      sfx.playRustle();
-      cozyLeafBtn.classList.add("is-fluttering");
-      setTimeout(() => cozyLeafBtn.classList.remove("is-fluttering"), 700);
-      const leafMsgs = [
-        "🍁 Sandık arasına saklanmış kurumuş bir sonbahar yaprağı...",
-        "🍂 Hışırtı... Merak ettikçe zihnin bir sonbahar ormanı gibi tazelenir.",
-        "🍁 Kitap sayfası gibi kokan bir sonbahar yaprağı ayracı ✨"
-      ];
-      showToast(leafMsgs[Math.floor(Math.random() * leafMsgs.length)]);
-    };
-    cozyLeafBtn.addEventListener("click", handleLeafTouch);
-    cozyLeafBtn.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        handleLeafTouch();
       }
     });
   }
@@ -1904,11 +1864,11 @@ if (soundQuickToggle) {
 
 // ---------- Profile & Catalog UI ----------
 function getRankInfo(total) {
-  if (total >= 20) return { title: "Bilge Kaşif 💎", desc: "20+ merak sandığa eklendi!", icon: "💎" };
-  if (total >= 10) return { title: "Kahve & Kitap Filozofu ☕", desc: "10+ merak tamamlandı", icon: "☕" };
-  if (total >= 5)  return { title: "Merak Kaşifi ✨", desc: "5+ merak sandıkta birikti", icon: "✨" };
+  if (total >= 20) return { title: "Bilge Kaşif 💎", desc: "20+ kavram sandığa eklendi!", icon: "💎" };
+  if (total >= 10) return { title: "Kahve & Kitap Filozofu ☕", desc: "10+ kavram tamamlandı", icon: "☕" };
+  if (total >= 5)  return { title: "Kavram Kaşifi ✨", desc: "5+ kavram sandıkta birikti", icon: "✨" };
   if (total >= 1)  return { title: "Meraklı Çırak 🌱", desc: "Harika bir alışkanlık başladı!", icon: "🌱" };
-  return { title: "Yeni Meraklı 🧭", desc: "Sandığını doldurmaya hazır mısın?", icon: "🧭" };
+  return { title: "Yeni Kaşif 🧭", desc: "Sandığını doldurmaya hazır mısın?", icon: "🧭" };
 }
 
 function computeStats(list) {
@@ -1949,7 +1909,7 @@ function renderStats(list) {
       <div class="stats-metrics-row">
         <div class="stat-metric-item">
           <span class="stat-metric-val">${total}</span>
-          <span class="stat-metric-label">Öğrenilen Merak</span>
+          <span class="stat-metric-label">Öğrenilen Kavram</span>
         </div>
         <div class="stat-metric-divider"></div>
         <div class="stat-metric-item">

@@ -2235,12 +2235,6 @@ input[type="range"]::-moz-range-thumb {
     width: 74px;
     height: 40px;
   }
-  .cozy-leaf-box {
-    top: -18px;
-    left: 8px;
-    width: 34px;
-    height: 38px;
-  }
   .desk-greeting-bar {
     padding: 10px 14px;
     gap: 10px;
@@ -2258,7 +2252,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* --------------------------------------------------------------------------
-   Masa Üstü / Çalışma Köşesi Atmosferi (Kedi, Sıcak Kahve, Sonbahar Ayracı)
+   Masa Üstü / Çalışma Köşesi Atmosferi (Kedi & Sıcak Kahve)
    -------------------------------------------------------------------------- */
 
 /* Masa Üstü Karşılama Barı */
@@ -2372,7 +2366,7 @@ input[type="range"]::-moz-range-thumb {
   100% { opacity: 0; transform: translateY(-9px) scaleX(0.9); }
 }
 
-/* Dekoratif Masa / Çekmece Süsleri (Kedi + Sonbahar Ayracı) */
+/* Dekoratif Köşe Süsü (Kedi) */
 .cozy-decorations {
   position: relative;
   width: 100%;
@@ -2386,21 +2380,19 @@ input[type="range"]::-moz-range-thumb {
   transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* Uyuyan & Nefes Alan Sandık Kedisi (Sağ üst kenarda) */
+/* Uyuyan & Huzurlu Sandık Kedisi (Sağ üst kenarda sabit yatar) */
 .cozy-cat-box {
   top: -36px;
   right: 16px;
   width: 96px;
   height: 50px;
   cursor: pointer;
-  transform-origin: 50% 90%;
-  animation: catBreathe 3.8s ease-in-out infinite;
   user-select: none;
   filter: drop-shadow(0 5px 14px rgba(0, 0, 0, 0.35));
 }
 
 .cozy-cat-box:hover {
-  transform: scale(1.08) translateY(-2px);
+  transform: scale(1.06) translateY(-2px);
 }
 
 .cozy-cat-box:active {
@@ -2418,10 +2410,31 @@ input[type="range"]::-moz-range-thumb {
   overflow: visible;
 }
 
-/* Nefes alan göbek */
+/* SADECE KARIN/GÖBEK BÖLGESİ NEFES ALIR */
 .cat-belly {
   transform-origin: 54px 36px;
   animation: catBellyPulse 3.8s ease-in-out infinite;
+}
+
+@keyframes catBellyPulse {
+  0%, 100% {
+    transform: scale(1, 1);
+    opacity: 0.75;
+  }
+  38% {
+    /* Nefes alış: Göbek ve ciğer bölgesi nazikçe genişler */
+    transform: scale(1.14, 1.2) translateY(-1.2px);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.1, 1.15) translateY(-0.8px);
+    opacity: 0.92;
+  }
+  85% {
+    /* Nefes veriş: Göbek sakinleşir */
+    transform: scale(1, 1);
+    opacity: 0.75;
+  }
 }
 
 /* Uyurken yavaşça salınan kuyruk */
@@ -2468,94 +2481,6 @@ input[type="range"]::-moz-range-thumb {
 .cat-heart {
   font-size: 16px;
   animation: heartPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-/* Sonbahar Yaprağı / Kitap Ayracı (Sol üst köşeye tutturulmuş) */
-.cozy-leaf-box {
-  top: -24px;
-  left: 18px;
-  width: 44px;
-  height: 48px;
-  cursor: pointer;
-  transform-origin: 50% 90%;
-  transform: rotate(-14deg);
-  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.25s ease;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-  user-select: none;
-}
-
-.cozy-leaf-box:hover {
-  transform: rotate(-4deg) translateY(-4px) scale(1.1);
-  filter: drop-shadow(0 7px 14px rgba(217, 119, 54, 0.45));
-}
-
-.cozy-leaf-box:active {
-  transform: rotate(-18deg) scale(0.95);
-}
-
-.cozy-leaf-box.is-fluttering {
-  animation: leafFlutter 0.7s ease-in-out;
-}
-
-.leaf-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
-}
-
-@keyframes leafFlutter {
-  0% { transform: rotate(-14deg) translateY(0); }
-  25% { transform: rotate(8deg) translateY(-6px); }
-  50% { transform: rotate(-18deg) translateY(-2px); }
-  75% { transform: rotate(-8deg) translateY(-4px); }
-  100% { transform: rotate(-14deg) translateY(0); }
-}
-
-/* Nefes Alma Animasyonları */
-@keyframes catBreathe {
-  0% {
-    transform: scale(1, 1) translateY(0);
-  }
-  38% {
-    transform: scale(1.025, 1.055) translateY(-2.2px);
-  }
-  48% {
-    transform: scale(1.025, 1.05) translateY(-2px);
-  }
-  85% {
-    transform: scale(1, 1) translateY(0);
-  }
-  100% {
-    transform: scale(1, 1) translateY(0);
-  }
-}
-
-@keyframes catBellyPulse {
-  0%, 100% {
-    transform: scale(1, 1);
-    opacity: 0.75;
-  }
-  38% {
-    transform: scale(1.09, 1.14) translateY(-1px);
-    opacity: 0.92;
-  }
-  48% {
-    transform: scale(1.08, 1.12) translateY(-0.8px);
-    opacity: 0.9;
-  }
-}
-
-@keyframes catTailSleep {
-  0% {
-    transform: rotate(0deg);
-  }
-  50% {
-    transform: rotate(-3deg);
-  }
-  100% {
-    transform: rotate(5deg);
-  }
 }
 
 @keyframes catEarTwitch {

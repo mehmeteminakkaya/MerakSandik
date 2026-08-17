@@ -1096,15 +1096,15 @@ body {
   gap: 8px;
   padding: 10px 24px;
   border-radius: var(--radius-md);
-  background: rgba(196, 71, 71, 0.12);
-  border: 2px solid var(--stamp-red);
-  color: var(--stamp-red);
+  background: var(--seal-bg, rgba(196, 71, 71, 0.12));
+  border: 2px solid var(--seal-color, var(--stamp-red));
+  color: var(--seal-color, var(--stamp-red));
   font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  box-shadow: 0 0 24px var(--stamp-glow);
+  box-shadow: 0 0 24px var(--seal-glow, var(--stamp-glow));
   transform: rotate(-2deg);
   animation: stampImpact 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }
@@ -2327,6 +2327,266 @@ input[type="range"]::-moz-range-thumb {
     width: 40px;
     height: 44px;
   }
+  .topbar-actions {
+    gap: 6px;
+  }
+  .topbar-actions .icon-button {
+    width: 36px;
+    height: 36px;
+  }
+  .wax-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .wax-btn {
+    padding: 7px 6px;
+    font-size: 12px;
+  }
+  .curiosity-parchment-card {
+    padding: 10px 14px;
+    gap: 6px;
+  }
+  .parchment-quote {
+    font-size: 12.5px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Balmumu Mührü Renk Değişkenleri (Wax Seal Palette)
+   -------------------------------------------------------------------------- */
+:root,
+[data-seal="ruby"] {
+  --seal-color: #d64545;
+  --seal-glow: rgba(214, 69, 69, 0.35);
+  --seal-bg: rgba(214, 69, 69, 0.12);
+}
+
+[data-seal="gold"] {
+  --seal-color: #d4a34b;
+  --seal-glow: rgba(212, 163, 75, 0.38);
+  --seal-bg: rgba(212, 163, 75, 0.14);
+}
+
+[data-seal="emerald"] {
+  --seal-color: #2d6a4f;
+  --seal-glow: rgba(45, 106, 79, 0.38);
+  --seal-bg: rgba(45, 106, 79, 0.14);
+}
+
+[data-seal="sapphire"] {
+  --seal-color: #3b74af;
+  --seal-glow: rgba(59, 116, 175, 0.38);
+  --seal-bg: rgba(59, 116, 175, 0.14);
+}
+
+/* Ayarlar Modal: Balmumu Mührü Grid */
+.wax-toggle-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--surface-border);
+  margin-bottom: 2px;
+}
+
+.wax-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.wax-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--surface-border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wax-btn:hover {
+  color: var(--text-main);
+  border-color: var(--surface-border-hover);
+}
+
+.wax-btn.is-active {
+  border-color: var(--accent);
+  background: var(--surface-raised);
+  color: var(--text-main);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.wax-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dot-ruby { background: #d64545; box-shadow: 0 0 6px rgba(214, 69, 69, 0.5); }
+.dot-gold { background: #d4a34b; box-shadow: 0 0 6px rgba(212, 163, 75, 0.5); }
+.dot-emerald { background: #2d6a4f; box-shadow: 0 0 6px rgba(45, 106, 79, 0.5); }
+.dot-sapphire { background: #3b74af; box-shadow: 0 0 6px rgba(59, 116, 175, 0.5); }
+
+/* Üst Bar: Ambiyans & Masa Lambası İpi Butonları */
+.ambient-btn {
+  position: relative;
+  font-size: 14px;
+}
+
+.ambient-btn.is-active {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+  animation: ambientPulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes ambientPulse {
+  0% { box-shadow: 0 0 6px var(--accent-glow); }
+  100% { box-shadow: 0 0 16px var(--accent-glow); }
+}
+
+.lamp-cord-btn {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.lamp-cord-btn.is-lamp-active {
+  border-color: #dfac77;
+  color: #dfac77;
+  box-shadow: 0 0 14px rgba(223, 172, 119, 0.4);
+}
+
+.lamp-cord-btn.is-pulled {
+  animation: lampPull 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes lampPull {
+  0% { transform: translateY(0); }
+  35% { transform: translateY(8px); }
+  65% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+/* Masa Lambası Odak Modu (Spotlight Focus Effect) */
+body.focus-lamp-on .library-backdrop {
+  opacity: 0.18;
+  filter: brightness(0.48) contrast(1.15);
+}
+
+body.focus-lamp-on .app::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    circle at 50% 35%,
+    rgba(223, 172, 119, 0.12) 0%,
+    rgba(217, 119, 54, 0.05) 45%,
+    rgba(0, 0, 0, 0.55) 85%
+  );
+  mix-blend-mode: screen;
+}
+
+/* Günün İlham Parşömeni (Curiosity Parchment Card) */
+.curiosity-parchment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px 18px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+  position: relative;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+[data-theme="light"] .curiosity-parchment-card {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(120, 80, 40, 0.15);
+  box-shadow: 0 4px 14px rgba(60, 40, 20, 0.05);
+}
+
+.curiosity-parchment-card.is-flipping {
+  opacity: 0;
+  transform: scale(0.97) translateY(-2px);
+}
+
+.parchment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.parchment-tag {
+  font-family: var(--font-mono, monospace);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.parchment-cycle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-full);
+  color: var(--text-soft);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  padding: 3px 9px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.parchment-cycle-btn:hover {
+  color: var(--text-main);
+  border-color: var(--accent);
+  background: rgba(217, 119, 54, 0.08);
+}
+
+.parchment-quote {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 13.5px;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--text-main);
+}
+
+.parchment-author {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  align-self: flex-end;
+}
+
+/* Gece Uykusu Bonesi */
+.cat-nightcap {
+  transform-origin: 32px 14px;
+  animation: nightcapSway 3.8s ease-in-out infinite;
+}
+
+@keyframes nightcapSway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-3deg) translateY(-0.5px); }
 }
 
 /* --------------------------------------------------------------------------

@@ -194,10 +194,32 @@ const HISTORY_KEY = "offscript-history-v1";
 const SESSION_KEY = "offscript-session-v1";
 const REVIEW_AFTER_MS = 7 * 24 * 60 * 60 * 1000; // 7 gün sonra tekrar hatırlatıcısı
 
+// ---------- İlham & Merak Alıntıları (Günün Parşömeni) ----------
+const CURIOSITY_QUOTES = [
+  { text: "Öğrenmeyi bıraktığın gün yaşlanmaya başlarsın; merak, ruhun gençlik pınarıdır.", author: "Albert Einstein" },
+  { text: "Dünyayı anlamaya duyulan tutku, insanın en asil macerasıdır.", author: "Carl Sagan" },
+  { text: "Hiçbir şey yapmadan durmaktansa, bilmediğim bir denize yelken açmayı yeğlerim.", author: "Leonardo da Vinci" },
+  { text: "İlim ve sanat takdir edilmediği yerden göç eder; merakını daima diri tut.", author: "İbn-i Sina" },
+  { text: "Kitaplar, zamanın derinliklerinden gelen sessiz ama en sadık dostlardır.", author: "Montaigne" },
+  { text: "Merak etmek, karanlık bir odaya kibrit çakmak gibidir; her kıvılcım yeni bir dünya aydınlatır.", author: "Ursula K. Le Guin" },
+  { text: "Bir insanın zekası, verdiği cevaplardan çok sorduğu sorularda gizlidir.", author: "Voltaire" },
+  { text: "Her gün yeni bir şey öğrenmeyen zihin, paslanan bir kılıca benzer.", author: "Seneca" },
+  { text: "Bilim, bilmediğimiz şeylerin büyüsünü keşfetme sanatıdır.", author: "Richard Feynman" },
+  { text: "Evren, onu anlamak isteyen meraklı zihinler için yazılmış muazzam bir kitaptır.", author: "Galileo Galilei" },
+  { text: "Bizi insan kılan şey, yıldızlara bakıp 'Acaba?' diye sorma cesaretimizdir.", author: "Marcus Aurelius" }
+];
+
+let currentQuoteIndex = Math.floor(Math.random() * CURIOSITY_QUOTES.length);
+let sessionPetCount = 0;
+
 // ---------- Audio Synthesizer (Zero Dependency Web Audio API) ----------
 class SoundEffects {
   constructor() {
     this.ctx = null;
+    this.ambienceSource = null;
+    this.ambienceGain = null;
+    this.ambienceTimer = null;
+    this.currentAmbienceType = "none";
   }
 
   init() {
@@ -362,6 +384,162 @@ class SoundEffects {
       noise.start(now);
     } catch { /* sessiz kal */ }
   }
+
+  playChainClick() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      // High metallic bead chime
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(2200, now);
+      gain1.gain.setValueAtTime(0.09, now);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+      osc1.connect(gain1);
+      gain1.connect(this.ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.12);
+
+      // Low mechanical latch
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      osc2.type = "triangle";
+      osc2.frequency.setValueAtTime(340, now + 0.03);
+      gain2.gain.setValueAtTime(0.08, now + 0.03);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+      osc2.connect(gain2);
+      gain2.connect(this.ctx.destination);
+      osc2.start(now + 0.03);
+      osc2.stop(now + 0.18);
+    } catch { /* sessiz kal */ }
+  }
+
+  setAmbience(type) {
+    this.currentAmbienceType = type;
+    this.stopAmbience();
+    if (!settings.sound || type === "none") return;
+    this.init();
+    if (!this.ctx) return;
+
+    if (type === "rain") {
+      this.startRain();
+    } else if (type === "fire") {
+      this.startFire();
+    }
+  }
+
+  startRain() {
+    try {
+      const bufferSize = this.ctx.sampleRate * 2;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        data[i] = (lastOut + 0.02 * white) / 1.02;
+        lastOut = data[i];
+        data[i] *= 3.5;
+      }
+
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(1400, this.ctx.currentTime);
+
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.065, this.ctx.currentTime + 1.2);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+      noise.start();
+
+      this.ambienceSource = noise;
+      this.ambienceGain = gain;
+    } catch { /* sessiz kal */ }
+  }
+
+  startFire() {
+    try {
+      const bufferSize = this.ctx.sampleRate * 2;
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      let lastOut = 0.0;
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        data[i] = (lastOut + 0.04 * white) / 1.04;
+        lastOut = data[i];
+        data[i] *= 2.8;
+      }
+
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+      noise.loop = true;
+
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(320, this.ctx.currentTime);
+
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.07, this.ctx.currentTime + 1.0);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.ctx.destination);
+      noise.start();
+
+      this.ambienceSource = noise;
+      this.ambienceGain = gain;
+
+      // Random pops / crackles
+      this.ambienceTimer = setInterval(() => {
+        if (!this.ctx || this.currentAmbienceType !== "fire" || !settings.sound) return;
+        try {
+          const now = this.ctx.currentTime;
+          const pop = this.ctx.createOscillator();
+          const popGain = this.ctx.createGain();
+          pop.type = "sine";
+          pop.frequency.setValueAtTime(600 + Math.random() * 1200, now);
+          popGain.gain.setValueAtTime(0.04 + Math.random() * 0.05, now);
+          popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+          pop.connect(popGain);
+          popGain.connect(this.ctx.destination);
+          pop.start(now);
+          pop.stop(now + 0.035);
+        } catch { /* ignore */ }
+      }, 400 + Math.random() * 500);
+    } catch { /* sessiz kal */ }
+  }
+
+  stopAmbience() {
+    if (this.ambienceTimer) {
+      clearInterval(this.ambienceTimer);
+      this.ambienceTimer = null;
+    }
+    if (this.ambienceGain && this.ctx) {
+      try {
+        const now = this.ctx.currentTime;
+        this.ambienceGain.gain.linearRampToValueAtTime(0.0001, now + 0.5);
+      } catch { /* ignore */ }
+    }
+    if (this.ambienceSource) {
+      try {
+        const src = this.ambienceSource;
+        setTimeout(() => {
+          try { src.stop(); src.disconnect(); } catch { /* ignore */ }
+        }, 550);
+      } catch { /* ignore */ }
+      this.ambienceSource = null;
+    }
+  }
 }
 
 const sfx = new SoundEffects();
@@ -396,6 +574,9 @@ const closeProfile = document.querySelector("#closeProfile");
 const soundQuickToggle = document.querySelector("#soundQuickToggle");
 const soundIconOn = document.querySelector("#soundIconOn");
 const soundIconOff = document.querySelector("#soundIconOff");
+const ambientSoundBtn = document.querySelector("#ambientSoundBtn");
+const ambientIcon = document.querySelector("#ambientIcon");
+const lampPullCordBtn = document.querySelector("#lampPullCordBtn");
 
 const researchRange = document.querySelector("#researchRange");
 const researchLabel = document.querySelector("#researchLabel");
@@ -411,8 +592,6 @@ const clearHistoryBtn = document.querySelector("#clearHistoryBtn");
 // ---------- Helpers ----------
 
 // Şablon dizgilerine giren her kullanıcı/AI metni bundan geçmeli.
-// Notlar localStorage'a yazılıp sonraki oturumlarda tekrar basıldığı için
-// kaçırılan tek yer kalıcı bir enjeksiyon olur.
 const ESCAPE_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 
 function esc(value) {
@@ -425,7 +604,10 @@ function loadSettings() {
     sound: true,
     theme: "dark",
     palette: "coffee",
-    category: "general"
+    category: "general",
+    waxColor: "ruby",
+    ambience: "none",
+    lampFocus: false
   };
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
@@ -452,8 +634,11 @@ function saveSettings() {
     localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   } catch { /* ignore */ }
   syncSoundIcons();
+  syncAmbientButton();
   applyTheme(settings.theme);
   applyPalette(settings.palette);
+  applySeal(settings.waxColor);
+  applyLampFocus(settings.lampFocus);
 }
 
 function applyTheme(theme = settings.theme || "dark") {
@@ -485,6 +670,36 @@ function applyPalette(palette = settings.palette || "coffee") {
   document.querySelectorAll(".palette-btn").forEach((btn) => {
     btn.classList.toggle("is-active", btn.dataset.palette === palette);
   });
+}
+
+function applySeal(waxColor = settings.waxColor || "ruby") {
+  settings.waxColor = waxColor;
+  document.documentElement.setAttribute("data-seal", waxColor);
+
+  document.querySelectorAll(".wax-btn").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.seal === waxColor);
+  });
+}
+
+function applyLampFocus(isFocus = settings.lampFocus || false) {
+  settings.lampFocus = isFocus;
+  document.body.classList.toggle("focus-lamp-on", isFocus);
+  if (lampPullCordBtn) {
+    lampPullCordBtn.classList.toggle("is-lamp-active", isFocus);
+  }
+}
+
+function syncAmbientButton() {
+  if (!ambientIcon || !ambientSoundBtn) return;
+  const map = {
+    none: { icon: "🔇", title: "Arka Plan Ambiyansı: Kapalı (Açmak için tıkla)" },
+    rain: { icon: "🌧️", title: "Arka Plan Ambiyansı: Yağmur Sesi" },
+    fire: { icon: "🔥", title: "Arka Plan Ambiyansı: Şömine Çıtırtısı" }
+  };
+  const cur = map[settings.ambience] || map.none;
+  ambientIcon.textContent = cur.icon;
+  ambientSoundBtn.title = cur.title;
+  ambientSoundBtn.classList.toggle("is-active", settings.ambience !== "none");
 }
 
 function syncSoundIcons() {
@@ -1254,6 +1469,7 @@ function getGreeting() {
 
 function renderDeskGreeting() {
   const g = getGreeting();
+  const quote = CURIOSITY_QUOTES[currentQuoteIndex % CURIOSITY_QUOTES.length];
   return `
     <div class="desk-greeting-bar">
       <div class="desk-greeting-content">
@@ -1282,6 +1498,19 @@ function renderDeskGreeting() {
         </svg>
       </div>
     </div>
+
+    <!-- Günün İlham Parşömeni -->
+    <div class="curiosity-parchment-card" id="quoteCard">
+      <div class="parchment-header">
+        <span class="parchment-tag">📜 GÜNÜN İLHAMI</span>
+        <button id="nextQuoteBtn" class="parchment-cycle-btn" type="button" title="Başka bir alıntı göster ✨">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+          <span>Değiştir</span>
+        </button>
+      </div>
+      <p class="parchment-quote" id="parchmentText">“${esc(quote.text)}”</p>
+      <span class="parchment-author" id="parchmentAuthor">— ${esc(quote.author)}</span>
+    </div>
   `;
 }
 
@@ -1305,6 +1534,9 @@ function renderRecall() {
 }
 
 function renderCozyDecorations() {
+  const hour = new Date().getHours();
+  const isNight = hour >= 22 || hour < 6;
+
   return `
     <div class="cozy-decorations" aria-hidden="true">
 
@@ -1343,6 +1575,16 @@ function renderCozyDecorations() {
 
           <polygon class="cat-ear-twitch" points="29,17 35,7 41,19" fill="var(--cat-color,#e08a4c)"/>
           <polygon class="cat-ear-twitch" points="31,16 35,10 39,18" fill="#f9c0a8"/>
+
+          <!-- Gece Uykusu Bonesi (Saat 22:00 sonrası sevimli gece şapkası) -->
+          ${isNight ? `
+            <g class="cat-nightcap">
+              <path d="M 18 19 C 14 11 22 2 34 5 C 41 8 40 18 36 21 Z" fill="#c44747" stroke="#7a1c1c" stroke-width="0.8"/>
+              <path d="M 33 5 Q 46 2 48 9" stroke="#c44747" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              <circle cx="48" cy="9.5" r="2.8" fill="#fff5ea"/>
+              <path d="M 17 19 Q 27 16 37 20" stroke="#fff5ea" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+            </g>
+          ` : ""}
 
           <!-- Alın çizgileri -->
           <path d="M 28 18 L 28 22" stroke="#a8521a" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
@@ -1596,6 +1838,7 @@ function bindStageEvents() {
   const cozyCatBtn = document.querySelector("#cozyCatBtn");
   if (cozyCatBtn) {
     const handleCatPet = () => {
+      sessionPetCount++;
       sfx.playPurr();
       const emote = cozyCatBtn.querySelector(".cat-emote");
       if (emote) {
@@ -1608,12 +1851,19 @@ function bindStageEvents() {
       setTimeout(() => {
         cozyCatBtn.classList.remove("is-purring");
       }, 700);
-      const catMsgs = [
-        "Mırrr... 🐱🐾 (Sandık Kedisi huzurla mırıldanıyor)",
-        "Mırrr... 🐱💤 (Kedi başını patilerine daha çok gömdü)",
-        "Pisi pisi... 🐾 (Sandık Kedisi seninle çalışmayı çok seviyor!)"
-      ];
-      showToast(catMsgs[Math.floor(Math.random() * catMsgs.length)]);
+
+      if (sessionPetCount === 3) {
+        showToast("🐱 Mırrr... Sandık Kedisi sıcacık başını eline yasladı! 🐾 (Dostluk +1)");
+      } else if (sessionPetCount === 5) {
+        showToast("🏆 Gizli Başarım: Sandık Kedisinin Sırdaşı! 🐱🐾 Kedi sana tamamen bağlandı.");
+      } else {
+        const catMsgs = [
+          "Mırrr... 🐱🐾 (Sandık Kedisi huzurla mırıldanıyor)",
+          "Mırrr... 🐱💤 (Kedi başını patilerine daha çok gömdü)",
+          "Pisi pisi... 🐾 (Sandık Kedisi seninle çalışmayı çok seviyor!)"
+        ];
+        showToast(catMsgs[Math.floor(Math.random() * catMsgs.length)]);
+      }
     };
     cozyCatBtn.addEventListener("click", handleCatPet);
     cozyCatBtn.addEventListener("keydown", (e) => {
@@ -1651,6 +1901,26 @@ function bindStageEvents() {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         handleCoffeeSip();
+      }
+    });
+  }
+
+  const nextQuoteBtn = document.querySelector("#nextQuoteBtn");
+  if (nextQuoteBtn) {
+    nextQuoteBtn.addEventListener("click", () => {
+      sfx.playRustle();
+      currentQuoteIndex = (currentQuoteIndex + 1) % CURIOSITY_QUOTES.length;
+      const q = CURIOSITY_QUOTES[currentQuoteIndex];
+      const card = document.querySelector("#quoteCard");
+      const textEl = document.querySelector("#parchmentText");
+      const authorEl = document.querySelector("#parchmentAuthor");
+      if (card) {
+        card.classList.add("is-flipping");
+        setTimeout(() => {
+          if (textEl) textEl.textContent = `“${q.text}”`;
+          if (authorEl) authorEl.textContent = `— ${q.author}`;
+          card.classList.remove("is-flipping");
+        }, 220);
       }
     });
   }
@@ -1784,7 +2054,11 @@ function syncSettingsUI() {
   researchLabel.textContent = `${settings.researchMinutes} dk`;
   soundToggle.checked = settings.sound;
   syncSoundIcons();
+  syncAmbientButton();
   applyTheme(settings.theme);
+  applyPalette(settings.palette);
+  applySeal(settings.waxColor);
+  applyLampFocus(settings.lampFocus);
 }
 
 settingsBtn.addEventListener("click", () => {
@@ -1843,6 +2117,51 @@ document.querySelectorAll(".palette-btn").forEach((btn) => {
   });
 });
 
+document.querySelectorAll(".wax-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const seal = btn.dataset.seal;
+    sfx.playTick();
+    applySeal(seal);
+    saveSettings();
+    const names = {
+      ruby: "🔴 Yakut Kırmızısı Mührü seçildi",
+      gold: "🟡 Antik Altın Mührü seçildi",
+      emerald: "🟢 Zümrüt Yeşili Mührü seçildi",
+      sapphire: "🔵 Gece Safiri Mührü seçildi"
+    };
+    showToast(names[seal] || "Balmumu mührü güncellendi");
+  });
+});
+
+if (ambientSoundBtn) {
+  ambientSoundBtn.addEventListener("click", () => {
+    const sequence = ["none", "rain", "fire"];
+    const currentIdx = sequence.indexOf(settings.ambience);
+    const nextAmbience = sequence[(currentIdx + 1) % sequence.length];
+    settings.ambience = nextAmbience;
+    sfx.setAmbience(nextAmbience);
+    saveSettings();
+    const msgs = {
+      none: "🔇 Ambiyans sesi kapatıldı",
+      rain: "🌧️ Yağmur ambiyansı açıldı (Cama vuran damlalar)",
+      fire: "🔥 Şömine çıtırtısı açıldı (Sıcacık çalışma ambiyansı)"
+    };
+    showToast(msgs[nextAmbience]);
+  });
+}
+
+if (lampPullCordBtn) {
+  lampPullCordBtn.addEventListener("click", () => {
+    settings.lampFocus = !settings.lampFocus;
+    sfx.playChainClick();
+    lampPullCordBtn.classList.add("is-pulled");
+    setTimeout(() => lampPullCordBtn.classList.remove("is-pulled"), 400);
+    applyLampFocus(settings.lampFocus);
+    saveSettings();
+    showToast(settings.lampFocus ? "💡 Odak Lambası Açıldı — Derin çalışma modu" : "💡 Odak Lambası Kapatıldı");
+  });
+}
+
 researchRange.addEventListener("input", () => {
   settings.researchMinutes = Number(researchRange.value);
   researchLabel.textContent = `${settings.researchMinutes} dk`;
@@ -1851,12 +2170,22 @@ researchRange.addEventListener("input", () => {
 
 soundToggle.addEventListener("change", () => {
   settings.sound = soundToggle.checked;
+  if (!settings.sound) {
+    sfx.stopAmbience();
+  } else if (settings.ambience !== "none") {
+    sfx.setAmbience(settings.ambience);
+  }
   saveSettings();
 });
 
 if (soundQuickToggle) {
   soundQuickToggle.addEventListener("click", () => {
     settings.sound = !settings.sound;
+    if (!settings.sound) {
+      sfx.stopAmbience();
+    } else if (settings.ambience !== "none") {
+      sfx.setAmbience(settings.ambience);
+    }
     saveSettings();
     showToast(settings.sound ? "Ses efektleri açıldı" : "Ses kapatıldı");
   });
@@ -2060,7 +2389,18 @@ exportHistoryBtn.addEventListener("click", () => {
 // ---------- Initialization ----------
 applyTheme(settings.theme);
 applyPalette(settings.palette);
+applySeal(settings.waxColor);
+applyLampFocus(settings.lampFocus);
 syncSoundIcons();
+syncAmbientButton();
+
+if (settings.sound && settings.ambience && settings.ambience !== "none") {
+  const startOnGesture = () => {
+    sfx.setAmbience(settings.ambience);
+  };
+  window.addEventListener("click", startOnGesture, { once: true });
+  window.addEventListener("keydown", startOnGesture, { once: true });
+}
 
 if (!restoreSession()) {
   render();

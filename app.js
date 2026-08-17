@@ -269,6 +269,39 @@ class SoundEffects {
       });
     } catch { /* sessiz kal */ }
   }
+
+  playPurr() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      const mod = this.ctx.createOscillator();
+      const modGain = this.ctx.createGain();
+
+      mod.type = "sine";
+      mod.frequency.setValueAtTime(25, now);
+      modGain.gain.setValueAtTime(16, now);
+      mod.connect(osc.frequency);
+
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(80, now);
+
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.linearRampToValueAtTime(0.09, now + 0.12);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      mod.start(now);
+      osc.start(now);
+      mod.stop(now + 0.9);
+      osc.stop(now + 0.9);
+    } catch { /* sessiz kal */ }
+  }
 }
 
 const sfx = new SoundEffects();
@@ -1181,54 +1214,180 @@ function renderRecall() {
 function renderCozyDecorations() {
   return `
     <div class="cozy-decorations" aria-hidden="true">
-      <div class="cozy-item cozy-cat-box" id="cozyCatBtn" title="Sandık Kedisi (Sevmek için tıkla!)">
-        <span class="cat-emote">💤</span>
-        <svg viewBox="0 0 54 44" class="cat-svg">
-          <ellipse cx="28" cy="26" rx="18" ry="13" fill="var(--cat-color, #e08a4c)"/>
-          <circle cx="16" cy="20" r="11" fill="var(--cat-color, #e08a4c)"/>
-          <polygon points="8,14 11,4 18,12" fill="var(--cat-color, #e08a4c)"/>
-          <polygon points="10,12 12,6 16,11" fill="#f8b4a0"/>
-          <polygon points="16,11 23,4 25,14" fill="var(--cat-color, #e08a4c)"/>
-          <polygon points="18,11 22,6 23,12" fill="#f8b4a0"/>
-          <path d="M11 21 Q14 24 17 21" stroke="#331c0e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
-          <polygon points="15,23 17,23 16,25" fill="#f8b4a0"/>
-          <path d="M42 28 C48 26, 50 18, 44 16 C41 15, 38 18, 40 22" stroke="var(--cat-color, #e08a4c)" stroke-width="4.5" fill="none" stroke-linecap="round" class="cat-tail"/>
-          <ellipse cx="27" cy="28" rx="8" ry="5" fill="#fff5ea"/>
+
+      <!-- Sandık Kedisi: Köşeye kıvrılmış, huzurla uyuyan & nefes alan sevimli kedi -->
+      <div class="cozy-item cozy-cat-box" id="cozyCatBtn" title="Sandık Kedisi — sevmek için tıkla! 🐾">
+        <span class="cat-emote" aria-hidden="true">
+          <span class="z-1">z</span>
+          <span class="z-2">z</span>
+          <span class="z-3">Z</span>
+        </span>
+        <svg viewBox="0 0 96 50" class="cat-svg" xmlns="http://www.w3.org/2000/svg">
+          <!-- Gölge / kart kenarı teması -->
+          <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
+
+          <!-- Kuyruk (arkada kıvrılmış) -->
+          <path class="cat-tail" d="M 78 40 C 90 38 94 24 86 17 C 80 12 73 17 76 26" stroke="var(--cat-color,#e08a4c)" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+          <path class="cat-tail" d="M 85 17 C 83 14 77 16 77 22" stroke="#fff5ea" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
+
+          <!-- Ana Gövde (kıvrılmış yatan gövde) -->
+          <path class="cat-body-torso" d="M 22 44 C 18 36 20 22 36 16 C 54 10 76 14 84 26 C 90 34 88 44 82 45 C 68 46 34 46 22 44 Z" fill="var(--cat-color,#e08a4c)"/>
+
+          <!-- Sırt çizgileri (tekir deseni) -->
+          <path d="M 50 14 Q 48 21 46 25" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
+          <path d="M 60 15 Q 58 22 56 27" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
+          <path d="M 70 18 Q 68 25 65 29" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
+
+          <!-- Göbek (nefes alıp verirken şişen yumuşak göbek) -->
+          <ellipse class="cat-belly" cx="54" cy="36" rx="17" ry="9.5" fill="#fff5ea" opacity="0.8"/>
+
+          <!-- Kafa (patilerin üzerine yatmış dinleniyor) -->
+          <circle class="cat-head" cx="28" cy="30" r="14" fill="var(--cat-color,#e08a4c)"/>
+
+          <!-- Kulaklar -->
+          <polygon points="16,22 18,8 26,18" fill="var(--cat-color,#e08a4c)"/>
+          <polygon points="18,20 19,11 24,17" fill="#f9c0a8"/>
+
+          <polygon class="cat-ear-twitch" points="29,17 35,7 41,19" fill="var(--cat-color,#e08a4c)"/>
+          <polygon class="cat-ear-twitch" points="31,16 35,10 39,18" fill="#f9c0a8"/>
+
+          <!-- Alın çizgileri -->
+          <path d="M 28 18 L 28 22" stroke="#a8521a" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+          <path d="M 24 19 L 25 22" stroke="#a8521a" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
+          <path d="M 32 19 L 31 22" stroke="#a8521a" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
+
+          <!-- Yanak allıkları -->
+          <ellipse cx="20" cy="33.5" rx="3.2" ry="2" fill="#f89f9f" opacity="0.55"/>
+          <ellipse cx="37" cy="33.5" rx="3.2" ry="2" fill="#f89f9f" opacity="0.55"/>
+
+          <!-- Kapalı uyuyan gözler (huzurlu yaylar) -->
+          <path d="M 21 29.5 Q 24.5 32.5 27.5 29.5" stroke="#3e1a0c" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+          <path d="M 30 29.5 Q 33.5 32.5 36.5 29.5" stroke="#3e1a0c" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+
+          <!-- Pembe burun & ağız -->
+          <ellipse cx="28.5" cy="33.8" rx="2" ry="1.3" fill="#f2907a"/>
+          <path d="M 26.5 35.2 Q 28.5 37 30.5 35.2" stroke="#3e1a0c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+
+          <!-- Bıyıklar -->
+          <line x1="12" y1="32" x2="20" y2="34" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+          <line x1="12" y1="35" x2="20" y2="35.5" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+          <line x1="37" y1="34" x2="45" y2="32" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+          <line x1="37" y1="35.5" x2="45" y2="35" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+
+          <!-- Patiler (kart kenarına uzanmış çenenin altında) -->
+          <ellipse cx="24" cy="43.5" rx="6" ry="3.5" fill="var(--cat-color,#e08a4c)"/>
+          <ellipse cx="34" cy="43.5" rx="6" ry="3.5" fill="var(--cat-color,#e08a4c)"/>
+          <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="#fff5ea"/>
+          <ellipse cx="33" cy="44.2" rx="2.5" ry="1.5" fill="#fff5ea"/>
         </svg>
       </div>
 
-      <div class="cozy-item cozy-coffee-box" title="Sıcak Kahve ☕">
-        <svg viewBox="0 0 38 34" class="coffee-svg">
-          <path d="M8 12 L10 26 C11 29, 23 29, 24 26 L26 12 Z" fill="var(--cup-color, #ffffff)"/>
-          <ellipse cx="17" cy="12" rx="9" ry="2.5" fill="#4a2612"/>
-          <path d="M25 14 C29 14, 29 21, 24 22" stroke="var(--cup-color, #ffffff)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <ellipse cx="17" cy="28" rx="13" ry="2.5" fill="var(--cup-plate, #e6ded3)"/>
-          <path d="M14 8 Q15 5 14 2" stroke="var(--steam-color, rgba(255,255,255,0.7))" stroke-width="1.8" fill="none" stroke-linecap="round" class="steam-1"/>
-          <path d="M19 9 Q20 5 19 3" stroke="var(--steam-color, rgba(255,255,255,0.7))" stroke-width="1.8" fill="none" stroke-linecap="round" class="steam-2"/>
+      <!-- Kahve: Cam bardak, latte, buharlı -->
+      <div class="cozy-item cozy-coffee-box" title="Sıcak Latte">
+        <svg viewBox="0 0 52 56" class="coffee-svg" xmlns="http://www.w3.org/2000/svg">
+          <!-- Buharlar -->
+          <path d="M18 10 C16 6, 20 2, 18 -2" stroke="var(--steam-color,rgba(255,255,255,0.55))" stroke-width="2" fill="none" stroke-linecap="round" class="steam-1"/>
+          <path d="M26 8 C24 4, 28 0, 26 -4" stroke="var(--steam-color,rgba(255,255,255,0.55))" stroke-width="2" fill="none" stroke-linecap="round" class="steam-2"/>
+          <path d="M34 10 C32 6, 36 2, 34 -2" stroke="var(--steam-color,rgba(255,255,255,0.55))" stroke-width="2" fill="none" stroke-linecap="round" class="steam-3"/>
+          <!-- Cam bardak gövdesi -->
+          <path d="M12 16 L15 46 C15 48, 37 48, 37 46 L40 16 Z" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.35)" stroke-width="1.2"/>
+          <!-- Kahve içeriği katmanlar -->
+          <!-- Espresso katmanı (altta, koyu) -->
+          <path d="M15 40 L15.8 46 C15.8 47.5, 36.2 47.5, 36.2 46 L37 40 Z" fill="#3d1c08" opacity="0.9"/>
+          <!-- Süt katmanı (ortada) -->
+          <path d="M13.5 24 L15 40 L37 40 L38.5 24 Z" fill="#c8834a" opacity="0.85"/>
+          <!-- Köpük katmanı (üstte, açık) -->
+          <ellipse cx="26" cy="24" rx="13" ry="4" fill="#e8c99a"/>
+          <!-- Köpük üzeri latte art (kalp) -->
+          <path d="M22 23 C22 21, 24 20, 26 22 C28 20, 30 21, 30 23 C30 25, 26 27, 26 27 C26 27, 22 25, 22 23 Z" fill="#c8834a" opacity="0.6"/>
+          <!-- Cam bardak kenar parlaması -->
+          <path d="M13 20 L12.5 36" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Kulp -->
+          <path d="M38 22 C44 22, 46 30, 44 36 C42 42, 38 40, 38 38" stroke="rgba(255,255,255,0.35)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Tabak -->
+          <ellipse cx="26" cy="48" rx="17" ry="4" fill="var(--cup-plate,#e6ded3)"/>
+          <ellipse cx="26" cy="48" rx="13" ry="2.5" fill="var(--cup-color,#f0e8dc)"/>
         </svg>
       </div>
 
-      <div class="cozy-item cozy-leaf-box" title="Sonbahar Yaprağı 🍂">
-        <svg viewBox="0 0 28 28" class="leaf-svg">
-          <path d="M4 24 C8 22, 22 20, 24 4 C18 10, 8 12, 4 24 Z" fill="#d97736"/>
-          <path d="M4 24 L18 10" stroke="#783008" stroke-width="1.4" stroke-linecap="round"/>
-          <path d="M10 18 L14 20" stroke="#783008" stroke-width="1" stroke-linecap="round"/>
-          <path d="M14 14 L18 15" stroke="#783008" stroke-width="1" stroke-linecap="round"/>
+      <!-- Yaprak: Akçaağaç, detaylı damarlar -->
+      <div class="cozy-item cozy-leaf-box" title="Sonbahar Yaprağı">
+        <svg viewBox="0 0 44 48" class="leaf-svg" xmlns="http://www.w3.org/2000/svg">
+          <!-- Ana yaprak formu (akçaağaç) -->
+          <path d="M22 42
+            C22 42, 8 38, 4 28
+            C2 22, 6 18, 10 20
+            C8 14, 4 10, 8 6
+            C12 2, 16 8, 18 12
+            C18 8, 16 2, 22 2
+            C28 2, 26 8, 26 12
+            C28 8, 32 2, 36 6
+            C40 10, 36 14, 34 20
+            C38 18, 42 22, 40 28
+            C36 38, 22 42, 22 42 Z"
+            fill="#d97736"/>
+          <!-- Alt yarım ton -->
+          <path d="M22 42
+            C22 42, 8 38, 4 28
+            C2 22, 6 18, 10 20
+            C14 22, 18 28, 22 42 Z"
+            fill="#c0621e" opacity="0.45"/>
+          <!-- Orta damar -->
+          <line x1="22" y1="8" x2="22" y2="42" stroke="#a04a10" stroke-width="1.6" stroke-linecap="round"/>
+          <!-- Sol üst damarlar -->
+          <line x1="22" y1="14" x2="10" y2="20" stroke="#a04a10" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="22" y1="20" x2="8" y2="24" stroke="#a04a10" stroke-width="1" stroke-linecap="round"/>
+          <line x1="22" y1="26" x2="10" y2="29" stroke="#a04a10" stroke-width="0.9" stroke-linecap="round"/>
+          <!-- Sağ üst damarlar -->
+          <line x1="22" y1="14" x2="34" y2="20" stroke="#a04a10" stroke-width="1.1" stroke-linecap="round"/>
+          <line x1="22" y1="20" x2="36" y2="24" stroke="#a04a10" stroke-width="1" stroke-linecap="round"/>
+          <line x1="22" y1="26" x2="34" y2="29" stroke="#a04a10" stroke-width="0.9" stroke-linecap="round"/>
+          <!-- Sap -->
+          <path d="M22 42 Q21 46, 20 48" stroke="#7a3810" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Küçük turuncu aksan noktalar -->
+          <circle cx="10" cy="19" r="1.5" fill="#f0a060" opacity="0.7"/>
+          <circle cx="34" cy="19" r="1.5" fill="#f0a060" opacity="0.7"/>
         </svg>
       </div>
 
-      <div class="cozy-item cozy-scarf-box" title="Sıcak Örgü Atkı 🧣">
-        <svg viewBox="0 0 32 32" class="scarf-svg">
-          <path d="M6 10 C6 6, 26 6, 26 10 C26 13, 21 16, 16 16 C11 16, 6 13, 6 10 Z" fill="#b83838"/>
-          <path d="M11 15 L9 26 C9 27, 14 27, 14 26 L16 15" fill="#9c2727"/>
-          <line x1="9" y1="26" x2="9" y2="29" stroke="#b83838" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="11.5" y1="26" x2="11.5" y2="29" stroke="#b83838" stroke-width="1.4" stroke-linecap="round"/>
-          <line x1="14" y1="26" x2="14" y2="29" stroke="#b83838" stroke-width="1.4" stroke-linecap="round"/>
+      <!-- Atkı: Örgü, pom-pomlu, sıcak -->
+      <div class="cozy-item cozy-scarf-box" title="Örgü Atkı">
+        <svg viewBox="0 0 48 52" class="scarf-svg" xmlns="http://www.w3.org/2000/svg">
+          <!-- Atkı baş kısmı (sarılan bölge) -->
+          <path d="M6 14 C6 8, 42 8, 42 14 C42 18, 36 22, 28 22 C24 22, 22 20, 22 18 C22 20, 20 22, 16 22 C10 22, 6 18, 6 14 Z" fill="#c0392b"/>
+          <!-- Örgü doku çizgileri (baş) -->
+          <line x1="6" y1="11" x2="42" y2="11" stroke="#a93226" stroke-width="1" opacity="0.6"/>
+          <line x1="7" y1="14" x2="42" y2="14" stroke="#a93226" stroke-width="1" opacity="0.5"/>
+          <line x1="6" y1="17" x2="42" y2="17" stroke="#a93226" stroke-width="1" opacity="0.5"/>
+          <!-- Yatay şerit -->
+          <path d="M6 14 C6 16, 6 18, 6 18 C6 18, 10 22, 16 22" stroke="#e74c3c" stroke-width="2" fill="none" opacity="0.5"/>
+          <!-- Sarkık uç (uzun) -->
+          <path d="M16 22 L14 38 C14 40, 24 40, 24 38 L22 22" fill="#c0392b"/>
+          <!-- Sarkık uç örgü detayı -->
+          <line x1="15" y1="26" x2="23" y2="26" stroke="#a93226" stroke-width="1" opacity="0.6"/>
+          <line x1="15" y1="30" x2="23" y2="30" stroke="#a93226" stroke-width="1" opacity="0.5"/>
+          <line x1="15" y1="34" x2="23" y2="34" stroke="#a93226" stroke-width="1" opacity="0.5"/>
+          <!-- Kısa sarkık uç (karşı taraf) -->
+          <path d="M28 22 L30 32 C30 33, 36 33, 36 32 L34 22" fill="#c0392b"/>
+          <line x1="30" y1="26" x2="35" y2="26" stroke="#a93226" stroke-width="1" opacity="0.6"/>
+          <line x1="30" y1="30" x2="35" y2="30" stroke="#a93226" stroke-width="1" opacity="0.5"/>
+          <!-- Uzun uç püskül -->
+          <line x1="15" y1="38" x2="15" y2="43" stroke="#c0392b" stroke-width="2" stroke-linecap="round"/>
+          <line x1="18" y1="38" x2="17" y2="44" stroke="#c0392b" stroke-width="2" stroke-linecap="round"/>
+          <line x1="21" y1="38" x2="21" y2="43" stroke="#c0392b" stroke-width="2" stroke-linecap="round"/>
+          <!-- Kısa uç püskül -->
+          <line x1="30" y1="32" x2="30" y2="36" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="33" y1="32" x2="33" y2="36" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Şerit detayı (sarı çizgi) -->
+          <path d="M8 10 C8 10, 40 10, 40 10" stroke="#f1c40f" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+          <path d="M8 18 C8 18, 40 18, 40 18" stroke="#f1c40f" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
         </svg>
       </div>
+
     </div>
   `;
 }
+
 
 function renderIdle() {
   const fullPool = currentTopicPool();
@@ -1445,18 +1604,24 @@ function bindStageEvents() {
   const cozyCatBtn = document.querySelector("#cozyCatBtn");
   if (cozyCatBtn) {
     cozyCatBtn.addEventListener("click", () => {
-      sfx.playTick();
+      sfx.playPurr();
       const emote = cozyCatBtn.querySelector(".cat-emote");
       if (emote) {
-        emote.textContent = "🤍🐾";
-        setTimeout(() => { emote.textContent = "💤"; }, 2500);
+        emote.innerHTML = `<span class="cat-heart">🤍🐾</span>`;
+        setTimeout(() => {
+          emote.innerHTML = `<span class="z-1">z</span><span class="z-2">z</span><span class="z-3">Z</span>`;
+        }, 2500);
       }
-      showToast("Mırrr... 🐱🐾 (Sandık Kedisi seni çok sevdi!)");
+      cozyCatBtn.classList.add("is-purring");
+      setTimeout(() => {
+        cozyCatBtn.classList.remove("is-purring");
+      }, 700);
+      showToast("Mırrr... 🐱🐾 (Sandık Kedisi huzurla mırıldanıyor)");
     });
   }
 
   const spinBtn = document.querySelector("#spinBtn");
-  if (spinBtn) spinBtn.addEventListener("click", spinWheel);
+  if (spinBtn) spinBtn.addEventListener("click", spin);
 
   document.querySelectorAll(".cat-pill").forEach((btn) => {
     btn.addEventListener("click", () => {

@@ -2232,26 +2232,26 @@ input[type="range"]::-moz-range-thumb {
   .cozy-cat-box {
     top: -30px;
     right: 8px;
-    width: 52px;
+    width: 78px;
     height: 42px;
   }
   .cozy-coffee-box {
-    bottom: -16px;
-    left: 8px;
-    width: 38px;
-    height: 34px;
+    bottom: -18px;
+    left: 6px;
+    width: 48px;
+    height: 54px;
   }
   .cozy-leaf-box {
-    top: -12px;
-    left: -4px;
-    width: 28px;
-    height: 28px;
+    top: -16px;
+    left: -6px;
+    width: 38px;
+    height: 44px;
   }
   .cozy-scarf-box {
-    bottom: -12px;
-    right: -4px;
-    width: 30px;
-    height: 30px;
+    bottom: -16px;
+    right: -6px;
+    width: 44px;
+    height: 48px;
   }
 }
 
@@ -2268,70 +2268,196 @@ input[type="range"]::-moz-range-thumb {
   position: absolute;
   z-index: 10;
   pointer-events: auto;
-  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
+  transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 5px 14px rgba(0, 0, 0, 0.35));
 }
 
-/* Uyuyan & Mırıldayan Kedi */
+/* Uyuyan & Nefes Alan Sandık Kedisi */
 .cozy-cat-box {
   top: -36px;
-  right: 14px;
-  width: 60px;
-  height: 48px;
+  right: 16px;
+  width: 96px;
+  height: 50px;
   cursor: pointer;
-  animation: catBreathe 4s ease-in-out infinite;
+  transform-origin: 50% 90%;
+  animation: catBreathe 3.8s ease-in-out infinite;
+  user-select: none;
 }
 
 .cozy-cat-box:hover {
-  transform: scale(1.12) translateY(-2px);
+  transform: scale(1.08) translateY(-2px);
 }
 
 .cozy-cat-box:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
+}
+
+.cozy-cat-box.is-purring {
+  animation: catPurrShake 0.65s ease-in-out;
 }
 
 .cat-svg {
   width: 100%;
   height: 100%;
   display: block;
+  overflow: visible;
 }
 
+/* Nefes alan göbek */
+.cat-belly {
+  transform-origin: 54px 36px;
+  animation: catBellyPulse 3.8s ease-in-out infinite;
+}
+
+/* Uyurken yavaşça salınan kuyruk */
 .cat-tail {
-  transform-origin: 42px 28px;
-  animation: tailWag 3.5s ease-in-out infinite alternate;
+  transform-origin: 78px 40px;
+  animation: catTailSleep 5s ease-in-out infinite alternate;
 }
 
+/* Uyku esnasında hafif kulak seğirmesi */
+.cat-ear-twitch {
+  transform-origin: 35px 17px;
+  animation: catEarTwitch 7s ease-in-out infinite;
+}
+
+/* Yüzen Zzz Uykulu Emoticon */
 .cat-emote {
   position: absolute;
   top: -14px;
-  left: 6px;
-  font-size: 13px;
-  animation: zzzFloat 2.5s ease-in-out infinite;
+  left: 8px;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  pointer-events: none;
   user-select: none;
+  font-family: var(--font-mono, monospace);
+  font-weight: 700;
+  color: var(--accent, #d9823b);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
+.cat-emote .z-1 {
+  font-size: 11px;
+  animation: zFloat1 3.8s ease-in-out infinite;
+}
+.cat-emote .z-2 {
+  font-size: 13px;
+  animation: zFloat2 3.8s ease-in-out infinite 0.7s;
+}
+.cat-emote .z-3 {
+  font-size: 15px;
+  animation: zFloat3 3.8s ease-in-out infinite 1.4s;
+}
+
+.cat-heart {
+  font-size: 16px;
+  animation: heartPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Nefes Alma Animasyonları */
 @keyframes catBreathe {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-2px); }
+  0% {
+    transform: scale(1, 1) translateY(0);
+  }
+  38% {
+    /* Nefes alma (göğüs yükselir ve hafifçe genişler) */
+    transform: scale(1.025, 1.055) translateY(-2.2px);
+  }
+  48% {
+    /* Nefes tutma tepesi */
+    transform: scale(1.025, 1.05) translateY(-2px);
+  }
+  85% {
+    /* Yavaşça nefes verme (sakinleşme) */
+    transform: scale(1, 1) translateY(0);
+  }
+  100% {
+    transform: scale(1, 1) translateY(0);
+  }
 }
 
-@keyframes tailWag {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(14deg); }
+@keyframes catBellyPulse {
+  0%, 100% {
+    transform: scale(1, 1);
+    opacity: 0.75;
+  }
+  38% {
+    transform: scale(1.09, 1.14) translateY(-1px);
+    opacity: 0.92;
+  }
+  48% {
+    transform: scale(1.08, 1.12) translateY(-0.8px);
+    opacity: 0.9;
+  }
 }
 
-@keyframes zzzFloat {
-  0% { opacity: 0.2; transform: translateY(0) scale(0.8); }
-  50% { opacity: 1; transform: translateY(-4px) scale(1); }
-  100% { opacity: 0.2; transform: translateY(-8px) scale(0.8); }
+@keyframes catTailSleep {
+  0% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  100% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes catEarTwitch {
+  0%, 91%, 100% {
+    transform: rotate(0deg);
+  }
+  93% {
+    transform: rotate(8deg);
+  }
+  95% {
+    transform: rotate(-4deg);
+  }
+  97% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes zFloat1 {
+  0% { opacity: 0; transform: translate(0, 3px) scale(0.6); }
+  35% { opacity: 0.95; transform: translate(-3px, -4px) scale(1); }
+  75%, 100% { opacity: 0; transform: translate(-6px, -12px) scale(0.8); }
+}
+
+@keyframes zFloat2 {
+  0% { opacity: 0; transform: translate(0, 3px) scale(0.6); }
+  35% { opacity: 0.95; transform: translate(-4px, -6px) scale(1); }
+  75%, 100% { opacity: 0; transform: translate(-8px, -16px) scale(0.8); }
+}
+
+@keyframes zFloat3 {
+  0% { opacity: 0; transform: translate(0, 3px) scale(0.6); }
+  35% { opacity: 0.95; transform: translate(-5px, -8px) scale(1.1); }
+  75%, 100% { opacity: 0; transform: translate(-11px, -22px) scale(0.85); }
+}
+
+@keyframes heartPop {
+  0% { opacity: 0; transform: scale(0.4) translateY(4px); }
+  40% { opacity: 1; transform: scale(1.3) translateY(-4px); }
+  70% { opacity: 1; transform: scale(1) translateY(-6px); }
+  100% { opacity: 0.9; transform: scale(1) translateY(-8px); }
+}
+
+@keyframes catPurrShake {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  20% { transform: scale(1.06) rotate(-2deg); }
+  40% { transform: scale(1.06) rotate(2deg); }
+  60% { transform: scale(1.04) rotate(-1deg); }
+  80% { transform: scale(1.02) rotate(1deg); }
 }
 
 /* Dumanı Tüten Kahve */
 .cozy-coffee-box {
-  bottom: -18px;
-  left: 14px;
-  width: 44px;
-  height: 38px;
+  bottom: -24px;
+  left: 12px;
+  width: 58px;
+  height: 64px;
   animation: coffeeFloat 5s ease-in-out infinite;
 }
 
@@ -2342,31 +2468,35 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .steam-1 {
-  animation: steamRise 2s ease-in-out infinite;
+  animation: steamRise 2.2s ease-in-out infinite;
 }
 
 .steam-2 {
-  animation: steamRise 2.4s ease-in-out infinite 0.6s;
+  animation: steamRise 2.6s ease-in-out infinite 0.7s;
+}
+
+.steam-3 {
+  animation: steamRise 2s ease-in-out infinite 1.3s;
 }
 
 @keyframes steamRise {
-  0% { opacity: 0; transform: translateY(2px); }
-  50% { opacity: 0.8; transform: translateY(-2px); }
-  100% { opacity: 0; transform: translateY(-6px); }
+  0% { opacity: 0; transform: translateY(3px) scaleX(0.8); }
+  45% { opacity: 0.75; transform: translateY(-3px) scaleX(1); }
+  100% { opacity: 0; transform: translateY(-9px) scaleX(0.9); }
 }
 
 @keyframes coffeeFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-3px); }
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50% { transform: translateY(-4px) rotate(1deg); }
 }
 
-/* Sonbahar Yaprağı */
+/* Sonbahar Akçaağaç Yaprağı */
 .cozy-leaf-box {
-  top: -14px;
-  left: -8px;
-  width: 32px;
-  height: 32px;
-  animation: leafDrift 6s ease-in-out infinite alternate;
+  top: -18px;
+  left: -10px;
+  width: 46px;
+  height: 52px;
+  animation: leafDrift 7s ease-in-out infinite alternate;
 }
 
 .leaf-svg {
@@ -2376,17 +2506,19 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @keyframes leafDrift {
-  0% { transform: rotate(0deg) translateY(0); }
-  100% { transform: rotate(15deg) translateY(-4px); }
+  0% { transform: rotate(-6deg) translateY(0); }
+  33% { transform: rotate(4deg) translateY(-3px); }
+  66% { transform: rotate(-2deg) translateY(-6px); }
+  100% { transform: rotate(10deg) translateY(-2px); }
 }
 
 /* Örgü Atkı */
 .cozy-scarf-box {
-  bottom: -14px;
-  right: -6px;
-  width: 34px;
-  height: 34px;
-  animation: scarfSway 5s ease-in-out infinite alternate;
+  bottom: -18px;
+  right: -8px;
+  width: 54px;
+  height: 58px;
+  animation: scarfSway 6s ease-in-out infinite alternate;
 }
 
 .scarf-svg {
@@ -2396,8 +2528,9 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @keyframes scarfSway {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(-8deg) translateY(-2px); }
+  0% { transform: rotate(2deg) translateY(0); }
+  50% { transform: rotate(-4deg) translateY(-3px); }
+  100% { transform: rotate(6deg) translateY(-1px); }
 }
 
 /* Light Theme Variables for Cozy Items */

@@ -1469,7 +1469,7 @@ function getWheelItemHeight() {
 function getWheelInitialOffset(pool) {
   const itemHeight = getWheelItemHeight();
   const startIndex = Math.min(pool.length * 2, 30);
-  return Math.max(0, (startIndex - 3) * itemHeight);
+  return Math.max(0, (startIndex - 2) * itemHeight);
 }
 
 function spin() {
@@ -1482,7 +1482,8 @@ function spin() {
   const finalTopic = pickTopic();
   const spinLoops = Math.max(5, Math.ceil(70 / Math.max(pool.length, 1)));
   const targetIndex = (spinLoops * pool.length) + Math.floor(Math.random() * pool.length);
-  const offset = (targetIndex - 3) * itemHeight;
+  const centerIdx = 2;
+  const offset = (targetIndex - centerIdx) * itemHeight;
 
   // Her spinde kavramların sırasını tamamen karıştır ve hedefi targetIndex'e yerleştir
   const wheelItems = generateWheelItems(pool, finalTopic, targetIndex);
@@ -1791,7 +1792,6 @@ function renderIdle() {
 
   return `
     ${renderRecall()}
-    ${renderDeskGreeting()}
     <div class="catalog-wrapper">
       ${renderCategoryTabs()}
       <div style="position: relative;">
@@ -1822,6 +1822,7 @@ function renderIdle() {
           </div>
         </section>
       </div>
+      ${renderDeskGreeting()}
     </div>
   `;
 }

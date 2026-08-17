@@ -52,7 +52,7 @@
   --font-mono: "JetBrains Mono", monospace;
 
   /* Boyutlar */
-  --wheel-item: 62px;
+  --wheel-item: 54px;
   --radius-sm: 10px;
   --radius-md: 16px;
   --radius-lg: 24px;
@@ -367,8 +367,15 @@ body {
   line-height: 1;
 }
 
-/* Mobilde SADECE sol üstte sade logo kalsın, isim yazmasın */
+/* Mobilde SADECE sol üstte sade logo kalsın, isim yazmasın ve alan tasarrufu sağla */
 @media (max-width: 680px) {
+  :root {
+    --wheel-item: 48px;
+  }
+  .app {
+    padding: 12px 14px 20px;
+    gap: 10px;
+  }
   .desktop-only-text {
     display: none !important;
   }
@@ -387,6 +394,26 @@ body {
   .brand-logo-svg {
     width: 20px;
     height: 20px;
+  }
+  .roulette-header {
+    padding: 12px 16px;
+  }
+  .roulette-footer {
+    padding: 14px 18px 16px;
+  }
+  .wheel-track li b {
+    font-size: 16px;
+  }
+  .wheel-track li small {
+    font-size: 11px;
+  }
+  .curiosity-parchment-card {
+    padding: 10px 14px;
+    margin-top: 6px;
+  }
+  .parchment-quote {
+    font-size: 12.5px;
+    line-height: 1.4;
   }
 }
 
@@ -644,7 +671,7 @@ body {
 
 .wheel-viewport {
   position: relative;
-  height: calc(var(--wheel-item) * 7);
+  height: calc(var(--wheel-item) * 5);
   overflow: hidden;
   box-sizing: border-box;
   background: radial-gradient(circle at 50% 50%, rgba(201, 122, 62, 0.04), transparent 80%);
@@ -680,7 +707,7 @@ body {
 .wheel-track li b {
   font-family: var(--font-serif);
   font-weight: 700;
-  font-size: 19px;
+  font-size: 18px;
   color: var(--text-main);
   max-width: 100%;
   overflow: hidden;
@@ -691,7 +718,7 @@ body {
 
 .wheel-track li small {
   font-family: var(--font-sans);
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--text-muted);
   max-width: 100%;
@@ -705,7 +732,7 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  height: calc(var(--wheel-item) * 2.2);
+  height: calc(var(--wheel-item) * 1.5);
   pointer-events: none;
   z-index: 2;
 }
@@ -725,7 +752,7 @@ body {
   position: absolute;
   left: 16px;
   right: 16px;
-  top: calc(var(--wheel-item) * 3);
+  top: calc(var(--wheel-item) * 2);
   height: var(--wheel-item);
   box-sizing: border-box;
   border-radius: var(--radius-md);
@@ -2577,7 +2604,8 @@ input[type="range"]::-moz-range-thumb {
   background: var(--surface);
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
-  margin-bottom: 14px;
+  margin-top: 8px;
+  margin-bottom: 0;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
   position: relative;
   transition: transform 0.25s ease, opacity 0.25s ease;

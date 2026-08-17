@@ -2277,7 +2277,6 @@ if (themeQuickToggle) {
     const nextTheme = settings.theme === "light" ? "dark" : "light";
     applyTheme(nextTheme);
     saveSettings();
-    showToast(nextTheme === "light" ? "Aydınlık kütüphane modu" : "Karanlık kütüphane modu");
   });
 }
 
@@ -2394,12 +2393,6 @@ function setupHangingLampChain() {
     applyTheme(nextTheme);
     saveSettings();
     sfx.playChainClick();
-
-    showToast(
-      nextTheme === "light"
-        ? "☀️ Işıklar Açıldı — Aydınlık Kütüphane Modu"
-        : "🌙 Işıklar Kısıldı — Karanlık Kütüphane Modu"
-    );
   }
 
   function getSvgPoint(e) {

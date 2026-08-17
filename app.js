@@ -2223,10 +2223,35 @@ function closeSettingsModal() {
   render();
 }
 
-closeSettings.addEventListener("click", closeSettingsModal);
-settingsModal.addEventListener("click", (e) => {
-  if (e.target === settingsModal) closeSettingsModal();
-});
+if (closeSettings) closeSettings.addEventListener("click", closeSettingsModal);
+if (settingsModal) {
+  settingsModal.addEventListener("click", (e) => {
+    if (e.target === settingsModal) closeSettingsModal();
+  });
+}
+
+if (researchRange) {
+  researchRange.addEventListener("input", (e) => {
+    const val = parseInt(e.target.value, 10) || 15;
+    settings.researchMinutes = val;
+    if (researchLabel) researchLabel.textContent = `${val} dk`;
+    saveSettings();
+  });
+}
+
+if (soundToggle) {
+  soundToggle.addEventListener("change", (e) => {
+    settings.sound = e.target.checked;
+    syncSoundIcons();
+    if (!settings.sound) {
+      sfx.stopAmbience();
+    } else if (settings.ambience !== "none") {
+      sfx.setAmbience(settings.ambience);
+    }
+    syncAmbientButton();
+    saveSettings();
+  });
+}
 
 const themeQuickToggle = document.querySelector("#themeQuickToggle");
 const themeBtnDark = document.querySelector("#themeBtnDark");
@@ -2282,6 +2307,7 @@ if (ambientSoundBtn) {
     const nextAmbience = sequence[(currentIdx + 1) % sequence.length];
     settings.ambience = nextAmbience;
     sfx.setAmbience(nextAmbience);
+    syncAmbientButton();
     saveSettings();
     const msgs = {
       none: "🔇 Ambiyans sesi kapatıldı",
@@ -2759,26 +2785,35 @@ if (historySearchInput) {
   });
 }
 
-profileBtn.addEventListener("click", () => {
-  historySearchQuery = "";
-  if (historySearchInput) historySearchInput.value = "";
-  historyActiveCategory = "all";
-  syncProfileUI();
-  profileModal.classList.remove("is-hidden");
-});
+if (profileBtn) {
+  profileBtn.addEventListener("click", () => {
+    historySearchQuery = "";
+    if (historySearchInput) historySearchInput.value = "";
+    historyActiveCategory = "all";
+    syncProfileUI();
+    if (profileModal) profileModal.classList.remove("is-hidden");
+  });
+}
 
-closeProfile.addEventListener("click", () => profileModal.classList.add("is-hidden"));
-profileModal.addEventListener("click", (e) => {
-  if (e.target === profileModal) profileModal.classList.add("is-hidden");
-});
+if (closeProfile && profileModal) {
+  closeProfile.addEventListener("click", () => profileModal.classList.add("is-hidden"));
+}
 
-clearHistoryBtn.addEventListener("click", () => {
-  if (!confirm("Tüm araştırma geçmişini silmek istediğine emin misin?")) return;
-  saveHistory([]);
-  syncProfileUI();
-  render();
-  showToast("Katalog sıfırlandı");
-});
+if (profileModal) {
+  profileModal.addEventListener("click", (e) => {
+    if (e.target === profileModal) profileModal.classList.add("is-hidden");
+  });
+}
+
+if (clearHistoryBtn) {
+  clearHistoryBtn.addEventListener("click", () => {
+    if (!confirm("Tüm araştırma geçmişini silmek istediğine emin misin?")) return;
+    saveHistory([]);
+    syncProfileUI();
+    render();
+    showToast("Katalog sıfırlandı");
+  });
+}
 
 function historyToMarkdown(list) {
   if (!list.length) return "# Meraksandık — Araştırma Kataloğu\n\nHenüz araştırılan bir kavram yok.\n";
@@ -2800,19 +2835,21 @@ function historyToMarkdown(list) {
   return lines.join("\n");
 }
 
-exportHistoryBtn.addEventListener("click", () => {
-  const md = historyToMarkdown(loadHistory());
-  const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "meraksandik-katalog.md";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  showToast("Markdown dosyası indirildi");
-});
+if (exportHistoryBtn) {
+  exportHistoryBtn.addEventListener("click", () => {
+    const md = historyToMarkdown(loadHistory());
+    const blob = new Blob([md], { type: "text/markdown;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "meraksandik-katalog.md";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast("Markdown dosyası indirildi");
+  });
+}
 
 // ---------- Initialization ----------
 applyTheme(settings.theme);

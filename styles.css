@@ -503,15 +503,22 @@ body {
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y;
-  padding: 4px 2px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  padding: 4px 2px 2px;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 
 .category-tabs::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.category-tabs::-webkit-scrollbar-track,
+.category-tabs::-webkit-scrollbar-thumb {
+  display: none !important;
+  background: transparent !important;
 }
 
 .cat-pill {

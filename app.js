@@ -298,31 +298,106 @@ class SoundEffects {
     if (!this.ctx) return;
     try {
       const now = this.ctx.currentTime;
+      const duration = 1.1;
+
+      // 26Hz titreşim modülasyonlu derin mırıltı
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       const mod = this.ctx.createOscillator();
       const modGain = this.ctx.createGain();
 
       mod.type = "sine";
-      mod.frequency.setValueAtTime(25, now);
-      modGain.gain.setValueAtTime(16, now);
+      mod.frequency.setValueAtTime(26, now);
+      modGain.gain.setValueAtTime(24, now);
       mod.connect(osc.frequency);
 
       osc.type = "triangle";
-      osc.frequency.setValueAtTime(80, now);
+      osc.frequency.setValueAtTime(88, now);
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.09, now + 0.12);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+      gain.gain.linearRampToValueAtTime(0.24, now + 0.15);
+      gain.gain.setValueAtTime(0.24, now + 0.85);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
       mod.start(now);
       osc.start(now);
-      mod.stop(now + 0.9);
-      osc.stop(now + 0.9);
+      mod.stop(now + duration);
+      osc.stop(now + duration);
     } catch { /* sessiz kal */ }
+  }
+
+  playMeow() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const duration = 0.58;
+
+      // İki harmonik osilatör: üçgen (sıcak gövde) + testere dişi (ses teli tınısı)
+      const osc1 = this.ctx.createOscillator();
+      const osc2 = this.ctx.createOscillator();
+      const oscGain = this.ctx.createGain();
+
+      osc1.type = "triangle";
+      osc2.type = "sawtooth";
+
+      // Kedi ses tonu kayması (M-E-O-W: 460Hz -> 780Hz -> 360Hz)
+      osc1.frequency.setValueAtTime(460, now);
+      osc1.frequency.linearRampToValueAtTime(520, now + 0.07);
+      osc1.frequency.exponentialRampToValueAtTime(780, now + 0.28);
+      osc1.frequency.exponentialRampToValueAtTime(360, now + duration);
+
+      osc2.frequency.setValueAtTime(460, now);
+      osc2.frequency.linearRampToValueAtTime(520, now + 0.07);
+      osc2.frequency.exponentialRampToValueAtTime(780, now + 0.28);
+      osc2.frequency.exponentialRampToValueAtTime(360, now + duration);
+
+      // Tatlı kedi ses bükülmesi (vibrato)
+      const vibrato = this.ctx.createOscillator();
+      const vibratoGain = this.ctx.createGain();
+      vibrato.frequency.setValueAtTime(5.8, now);
+      vibratoGain.gain.setValueAtTime(14, now);
+      vibrato.connect(osc1.frequency);
+      vibrato.connect(osc2.frequency);
+      vibrato.start(now);
+      vibrato.stop(now + duration);
+
+      // Ses yolu rezonansı (vowel formant filter: M-EE-AA-WW)
+      const formant = this.ctx.createBiquadFilter();
+      formant.type = "bandpass";
+      formant.Q.setValueAtTime(3.4, now);
+      formant.frequency.setValueAtTime(820, now);
+      formant.frequency.linearRampToValueAtTime(1680, now + 0.26);
+      formant.frequency.exponentialRampToValueAtTime(680, now + duration);
+
+      // Genlik zarfı (doğal yumuşak kedi miyavlaması)
+      oscGain.gain.setValueAtTime(0.001, now);
+      oscGain.gain.linearRampToValueAtTime(0.22, now + 0.08);
+      oscGain.gain.setValueAtTime(0.22, now + 0.28);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+
+      osc1.connect(formant);
+      osc2.connect(formant);
+      formant.connect(oscGain);
+      oscGain.connect(this.ctx.destination);
+
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + duration + 0.02);
+      osc2.stop(now + duration + 0.02);
+    } catch { /* sessiz kal */ }
+  }
+
+  playCatInteraction() {
+    if (Math.random() < 0.6) {
+      this.playMeow();
+    } else {
+      this.playPurr();
+    }
   }
 
   playCoffee() {
@@ -385,31 +460,51 @@ class SoundEffects {
     } catch { /* sessiz kal */ }
   }
 
+  playWaxStamp() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(120, now);
+      osc1.frequency.exponentialRampToValueAtTime(40, now + 0.12);
+      gain1.gain.setValueAtTime(0.18, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc1.connect(gain1);
+      gain1.connect(this.ctx.destination);
+      osc1.start(now);
+      osc1.stop(now + 0.15);
+    } catch { /* sessiz kal */ }
+  }
+
   playChainClick() {
     if (!settings.sound) return;
     this.init();
     if (!this.ctx) return;
     try {
       const now = this.ctx.currentTime;
-      // High metallic bead chime
       const osc1 = this.ctx.createOscillator();
       const gain1 = this.ctx.createGain();
-      osc1.type = "sine";
-      osc1.frequency.setValueAtTime(2200, now);
-      gain1.gain.setValueAtTime(0.09, now);
-      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+      osc1.type = "triangle";
+      osc1.frequency.setValueAtTime(1450, now);
+      osc1.frequency.exponentialRampToValueAtTime(680, now + 0.05);
+      gain1.gain.setValueAtTime(0.24, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       osc1.connect(gain1);
       gain1.connect(this.ctx.destination);
       osc1.start(now);
-      osc1.stop(now + 0.12);
+      osc1.stop(now + 0.08);
 
-      // Low mechanical latch
       const osc2 = this.ctx.createOscillator();
       const gain2 = this.ctx.createGain();
-      osc2.type = "triangle";
-      osc2.frequency.setValueAtTime(340, now + 0.03);
-      gain2.gain.setValueAtTime(0.08, now + 0.03);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(2600, now + 0.03);
+      osc2.frequency.exponentialRampToValueAtTime(1100, now + 0.14);
+      gain2.gain.setValueAtTime(0.12, now + 0.03);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
       osc2.connect(gain2);
       gain2.connect(this.ctx.destination);
       osc2.start(now + 0.03);
@@ -430,7 +525,7 @@ class SoundEffects {
       b3 = 0.86650 * b3 + white * 0.3104856;
       b4 = 0.55000 * b4 + white * 0.5329522;
       b5 = -0.7616 * b5 - white * 0.0168980;
-      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.09;
+      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.38;
       b6 = white * 0.115926;
     }
     return buffer;
@@ -444,7 +539,7 @@ class SoundEffects {
     for (let i = 0; i < length; i++) {
       const white = Math.random() * 2 - 1;
       lastOut = (lastOut + 0.02 * white) / 1.02;
-      data[i] = lastOut * 3.2;
+      data[i] = lastOut * 8.5;
     }
     return buffer;
   }
@@ -473,11 +568,11 @@ class SoundEffects {
 
       const lowFilter = this.ctx.createBiquadFilter();
       lowFilter.type = "lowpass";
-      lowFilter.frequency.setValueAtTime(320, this.ctx.currentTime);
+      lowFilter.frequency.setValueAtTime(380, this.ctx.currentTime);
 
       const rainBedGain = this.ctx.createGain();
       rainBedGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      rainBedGain.gain.linearRampToValueAtTime(0.042, this.ctx.currentTime + 1.2);
+      rainBedGain.gain.linearRampToValueAtTime(0.24, this.ctx.currentTime + 0.8);
 
       brownSrc.connect(lowFilter);
       lowFilter.connect(rainBedGain);
@@ -492,17 +587,17 @@ class SoundEffects {
 
       const bandFilter = this.ctx.createBiquadFilter();
       bandFilter.type = "bandpass";
-      bandFilter.frequency.setValueAtTime(850, this.ctx.currentTime);
-      bandFilter.Q.setValueAtTime(0.9, this.ctx.currentTime);
+      bandFilter.frequency.setValueAtTime(950, this.ctx.currentTime);
+      bandFilter.Q.setValueAtTime(1.1, this.ctx.currentTime);
 
       const drizzleGain = this.ctx.createGain();
       drizzleGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      drizzleGain.gain.linearRampToValueAtTime(0.024, this.ctx.currentTime + 1.2);
+      drizzleGain.gain.linearRampToValueAtTime(0.18, this.ctx.currentTime + 0.8);
 
       const lfo = this.ctx.createOscillator();
       const lfoGain = this.ctx.createGain();
       lfo.frequency.setValueAtTime(0.15, this.ctx.currentTime);
-      lfoGain.gain.setValueAtTime(0.008, this.ctx.currentTime);
+      lfoGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
       lfo.connect(lfoGain);
       lfoGain.connect(drizzleGain.gain);
       lfo.start();
@@ -530,7 +625,7 @@ class SoundEffects {
           dropFilter.Q.setValueAtTime(3.5, now);
 
           const dropGain = this.ctx.createGain();
-          const vol = 0.006 + Math.random() * 0.014;
+          const vol = 0.06 + Math.random() * 0.12;
           dropGain.gain.setValueAtTime(vol, now);
           dropGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
 
@@ -542,11 +637,11 @@ class SoundEffects {
           dropSrc.stop(now + 0.045);
         } catch { /* ignore */ }
 
-        const nextDelay = 45 + Math.random() * 85;
+        const nextDelay = 40 + Math.random() * 85;
         this.ambienceTimer = setTimeout(scheduleNextDrop, nextDelay);
       };
 
-      this.ambienceTimer = setTimeout(scheduleNextDrop, 200);
+      this.ambienceTimer = setTimeout(scheduleNextDrop, 150);
 
     } catch { /* sessiz kal */ }
   }
@@ -561,11 +656,11 @@ class SoundEffects {
 
       const hearthFilter = this.ctx.createBiquadFilter();
       hearthFilter.type = "lowpass";
-      hearthFilter.frequency.setValueAtTime(160, this.ctx.currentTime);
+      hearthFilter.frequency.setValueAtTime(220, this.ctx.currentTime);
 
       const hearthGain = this.ctx.createGain();
       hearthGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      hearthGain.gain.linearRampToValueAtTime(0.045, this.ctx.currentTime + 1.0);
+      hearthGain.gain.linearRampToValueAtTime(0.25, this.ctx.currentTime + 0.8);
 
       brownSrc.connect(hearthFilter);
       hearthFilter.connect(hearthGain);
@@ -580,12 +675,12 @@ class SoundEffects {
 
       const emberFilter = this.ctx.createBiquadFilter();
       emberFilter.type = "bandpass";
-      emberFilter.frequency.setValueAtTime(620, this.ctx.currentTime);
+      emberFilter.frequency.setValueAtTime(700, this.ctx.currentTime);
       emberFilter.Q.setValueAtTime(1.2, this.ctx.currentTime);
 
       const emberGain = this.ctx.createGain();
       emberGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      emberGain.gain.linearRampToValueAtTime(0.016, this.ctx.currentTime + 1.0);
+      emberGain.gain.linearRampToValueAtTime(0.14, this.ctx.currentTime + 0.8);
 
       pinkSrc.connect(emberFilter);
       emberFilter.connect(emberGain);
@@ -595,25 +690,25 @@ class SoundEffects {
       this.ambienceSources = [brownSrc, pinkSrc];
       this.ambienceGains = [hearthGain, emberGain];
 
-      // 3. Gerçekçi Odun Çıقطrtıları & Kıvılcımlar (Organic Wood Pops & Spark Snaps)
+      // 3. Gerçekçi Odun Çıtırtıları & Kıvılcımlar (Organic Wood Pops & Spark Snaps)
       const scheduleNextPop = () => {
         if (!this.ctx || this.currentAmbienceType !== "fire" || !settings.sound) return;
         try {
           const now = this.ctx.currentTime;
-          const isDeepPop = Math.random() < 0.18;
+          const isDeepPop = Math.random() < 0.22;
 
           if (isDeepPop) {
             const osc = this.ctx.createOscillator();
             const gain = this.ctx.createGain();
             osc.type = "sine";
-            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.setValueAtTime(150, now);
             osc.frequency.exponentialRampToValueAtTime(45, now + 0.05);
-            gain.gain.setValueAtTime(0.035, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
+            gain.gain.setValueAtTime(0.20, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
             osc.connect(gain);
             gain.connect(this.ctx.destination);
             osc.start(now);
-            osc.stop(now + 0.06);
+            osc.stop(now + 0.065);
           } else {
             const popBuf = this.createPinkNoiseBuffer(0.03);
             const popSrc = this.ctx.createBufferSource();
@@ -621,27 +716,27 @@ class SoundEffects {
 
             const popFilter = this.ctx.createBiquadFilter();
             popFilter.type = "highpass";
-            popFilter.frequency.setValueAtTime(2400 + Math.random() * 2600, now);
+            popFilter.frequency.setValueAtTime(2200 + Math.random() * 2600, now);
 
             const popGain = this.ctx.createGain();
-            const vol = 0.015 + Math.random() * 0.028;
+            const vol = 0.12 + Math.random() * 0.16;
             popGain.gain.setValueAtTime(vol, now);
-            popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.018);
+            popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
 
             popSrc.connect(popFilter);
             popFilter.connect(popGain);
             popGain.connect(this.ctx.destination);
 
             popSrc.start(now);
-            popSrc.stop(now + 0.025);
+            popSrc.stop(now + 0.03);
           }
         } catch { /* ignore */ }
 
-        const nextDelay = 80 + Math.random() * 320;
+        const nextDelay = 70 + Math.random() * 260;
         this.ambienceTimer = setTimeout(scheduleNextPop, nextDelay);
       };
 
-      this.ambienceTimer = setTimeout(scheduleNextPop, 150);
+      this.ambienceTimer = setTimeout(scheduleNextPop, 120);
 
     } catch { /* sessiz kal */ }
   }
@@ -1921,7 +2016,7 @@ function bindStageEvents() {
   if (cozyCatBtn) {
     const handleCatPet = () => {
       sessionPetCount++;
-      sfx.playPurr();
+      sfx.playCatInteraction();
       const emote = cozyCatBtn.querySelector(".cat-emote");
       if (emote) {
         emote.innerHTML = `<span class="cat-heart">🤍🐾</span>`;
@@ -1935,14 +2030,15 @@ function bindStageEvents() {
       }, 700);
 
       if (sessionPetCount === 3) {
-        showToast("🐱 Mırrr... Sandık Kedisi sıcacık başını eline yasladı! 🐾 (Dostluk +1)");
+        showToast("🐱 Miyaav~ Mırrr... Sandık Kedisi başını eline yasladı! 🐾 (Dostluk +1)");
       } else if (sessionPetCount === 5) {
         showToast("🏆 Gizli Başarım: Sandık Kedisinin Sırdaşı! 🐱🐾 Kedi sana tamamen bağlandı.");
       } else {
         const catMsgs = [
+          "Miyaaav! 🐱✨ (Sandık Kedisi sevindi ve patisini uzattı)",
           "Mırrr... 🐱🐾 (Sandık Kedisi huzurla mırıldanıyor)",
-          "Mırrr... 🐱💤 (Kedi başını patilerine daha çok gömdü)",
-          "Pisi pisi... 🐾 (Sandık Kedisi seninle çalışmayı çok seviyor!)"
+          "Miyav~ 🐾 (Sandık Kedisi seninle çalışmayı çok seviyor!)",
+          "Mırrr... 🐱💤 (Kedi başını patilerine daha çok gömdü)"
         ];
         showToast(catMsgs[Math.floor(Math.random() * catMsgs.length)]);
       }
@@ -2201,6 +2297,11 @@ document.querySelectorAll(".palette-btn").forEach((btn) => {
 
 if (ambientSoundBtn) {
   ambientSoundBtn.addEventListener("click", () => {
+    sfx.init();
+    if (!settings.sound) {
+      settings.sound = true;
+      syncSoundIcons();
+    }
     const sequence = ["none", "rain", "fire"];
     const currentIdx = sequence.indexOf(settings.ambience);
     const nextAmbience = sequence[(currentIdx + 1) % sequence.length];

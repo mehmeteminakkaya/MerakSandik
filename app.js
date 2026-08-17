@@ -211,6 +211,10 @@ const CURIOSITY_QUOTES = [
 
 let currentQuoteIndex = Math.floor(Math.random() * CURIOSITY_QUOTES.length);
 let sessionPetCount = 0;
+let lastCatPetTime = 0;
+let rapidPetStreak = 0;
+const RAPID_PET_WINDOW_MS = 1000; // bu aralıkta üst üste 3+ tıklama kediyi huysuzlandırır
+const RAPID_PET_ANNOY_THRESHOLD = 3;
 
 // ---------- Audio Synthesizer (Zero Dependency Web Audio API) ----------
 class SoundEffects {
@@ -219,7 +223,9 @@ class SoundEffects {
     this.currentAmbienceType = "none";
     this.ambienceFade = null;
     this.meowAudio = null;
+    this.meowSweetAudio = null;
     this.purrAudio = null;
+    this.growlAudio = null;
     this.rainAudio = null;
     this.fireAudio = null;
     this.oceanAudio = null;
@@ -239,8 +245,12 @@ class SoundEffects {
       try {
         this.meowAudio = new Audio("/meow.mp3");
         this.meowAudio.preload = "auto";
+        this.meowSweetAudio = new Audio("/meow-sweet.mp3");
+        this.meowSweetAudio.preload = "auto";
         this.purrAudio = new Audio("/purr.mp3");
         this.purrAudio.preload = "auto";
+        this.growlAudio = new Audio("/growl.mp3");
+        this.growlAudio.preload = "auto";
         this.rainAudio = new Audio("/rain.mp3");
         this.rainAudio.preload = "auto";
         this.rainAudio.loop = true;
@@ -340,16 +350,34 @@ class SoundEffects {
     if (!settings.sound) return;
     this.init();
     try {
-      if (this.meowAudio) {
-        this.meowAudio.currentTime = 0;
-        this.meowAudio.volume = 0.95;
-        this.meowAudio.play().catch(() => {});
+      const track = Math.random() < 0.5 ? this.meowAudio : this.meowSweetAudio || this.meowAudio;
+      if (track) {
+        track.currentTime = 0;
+        track.volume = 0.95;
+        track.play().catch(() => {});
         return;
       }
     } catch { /* ignore */ }
   }
 
-  playCatInteraction() {
+  playGrowl() {
+    if (!settings.sound) return;
+    this.init();
+    try {
+      if (this.growlAudio) {
+        this.growlAudio.currentTime = 0;
+        this.growlAudio.volume = 0.85;
+        this.growlAudio.play().catch(() => {});
+        return;
+      }
+    } catch { /* ignore */ }
+  }
+
+  playCatInteraction(mood = "happy") {
+    if (mood === "annoyed") {
+      this.playGrowl();
+      return;
+    }
     if (Math.random() < 0.65) {
       this.playMeow();
     } else {
@@ -1762,10 +1790,17 @@ function bindStageEvents() {
   if (cozyCatBtn) {
     const handleCatPet = () => {
       sessionPetCount++;
-      sfx.playCatInteraction();
+
+      const now = Date.now();
+      rapidPetStreak = (now - lastCatPetTime < RAPID_PET_WINDOW_MS) ? rapidPetStreak + 1 : 1;
+      lastCatPetTime = now;
+      const isAnnoyed = rapidPetStreak >= RAPID_PET_ANNOY_THRESHOLD;
+
+      sfx.playCatInteraction(isAnnoyed ? "annoyed" : "happy");
+
       const emote = cozyCatBtn.querySelector(".cat-emote");
       if (emote) {
-        emote.innerHTML = `<span class="cat-heart">🤍🐾</span>`;
+        emote.innerHTML = isAnnoyed ? `<span class="cat-heart">😾💢</span>` : `<span class="cat-heart">🤍🐾</span>`;
         setTimeout(() => {
           emote.innerHTML = `<span class="z-1">z</span><span class="z-2">z</span><span class="z-3">Z</span>`;
         }, 2500);
@@ -1775,7 +1810,10 @@ function bindStageEvents() {
         cozyCatBtn.classList.remove("is-purring");
       }, 700);
 
-      if (sessionPetCount === 3) {
+      if (isAnnoyed) {
+        rapidPetStreak = 0; // hırladıktan sonra sıfırla, art arda hırlama spam'ini önle
+        showToast("😾 Hırrr! Sandık Kedisi rahatsız oldu, ona biraz nefes aldır 🐾");
+      } else if (sessionPetCount === 3) {
         showToast("🐱 Miyaav~ Mırrr... Sandık Kedisi başını eline yasladı! 🐾 (Dostluk +1)");
       } else if (sessionPetCount === 5) {
         showToast("🏆 Gizli Başarım: Sandık Kedisinin Sırdaşı! 🐱🐾 Kedi sana tamamen bağlandı.");

@@ -216,12 +216,12 @@ let sessionPetCount = 0;
 class SoundEffects {
   constructor() {
     this.ctx = null;
-    this.ambienceSources = [];
-    this.ambienceGains = [];
-    this.ambienceTimer = null;
     this.currentAmbienceType = "none";
+    this.ambienceFade = null;
     this.meowAudio = null;
     this.purrAudio = null;
+    this.rainAudio = null;
+    this.fireAudio = null;
   }
 
   init() {
@@ -236,13 +236,23 @@ class SoundEffects {
     }
     if (!this.meowAudio && typeof Audio !== "undefined") {
       try {
-        this.meowAudio = new Audio("/meow.wav");
+        this.meowAudio = new Audio("/meow.mp3");
         this.meowAudio.preload = "auto";
-        this.purrAudio = new Audio("/purr.wav");
+        this.purrAudio = new Audio("/purr.mp3");
         this.purrAudio.preload = "auto";
+        this.rainAudio = new Audio("/rain.mp3");
+        this.rainAudio.preload = "auto";
+        this.rainAudio.loop = true;
+        this.fireAudio = new Audio("/fireplace.mp3");
+        this.fireAudio.preload = "auto";
+        this.fireAudio.loop = true;
       } catch { /* ignore */ }
     }
     return this.ctx;
+  }
+
+  isAmbiencePlaying() {
+    return !!((this.rainAudio && !this.rainAudio.paused) || (this.fireAudio && !this.fireAudio.paused));
   }
 
   playTick() {
@@ -451,292 +461,44 @@ class SoundEffects {
     } catch { /* sessiz kal */ }
   }
 
-  createNoiseBuffer(type = "pink", seconds = 4) {
-    const length = Math.floor(this.ctx.sampleRate * seconds);
-    const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-
-    if (type === "white") {
-      for (let i = 0; i < length; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
-    } else if (type === "brown") {
-      let lastOut = 0.0;
-      for (let i = 0; i < length; i++) {
-        const white = Math.random() * 2 - 1;
-        lastOut = (lastOut + 0.05 * white) / 1.02;
-        data[i] = lastOut;
-      }
-    } else {
-      // Pink noise (Paul Kellet filter)
-      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-      for (let i = 0; i < length; i++) {
-        const white = Math.random() * 2 - 1;
-        b0 = 0.99886 * b0 + white * 0.0555179;
-        b1 = 0.99332 * b1 + white * 0.0750759;
-        b2 = 0.96900 * b2 + white * 0.1538520;
-        b3 = 0.86650 * b3 + white * 0.3104856;
-        b4 = 0.55000 * b4 + white * 0.5329522;
-        b5 = -0.7616 * b5 - white * 0.0168980;
-        data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362);
-        b6 = white * 0.115926;
-      }
-    }
-
-    // Normalize so peak is 0.92
-    let max = 0;
-    for (let i = 0; i < length; i++) {
-      const abs = Math.abs(data[i]);
-      if (abs > max) max = abs;
-    }
-    if (max > 0) {
-      const scale = 0.92 / max;
-      for (let i = 0; i < length; i++) {
-        data[i] *= scale;
-      }
-    }
-
-    return buffer;
-  }
-
   setAmbience(type) {
     this.currentAmbienceType = type;
     this.stopAmbience();
     if (!settings.sound || type === "none") return;
     this.init();
-    if (!this.ctx) return;
-
-    if (type === "rain") {
-      this.startRain();
-    } else if (type === "fire") {
-      this.startFire();
-    }
-  }
-
-  startRain() {
+    const track = type === "rain" ? this.rainAudio : type === "fire" ? this.fireAudio : null;
+    if (!track) return;
     try {
-      // 1. Derin Uzak Yağmur Uğultusu (Warm Brown Noise Bed)
-      const brownBuf = this.createNoiseBuffer("brown", 4);
-      const brownSrc = this.ctx.createBufferSource();
-      brownSrc.buffer = brownBuf;
-      brownSrc.loop = true;
-
-      const lowFilter = this.ctx.createBiquadFilter();
-      lowFilter.type = "lowpass";
-      lowFilter.frequency.setValueAtTime(450, this.ctx.currentTime);
-
-      const rainBedGain = this.ctx.createGain();
-      rainBedGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-      rainBedGain.gain.linearRampToValueAtTime(0.42, this.ctx.currentTime + 0.6);
-
-      brownSrc.connect(lowFilter);
-      lowFilter.connect(rainBedGain);
-      rainBedGain.connect(this.ctx.destination);
-      brownSrc.start();
-
-      // 2. Yumuşak Yağmur Çiselemesi & Rüzgar Dalgası (Pink Noise Mid-Drizzle with gentle LFO)
-      const pinkBuf = this.createNoiseBuffer("pink", 4);
-      const pinkSrc = this.ctx.createBufferSource();
-      pinkSrc.buffer = pinkBuf;
-      pinkSrc.loop = true;
-
-      const bandFilter = this.ctx.createBiquadFilter();
-      bandFilter.type = "bandpass";
-      bandFilter.frequency.setValueAtTime(1100, this.ctx.currentTime);
-      bandFilter.Q.setValueAtTime(0.9, this.ctx.currentTime);
-
-      const drizzleGain = this.ctx.createGain();
-      drizzleGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-      drizzleGain.gain.linearRampToValueAtTime(0.35, this.ctx.currentTime + 0.6);
-
-      const lfo = this.ctx.createOscillator();
-      const lfoGain = this.ctx.createGain();
-      lfo.frequency.setValueAtTime(0.18, this.ctx.currentTime);
-      lfoGain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-      lfo.connect(lfoGain);
-      lfoGain.connect(drizzleGain.gain);
-      lfo.start();
-
-      pinkSrc.connect(bandFilter);
-      bandFilter.connect(drizzleGain);
-      drizzleGain.connect(this.ctx.destination);
-      pinkSrc.start();
-
-      // 3. İnce Sis & Çatı Tıkırtısı (Gentle Highpass Mist)
-      const whiteBuf = this.createNoiseBuffer("white", 4);
-      const whiteSrc = this.ctx.createBufferSource();
-      whiteSrc.buffer = whiteBuf;
-      whiteSrc.loop = true;
-
-      const mistFilter = this.ctx.createBiquadFilter();
-      mistFilter.type = "highpass";
-      mistFilter.frequency.setValueAtTime(2600, this.ctx.currentTime);
-
-      const mistGain = this.ctx.createGain();
-      mistGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-      mistGain.gain.linearRampToValueAtTime(0.18, this.ctx.currentTime + 0.6);
-
-      whiteSrc.connect(mistFilter);
-      mistFilter.connect(mistGain);
-      mistGain.connect(this.ctx.destination);
-      whiteSrc.start();
-
-      this.ambienceSources = [brownSrc, pinkSrc, whiteSrc, lfo];
-      this.ambienceGains = [rainBedGain, drizzleGain, mistGain];
-
-      // 4. Cama Vuran Doğal Tekil Damlalar (Organic ASMR Window Droplets)
-      const scheduleNextDrop = () => {
-        if (!this.ctx || this.currentAmbienceType !== "rain" || !settings.sound) return;
-        try {
-          const now = this.ctx.currentTime;
-          const dropBuffer = this.createNoiseBuffer("pink", 0.08);
-          const dropSrc = this.ctx.createBufferSource();
-          dropSrc.buffer = dropBuffer;
-
-          const dropFilter = this.ctx.createBiquadFilter();
-          dropFilter.type = "bandpass";
-          dropFilter.frequency.setValueAtTime(1400 + Math.random() * 1800, now);
-          dropFilter.Q.setValueAtTime(4.0, now);
-
-          const dropGain = this.ctx.createGain();
-          const vol = 0.15 + Math.random() * 0.25;
-          dropGain.gain.setValueAtTime(vol, now);
-          dropGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
-
-          dropSrc.connect(dropFilter);
-          dropFilter.connect(dropGain);
-          dropGain.connect(this.ctx.destination);
-
-          dropSrc.start(now);
-          dropSrc.stop(now + 0.055);
-        } catch { /* ignore */ }
-
-        const nextDelay = 35 + Math.random() * 80;
-        this.ambienceTimer = setTimeout(scheduleNextDrop, nextDelay);
-      };
-
-      this.ambienceTimer = setTimeout(scheduleNextDrop, 120);
-
+      track.currentTime = 0;
+      track.volume = 0.01;
+      track.play().catch(() => {});
+      this.fadeAmbienceVolume(track, 0.55, 600);
     } catch { /* sessiz kal */ }
   }
 
-  startFire() {
-    try {
-      // 1. Taş Ocak / Şömine Hava Uğultusu (Warm Low Hearth Draft)
-      const brownBuf = this.createNoiseBuffer("brown", 4);
-      const brownSrc = this.ctx.createBufferSource();
-      brownSrc.buffer = brownBuf;
-      brownSrc.loop = true;
-
-      const hearthFilter = this.ctx.createBiquadFilter();
-      hearthFilter.type = "lowpass";
-      hearthFilter.frequency.setValueAtTime(280, this.ctx.currentTime);
-
-      const hearthGain = this.ctx.createGain();
-      hearthGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-      hearthGain.gain.linearRampToValueAtTime(0.48, this.ctx.currentTime + 0.6);
-
-      brownSrc.connect(hearthFilter);
-      hearthFilter.connect(hearthGain);
-      hearthGain.connect(this.ctx.destination);
-      brownSrc.start();
-
-      // 2. Köz Fısıltısı (Gentle Mid Ember Shimmer)
-      const pinkBuf = this.createNoiseBuffer("pink", 4);
-      const pinkSrc = this.ctx.createBufferSource();
-      pinkSrc.buffer = pinkBuf;
-      pinkSrc.loop = true;
-
-      const emberFilter = this.ctx.createBiquadFilter();
-      emberFilter.type = "bandpass";
-      emberFilter.frequency.setValueAtTime(850, this.ctx.currentTime);
-      emberFilter.Q.setValueAtTime(1.4, this.ctx.currentTime);
-
-      const emberGain = this.ctx.createGain();
-      emberGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
-      emberGain.gain.linearRampToValueAtTime(0.30, this.ctx.currentTime + 0.6);
-
-      pinkSrc.connect(emberFilter);
-      emberFilter.connect(emberGain);
-      emberGain.connect(this.ctx.destination);
-      pinkSrc.start();
-
-      this.ambienceSources = [brownSrc, pinkSrc];
-      this.ambienceGains = [hearthGain, emberGain];
-
-      // 3. Gerçekçi Odun Çıtırtıları & Kıvılcımlar (Organic Wood Pops & Spark Snaps)
-      const scheduleNextPop = () => {
-        if (!this.ctx || this.currentAmbienceType !== "fire" || !settings.sound) return;
-        try {
-          const now = this.ctx.currentTime;
-          const isDeepPop = Math.random() < 0.25;
-
-          if (isDeepPop) {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(160, now);
-            osc.frequency.exponentialRampToValueAtTime(50, now + 0.06);
-            gain.gain.setValueAtTime(0.38, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            osc.start(now);
-            osc.stop(now + 0.075);
-          } else {
-            const popBuf = this.createNoiseBuffer("white", 0.04);
-            const popSrc = this.ctx.createBufferSource();
-            popSrc.buffer = popBuf;
-
-            const popFilter = this.ctx.createBiquadFilter();
-            popFilter.type = "highpass";
-            popFilter.frequency.setValueAtTime(1800 + Math.random() * 2400, now);
-
-            const popGain = this.ctx.createGain();
-            const vol = 0.25 + Math.random() * 0.35;
-            popGain.gain.setValueAtTime(vol, now);
-            popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.028);
-
-            popSrc.connect(popFilter);
-            popFilter.connect(popGain);
-            popGain.connect(this.ctx.destination);
-
-            popSrc.start(now);
-            popSrc.stop(now + 0.035);
-          }
-        } catch { /* ignore */ }
-
-        const nextDelay = 60 + Math.random() * 220;
-        this.ambienceTimer = setTimeout(scheduleNextPop, nextDelay);
-      };
-
-      this.ambienceTimer = setTimeout(scheduleNextPop, 100);
-
-    } catch { /* sessiz kal */ }
+  fadeAmbienceVolume(track, targetVolume, durationMs) {
+    if (this.ambienceFade) clearInterval(this.ambienceFade);
+    const steps = 20;
+    const startVolume = track.volume;
+    let step = 0;
+    this.ambienceFade = setInterval(() => {
+      step += 1;
+      track.volume = startVolume + (targetVolume - startVolume) * (step / steps);
+      if (step >= steps) clearInterval(this.ambienceFade);
+    }, durationMs / steps);
   }
 
   stopAmbience() {
-    if (this.ambienceTimer) {
-      clearTimeout(this.ambienceTimer);
-      this.ambienceTimer = null;
+    if (this.ambienceFade) {
+      clearInterval(this.ambienceFade);
+      this.ambienceFade = null;
     }
-    if (this.ambienceSources && this.ambienceSources.length) {
-      this.ambienceSources.forEach((src) => {
-        try {
-          src.stop();
-          src.disconnect();
-        } catch { /* ignore */ }
-      });
-      this.ambienceSources = [];
-    }
-    if (this.ambienceGains && this.ambienceGains.length) {
-      this.ambienceGains.forEach((g) => {
-        try {
-          g.disconnect();
-        } catch { /* ignore */ }
-      });
-      this.ambienceGains = [];
-    }
+    [this.rainAudio, this.fireAudio].forEach((track) => {
+      if (track && !track.paused) {
+        track.pause();
+        track.currentTime = 0;
+      }
+    });
   }
 }
 
@@ -2868,7 +2630,7 @@ syncAmbientButton();
 
 const unlockAllAudio = () => {
   sfx.init();
-  if (settings.sound && settings.ambience && settings.ambience !== "none" && !sfx.ambienceSources.length) {
+  if (settings.sound && settings.ambience && settings.ambience !== "none" && !sfx.isAmbiencePlaying()) {
     sfx.setAmbience(settings.ambience);
   }
 };

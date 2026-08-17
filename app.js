@@ -417,6 +417,38 @@ class SoundEffects {
     } catch { /* sessiz kal */ }
   }
 
+  createPinkNoiseBuffer(seconds = 3) {
+    const length = Math.floor(this.ctx.sampleRate * seconds);
+    const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < length; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.09;
+      b6 = white * 0.115926;
+    }
+    return buffer;
+  }
+
+  createBrownNoiseBuffer(seconds = 3) {
+    const length = Math.floor(this.ctx.sampleRate * seconds);
+    const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    let lastOut = 0.0;
+    for (let i = 0; i < length; i++) {
+      const white = Math.random() * 2 - 1;
+      lastOut = (lastOut + 0.02 * white) / 1.02;
+      data[i] = lastOut * 3.2;
+    }
+    return buffer;
+  }
+
   setAmbience(type) {
     this.currentAmbienceType = type;
     this.stopAmbience();
@@ -433,112 +465,209 @@ class SoundEffects {
 
   startRain() {
     try {
-      const bufferSize = this.ctx.sampleRate * 2;
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = (lastOut + 0.02 * white) / 1.02;
-        lastOut = data[i];
-        data[i] *= 3.5;
-      }
+      // 1. Derin Uzak Yağmur Uğultusu (Warm Brown Noise Bed)
+      const brownBuf = this.createBrownNoiseBuffer(3);
+      const brownSrc = this.ctx.createBufferSource();
+      brownSrc.buffer = brownBuf;
+      brownSrc.loop = true;
 
-      const noise = this.ctx.createBufferSource();
-      noise.buffer = buffer;
-      noise.loop = true;
+      const lowFilter = this.ctx.createBiquadFilter();
+      lowFilter.type = "lowpass";
+      lowFilter.frequency.setValueAtTime(320, this.ctx.currentTime);
 
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(1400, this.ctx.currentTime);
+      const rainBedGain = this.ctx.createGain();
+      rainBedGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+      rainBedGain.gain.linearRampToValueAtTime(0.042, this.ctx.currentTime + 1.2);
 
-      const gain = this.ctx.createGain();
-      gain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.065, this.ctx.currentTime + 1.2);
+      brownSrc.connect(lowFilter);
+      lowFilter.connect(rainBedGain);
+      rainBedGain.connect(this.ctx.destination);
+      brownSrc.start();
 
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.ctx.destination);
-      noise.start();
+      // 2. Yumuşak Yağmur Çiselemesi & Rüzgar Dalgası (Pink Noise Mid-Drizzle with gentle LFO)
+      const pinkBuf = this.createPinkNoiseBuffer(3);
+      const pinkSrc = this.ctx.createBufferSource();
+      pinkSrc.buffer = pinkBuf;
+      pinkSrc.loop = true;
 
-      this.ambienceSource = noise;
-      this.ambienceGain = gain;
+      const bandFilter = this.ctx.createBiquadFilter();
+      bandFilter.type = "bandpass";
+      bandFilter.frequency.setValueAtTime(850, this.ctx.currentTime);
+      bandFilter.Q.setValueAtTime(0.9, this.ctx.currentTime);
+
+      const drizzleGain = this.ctx.createGain();
+      drizzleGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+      drizzleGain.gain.linearRampToValueAtTime(0.024, this.ctx.currentTime + 1.2);
+
+      const lfo = this.ctx.createOscillator();
+      const lfoGain = this.ctx.createGain();
+      lfo.frequency.setValueAtTime(0.15, this.ctx.currentTime);
+      lfoGain.gain.setValueAtTime(0.008, this.ctx.currentTime);
+      lfo.connect(lfoGain);
+      lfoGain.connect(drizzleGain.gain);
+      lfo.start();
+
+      pinkSrc.connect(bandFilter);
+      bandFilter.connect(drizzleGain);
+      drizzleGain.connect(this.ctx.destination);
+      pinkSrc.start();
+
+      this.ambienceSources = [brownSrc, pinkSrc, lfo];
+      this.ambienceGains = [rainBedGain, drizzleGain];
+
+      // 3. Cama Vuran Doğal Tekil Damlalar (Organic ASMR Window Droplets)
+      const scheduleNextDrop = () => {
+        if (!this.ctx || this.currentAmbienceType !== "rain" || !settings.sound) return;
+        try {
+          const now = this.ctx.currentTime;
+          const dropBuffer = this.createPinkNoiseBuffer(0.06);
+          const dropSrc = this.ctx.createBufferSource();
+          dropSrc.buffer = dropBuffer;
+
+          const dropFilter = this.ctx.createBiquadFilter();
+          dropFilter.type = "bandpass";
+          dropFilter.frequency.setValueAtTime(1600 + Math.random() * 1400, now);
+          dropFilter.Q.setValueAtTime(3.5, now);
+
+          const dropGain = this.ctx.createGain();
+          const vol = 0.006 + Math.random() * 0.014;
+          dropGain.gain.setValueAtTime(vol, now);
+          dropGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+
+          dropSrc.connect(dropFilter);
+          dropFilter.connect(dropGain);
+          dropGain.connect(this.ctx.destination);
+
+          dropSrc.start(now);
+          dropSrc.stop(now + 0.045);
+        } catch { /* ignore */ }
+
+        const nextDelay = 45 + Math.random() * 85;
+        this.ambienceTimer = setTimeout(scheduleNextDrop, nextDelay);
+      };
+
+      this.ambienceTimer = setTimeout(scheduleNextDrop, 200);
+
     } catch { /* sessiz kal */ }
   }
 
   startFire() {
     try {
-      const bufferSize = this.ctx.sampleRate * 2;
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0.0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = (lastOut + 0.04 * white) / 1.04;
-        lastOut = data[i];
-        data[i] *= 2.8;
-      }
+      // 1. Taş Ocak / Şömine Hava Uğultusu (Warm Low Hearth Draft)
+      const brownBuf = this.createBrownNoiseBuffer(3);
+      const brownSrc = this.ctx.createBufferSource();
+      brownSrc.buffer = brownBuf;
+      brownSrc.loop = true;
 
-      const noise = this.ctx.createBufferSource();
-      noise.buffer = buffer;
-      noise.loop = true;
+      const hearthFilter = this.ctx.createBiquadFilter();
+      hearthFilter.type = "lowpass";
+      hearthFilter.frequency.setValueAtTime(160, this.ctx.currentTime);
 
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = "lowpass";
-      filter.frequency.setValueAtTime(320, this.ctx.currentTime);
+      const hearthGain = this.ctx.createGain();
+      hearthGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+      hearthGain.gain.linearRampToValueAtTime(0.045, this.ctx.currentTime + 1.0);
 
-      const gain = this.ctx.createGain();
-      gain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.07, this.ctx.currentTime + 1.0);
+      brownSrc.connect(hearthFilter);
+      hearthFilter.connect(hearthGain);
+      hearthGain.connect(this.ctx.destination);
+      brownSrc.start();
 
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.ctx.destination);
-      noise.start();
+      // 2. Köz Fısıltısı (Gentle Mid Ember Shimmer)
+      const pinkBuf = this.createPinkNoiseBuffer(3);
+      const pinkSrc = this.ctx.createBufferSource();
+      pinkSrc.buffer = pinkBuf;
+      pinkSrc.loop = true;
 
-      this.ambienceSource = noise;
-      this.ambienceGain = gain;
+      const emberFilter = this.ctx.createBiquadFilter();
+      emberFilter.type = "bandpass";
+      emberFilter.frequency.setValueAtTime(620, this.ctx.currentTime);
+      emberFilter.Q.setValueAtTime(1.2, this.ctx.currentTime);
 
-      // Random pops / crackles
-      this.ambienceTimer = setInterval(() => {
+      const emberGain = this.ctx.createGain();
+      emberGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
+      emberGain.gain.linearRampToValueAtTime(0.016, this.ctx.currentTime + 1.0);
+
+      pinkSrc.connect(emberFilter);
+      emberFilter.connect(emberGain);
+      emberGain.connect(this.ctx.destination);
+      pinkSrc.start();
+
+      this.ambienceSources = [brownSrc, pinkSrc];
+      this.ambienceGains = [hearthGain, emberGain];
+
+      // 3. Gerçekçi Odun Çıقطrtıları & Kıvılcımlar (Organic Wood Pops & Spark Snaps)
+      const scheduleNextPop = () => {
         if (!this.ctx || this.currentAmbienceType !== "fire" || !settings.sound) return;
         try {
           const now = this.ctx.currentTime;
-          const pop = this.ctx.createOscillator();
-          const popGain = this.ctx.createGain();
-          pop.type = "sine";
-          pop.frequency.setValueAtTime(600 + Math.random() * 1200, now);
-          popGain.gain.setValueAtTime(0.04 + Math.random() * 0.05, now);
-          popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
-          pop.connect(popGain);
-          popGain.connect(this.ctx.destination);
-          pop.start(now);
-          pop.stop(now + 0.035);
+          const isDeepPop = Math.random() < 0.18;
+
+          if (isDeepPop) {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.exponentialRampToValueAtTime(45, now + 0.05);
+            gain.gain.setValueAtTime(0.035, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.055);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now);
+            osc.stop(now + 0.06);
+          } else {
+            const popBuf = this.createPinkNoiseBuffer(0.03);
+            const popSrc = this.ctx.createBufferSource();
+            popSrc.buffer = popBuf;
+
+            const popFilter = this.ctx.createBiquadFilter();
+            popFilter.type = "highpass";
+            popFilter.frequency.setValueAtTime(2400 + Math.random() * 2600, now);
+
+            const popGain = this.ctx.createGain();
+            const vol = 0.015 + Math.random() * 0.028;
+            popGain.gain.setValueAtTime(vol, now);
+            popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.018);
+
+            popSrc.connect(popFilter);
+            popFilter.connect(popGain);
+            popGain.connect(this.ctx.destination);
+
+            popSrc.start(now);
+            popSrc.stop(now + 0.025);
+          }
         } catch { /* ignore */ }
-      }, 400 + Math.random() * 500);
+
+        const nextDelay = 80 + Math.random() * 320;
+        this.ambienceTimer = setTimeout(scheduleNextPop, nextDelay);
+      };
+
+      this.ambienceTimer = setTimeout(scheduleNextPop, 150);
+
     } catch { /* sessiz kal */ }
   }
 
   stopAmbience() {
     if (this.ambienceTimer) {
+      clearTimeout(this.ambienceTimer);
       clearInterval(this.ambienceTimer);
       this.ambienceTimer = null;
     }
-    if (this.ambienceGain && this.ctx) {
-      try {
-        const now = this.ctx.currentTime;
-        this.ambienceGain.gain.linearRampToValueAtTime(0.0001, now + 0.5);
-      } catch { /* ignore */ }
+    if (this.ambienceGains && this.ctx) {
+      const now = this.ctx.currentTime;
+      this.ambienceGains.forEach((g) => {
+        try { g.gain.linearRampToValueAtTime(0.0001, now + 0.4); } catch { /* ignore */ }
+      });
     }
-    if (this.ambienceSource) {
-      try {
-        const src = this.ambienceSource;
-        setTimeout(() => {
-          try { src.stop(); src.disconnect(); } catch { /* ignore */ }
-        }, 550);
-      } catch { /* ignore */ }
-      this.ambienceSource = null;
+    if (this.ambienceSources) {
+      const sources = this.ambienceSources;
+      setTimeout(() => {
+        sources.forEach((s) => {
+          try { s.stop(); s.disconnect(); } catch { /* ignore */ }
+        });
+      }, 450);
+      this.ambienceSources = null;
     }
+    this.ambienceGains = null;
   }
 }
 

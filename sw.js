@@ -1,4 +1,4 @@
-const CACHE_NAME = "meraksandik-v25";
+const CACHE_NAME = "meraksandik-v26";
 const PRECACHE_URLS = [
   "/",
   "/index.html",
@@ -7,7 +7,8 @@ const PRECACHE_URLS = [
   "/manifest.json",
   "/icon-192.png",
   "/icon-512.png",
-  "/library-bg.jpg"
+  "/library-bg.jpg",
+  "/library-bg-light.jpg"
 ];
 
 self.addEventListener("install", (event) => {

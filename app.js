@@ -1178,6 +1178,58 @@ function renderRecall() {
   `;
 }
 
+function renderCozyDecorations() {
+  return `
+    <div class="cozy-decorations" aria-hidden="true">
+      <div class="cozy-item cozy-cat-box" id="cozyCatBtn" title="Sandık Kedisi (Sevmek için tıkla!)">
+        <span class="cat-emote">💤</span>
+        <svg viewBox="0 0 54 44" class="cat-svg">
+          <ellipse cx="28" cy="26" rx="18" ry="13" fill="var(--cat-color, #e08a4c)"/>
+          <circle cx="16" cy="20" r="11" fill="var(--cat-color, #e08a4c)"/>
+          <polygon points="8,14 11,4 18,12" fill="var(--cat-color, #e08a4c)"/>
+          <polygon points="10,12 12,6 16,11" fill="#f8b4a0"/>
+          <polygon points="16,11 23,4 25,14" fill="var(--cat-color, #e08a4c)"/>
+          <polygon points="18,11 22,6 23,12" fill="#f8b4a0"/>
+          <path d="M11 21 Q14 24 17 21" stroke="#331c0e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <polygon points="15,23 17,23 16,25" fill="#f8b4a0"/>
+          <path d="M42 28 C48 26, 50 18, 44 16 C41 15, 38 18, 40 22" stroke="var(--cat-color, #e08a4c)" stroke-width="4.5" fill="none" stroke-linecap="round" class="cat-tail"/>
+          <ellipse cx="27" cy="28" rx="8" ry="5" fill="#fff5ea"/>
+        </svg>
+      </div>
+
+      <div class="cozy-item cozy-coffee-box" title="Sıcak Kahve ☕">
+        <svg viewBox="0 0 38 34" class="coffee-svg">
+          <path d="M8 12 L10 26 C11 29, 23 29, 24 26 L26 12 Z" fill="var(--cup-color, #ffffff)"/>
+          <ellipse cx="17" cy="12" rx="9" ry="2.5" fill="#4a2612"/>
+          <path d="M25 14 C29 14, 29 21, 24 22" stroke="var(--cup-color, #ffffff)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <ellipse cx="17" cy="28" rx="13" ry="2.5" fill="var(--cup-plate, #e6ded3)"/>
+          <path d="M14 8 Q15 5 14 2" stroke="var(--steam-color, rgba(255,255,255,0.7))" stroke-width="1.8" fill="none" stroke-linecap="round" class="steam-1"/>
+          <path d="M19 9 Q20 5 19 3" stroke="var(--steam-color, rgba(255,255,255,0.7))" stroke-width="1.8" fill="none" stroke-linecap="round" class="steam-2"/>
+        </svg>
+      </div>
+
+      <div class="cozy-item cozy-leaf-box" title="Sonbahar Yaprağı 🍂">
+        <svg viewBox="0 0 28 28" class="leaf-svg">
+          <path d="M4 24 C8 22, 22 20, 24 4 C18 10, 8 12, 4 24 Z" fill="#d97736"/>
+          <path d="M4 24 L18 10" stroke="#783008" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M10 18 L14 20" stroke="#783008" stroke-width="1" stroke-linecap="round"/>
+          <path d="M14 14 L18 15" stroke="#783008" stroke-width="1" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="cozy-item cozy-scarf-box" title="Sıcak Örgü Atkı 🧣">
+        <svg viewBox="0 0 32 32" class="scarf-svg">
+          <path d="M6 10 C6 6, 26 6, 26 10 C26 13, 21 16, 16 16 C11 16, 6 13, 6 10 Z" fill="#b83838"/>
+          <path d="M11 15 L9 26 C9 27, 14 27, 14 26 L16 15" fill="#9c2727"/>
+          <line x1="9" y1="26" x2="9" y2="29" stroke="#b83838" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="11.5" y1="26" x2="11.5" y2="29" stroke="#b83838" stroke-width="1.4" stroke-linecap="round"/>
+          <line x1="14" y1="26" x2="14" y2="29" stroke="#b83838" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  `;
+}
+
 function renderIdle() {
   const fullPool = currentTopicPool();
   const pool = availableTopicPool();
@@ -1198,31 +1250,34 @@ function renderIdle() {
     ${renderRecall()}
     <div class="catalog-wrapper">
       ${renderCategoryTabs()}
-      <section class="roulette-card">
-        <div class="roulette-header">
-          <div class="roulette-header-title">
-            ${categoryIcon(cat)}
-            <span>${cat.tr} Çekmecesi</span>
+      <div style="position: relative;">
+        ${renderCozyDecorations()}
+        <section class="roulette-card">
+          <div class="roulette-header">
+            <div class="roulette-header-title">
+              ${categoryIcon(cat)}
+              <span>${cat.tr} Çekmecesi</span>
+            </div>
           </div>
-        </div>
 
-        <div class="wheel-viewport" id="wheelViewport" aria-hidden="true">
-          <div class="wheel-fade top"></div>
-          <ul class="wheel-track" id="wheelTrack" style="transform: translateY(-${initialOffset}px);">${items}</ul>
-          <div class="wheel-fade bottom"></div>
-          <div class="wheel-guide">
-            <div class="wheel-guide-pointer left"></div>
-            <div class="wheel-guide-pointer right"></div>
+          <div class="wheel-viewport" id="wheelViewport" aria-hidden="true">
+            <div class="wheel-fade top"></div>
+            <ul class="wheel-track" id="wheelTrack" style="transform: translateY(-${initialOffset}px);">${items}</ul>
+            <div class="wheel-fade bottom"></div>
+            <div class="wheel-guide">
+              <div class="wheel-guide-pointer left"></div>
+              <div class="wheel-guide-pointer right"></div>
+            </div>
           </div>
-        </div>
 
-        <div class="roulette-footer">
-          <button id="spinBtn" class="btn btn-primary" type="button" ${state.spinning ? "disabled" : ""}>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
-            ${state.spinning ? "Kart Çekiliyor…" : "Sandıktan Çek"}
-          </button>
-        </div>
-      </section>
+          <div class="roulette-footer">
+            <button id="spinBtn" class="btn btn-primary" type="button" ${state.spinning ? "disabled" : ""}>
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+              ${state.spinning ? "Kart Çekiliyor…" : "Sandıktan Çek"}
+            </button>
+          </div>
+        </section>
+      </div>
     </div>
   `;
 }
@@ -1253,137 +1308,163 @@ function renderQuickTools(topic) {
 function renderLanded() {
   const cat = CATEGORIES.find((c) => c.id === activeCategory()) || CATEGORIES[0];
   return `
-    <article class="concept-card">
-      <div class="card-top-meta">
-        <span class="card-callno">${callNumber(state.topic)}</span>
-        <span class="card-cat-badge">
-          ${categoryIcon(cat)}
-          ${cat.tr}
-        </span>
-      </div>
+    <div style="position: relative;">
+      ${renderCozyDecorations()}
+      <article class="concept-card">
+        <div class="card-top-meta">
+          <span class="card-callno">${callNumber(state.topic)}</span>
+          <span class="card-cat-badge">
+            ${categoryIcon(cat)}
+            ${cat.tr}
+          </span>
+        </div>
 
-      <h1 class="card-headline">${esc(state.topic.tr)}</h1>
-      <p class="card-subtitle">${esc(state.topic.en)}</p>
+        <h1 class="card-headline">${esc(state.topic.tr)}</h1>
+        <p class="card-subtitle">${esc(state.topic.en)}</p>
 
-      ${renderQuickTools(state.topic)}
+        ${renderQuickTools(state.topic)}
 
-      <div class="card-instruction">
-        <p>
-          <strong>${settings.researchMinutes} dakika</strong> boyunca bu kavramı araştırıp öğrenmek için süreyi başlatabilirsin.
-        </p>
-      </div>
+        <div class="card-instruction">
+          <p>
+            <strong>${settings.researchMinutes} dakika</strong> boyunca bu kavramı araştırıp öğrenmek için süreyi başlatabilirsin.
+          </p>
+        </div>
 
-      <div class="actions-row">
-        <button id="startResearchBtn" class="btn btn-primary" type="button">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Araştırmaya Başla
-        </button>
-        <button id="cancelBtn" class="btn btn-secondary" type="button">Başka Kart Çek</button>
-      </div>
-    </article>
+        <div class="actions-row">
+          <button id="startResearchBtn" class="btn btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Araştırmaya Başla
+          </button>
+          <button id="cancelBtn" class="btn btn-secondary" type="button">Başka Kart Çek</button>
+        </div>
+      </article>
+    </div>
   `;
 }
 
 function renderResearching() {
   const cat = CATEGORIES.find((c) => c.id === activeCategory()) || CATEGORIES[0];
   return `
-    <article class="concept-card">
-      <div class="card-top-meta">
-        <span class="card-callno">${callNumber(state.topic)}</span>
-        <span class="card-cat-badge">
-          ${categoryIcon(cat)}
-          ${cat.tr}
-        </span>
-      </div>
+    <div style="position: relative;">
+      ${renderCozyDecorations()}
+      <article class="concept-card">
+        <div class="card-top-meta">
+          <span class="card-callno">${callNumber(state.topic)}</span>
+          <span class="card-cat-badge">
+            ${categoryIcon(cat)}
+            ${cat.tr}
+          </span>
+        </div>
 
-      <h1 class="card-headline">${esc(state.topic.tr)}</h1>
-      <p class="card-subtitle">${esc(state.topic.en)}</p>
+        <h1 class="card-headline">${esc(state.topic.tr)}</h1>
+        <p class="card-subtitle">${esc(state.topic.en)}</p>
 
-      ${renderQuickTools(state.topic)}
+        ${renderQuickTools(state.topic)}
 
-      <div id="timerSection" class="timer-section">
-        <div class="radial-timer-wrap">
-          <svg class="radial-svg" viewBox="0 0 160 160">
-            <circle class="radial-bg" cx="80" cy="80" r="70"></circle>
-            <circle id="radialProgress" class="radial-progress" cx="80" cy="80" r="70"></circle>
-          </svg>
-          <div class="radial-timer-content">
-            <span id="timerDigits" class="timer-digits">00:00</span>
-            <span class="timer-label">${state.paused ? "DURAKLATILDI" : "ODAKLANMA SÜRESİ"}</span>
+        <div id="timerSection" class="timer-section">
+          <div class="radial-timer-wrap">
+            <svg class="radial-svg" viewBox="0 0 160 160">
+              <circle class="radial-bg" cx="80" cy="80" r="70"></circle>
+              <circle id="radialProgress" class="radial-progress" cx="80" cy="80" r="70"></circle>
+            </svg>
+            <div class="radial-timer-content">
+              <span id="timerDigits" class="timer-digits">00:00</span>
+              <span class="timer-label">${state.paused ? "DURAKLATILDI" : "ODAKLANMA SÜRESİ"}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="notes-container">
-        <label class="notes-label" for="researchNotesInput">
-          <span>Not Defteri</span>
-        </label>
-        <textarea id="researchNotesInput" class="notes-textarea" placeholder="Öğrendiğin ana fikirleri veya kendi cümlelerinle özetini buraya not al...">${esc(state.notes)}</textarea>
-      </div>
+        <div class="notes-container">
+          <label class="notes-label" for="researchNotesInput">
+            <span>Not Defteri</span>
+          </label>
+          <textarea id="researchNotesInput" class="notes-textarea" placeholder="Öğrendiğin ana fikirleri veya kendi cümlelerinle özetini buraya not al...">${esc(state.notes)}</textarea>
+        </div>
 
-      <div class="actions-row">
-        <button id="pauseBtn" class="btn btn-secondary" type="button">
-          ${state.paused
-            ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Devam Et'
-            : '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Duraklat'
-          }
-        </button>
-        <button id="finishResearchBtn" class="btn btn-primary" type="button">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
-          Tamamla ve Kaydet
-        </button>
-      </div>
-    </article>
+        <div class="actions-row">
+          <button id="pauseBtn" class="btn btn-secondary" type="button">
+            ${state.paused
+              ? '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg> Devam Et'
+              : '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Duraklat'
+            }
+          </button>
+          <button id="finishResearchBtn" class="btn btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
+            Tamamla ve Kaydet
+          </button>
+        </div>
+      </article>
+    </div>
   `;
 }
 
 function renderDone() {
   const cat = CATEGORIES.find((c) => c.id === activeCategory()) || CATEGORIES[0];
   return `
-    <article class="concept-card">
-      <div class="card-top-meta">
-        <span class="card-callno">${callNumber(state.topic)}</span>
-        <span class="card-cat-badge">
-          ${categoryIcon(cat)}
-          ${cat.tr}
-        </span>
-      </div>
-
-      <h1 class="card-headline">${esc(state.topic.tr)}</h1>
-      <p class="card-subtitle">${esc(state.topic.en)}</p>
-
-      <div class="completion-badge-wrap">
-        <div class="stamp-badge">
-          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          TAMAMLANDI
+    <div style="position: relative;">
+      ${renderCozyDecorations()}
+      <article class="concept-card">
+        <div class="card-top-meta">
+          <span class="card-callno">${callNumber(state.topic)}</span>
+          <span class="card-cat-badge">
+            ${categoryIcon(cat)}
+            ${cat.tr}
+          </span>
         </div>
-      </div>
 
-      ${state.notes ? `
-        <div class="completion-notes-recap">
-          <h4>Kaydedilen Not</h4>
-          <p>${esc(state.notes)}</p>
+        <h1 class="card-headline">${esc(state.topic.tr)}</h1>
+        <p class="card-subtitle">${esc(state.topic.en)}</p>
+
+        <div class="completion-badge-wrap">
+          <div class="stamp-badge">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            TAMAMLANDI
+          </div>
         </div>
-      ` : ""}
 
-      <div class="actions-row">
-        <button id="newRoundBtn" class="btn btn-primary" type="button">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
-          Yeni Kart Çek
-        </button>
-        <button id="viewInCatalogBtn" class="btn btn-secondary" type="button">Notlarımı Gör</button>
-      </div>
-    </article>
+        ${state.notes ? `
+          <div class="completion-notes-recap">
+            <h4>Kaydedilen Not</h4>
+            <p>${esc(state.notes)}</p>
+          </div>
+        ` : ""}
+
+        <div class="actions-row">
+          <button id="newRoundBtn" class="btn btn-primary" type="button">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+            Yeni Kart Çek
+          </button>
+          <button id="viewInCatalogBtn" class="btn btn-secondary" type="button">Notlarımı Gör</button>
+        </div>
+      </article>
+    </div>
   `;
 }
 
 function bindStageEvents() {
+  const cozyCatBtn = document.querySelector("#cozyCatBtn");
+  if (cozyCatBtn) {
+    cozyCatBtn.addEventListener("click", () => {
+      sfx.playTick();
+      const emote = cozyCatBtn.querySelector(".cat-emote");
+      if (emote) {
+        emote.textContent = "🤍🐾";
+        setTimeout(() => { emote.textContent = "💤"; }, 2500);
+      }
+      showToast("Mırrr... 🐱🐾 (Sandık Kedisi seni çok sevdi!)");
+    });
+  }
+
   const spinBtn = document.querySelector("#spinBtn");
-  if (spinBtn) spinBtn.addEventListener("click", spin);
+  if (spinBtn) spinBtn.addEventListener("click", spinWheel);
 
   document.querySelectorAll(".cat-pill").forEach((btn) => {
     btn.addEventListener("click", () => {
-      setCategory(btn.dataset.category);
+      if (state.spinning) return;
+      sfx.playTick();
+      settings.category = btn.dataset.category;
+      saveSettings();
+      render();
     });
   });
 

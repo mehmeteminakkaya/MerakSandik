@@ -331,6 +331,7 @@ function loadSettings() {
     researchMinutes: 15,
     sound: true,
     theme: "dark",
+    palette: "coffee",
     category: "general"
   };
   try {
@@ -359,6 +360,7 @@ function saveSettings() {
   } catch { /* ignore */ }
   syncSoundIcons();
   applyTheme(settings.theme);
+  applyPalette(settings.palette);
 }
 
 function applyTheme(theme = settings.theme || "dark") {
@@ -381,6 +383,15 @@ function applyTheme(theme = settings.theme || "dark") {
     if (themeBtnDark) themeBtnDark.classList.add("is-active");
     if (themeBtnLight) themeBtnLight.classList.remove("is-active");
   }
+}
+
+function applyPalette(palette = settings.palette || "coffee") {
+  settings.palette = palette;
+  document.documentElement.setAttribute("data-palette", palette);
+
+  document.querySelectorAll(".palette-btn").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.palette === palette);
+  });
 }
 
 function syncSoundIcons() {
@@ -1537,6 +1548,20 @@ if (themeBtnLight) {
   });
 }
 
+document.querySelectorAll(".palette-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const pal = btn.dataset.palette;
+    applyPalette(pal);
+    saveSettings();
+    const names = {
+      coffee: "☕ Sıcak Kahve paleti uygulandı",
+      library: "🌲 Gece Kütüphanesi paleti uygulandı",
+      matcha: "🍵 Matcha & Yulaf paleti uygulandı"
+    };
+    showToast(names[pal] || "Renk paleti güncellendi");
+  });
+});
+
 researchRange.addEventListener("input", () => {
   settings.researchMinutes = Number(researchRange.value);
   researchLabel.textContent = `${settings.researchMinutes} dk`;
@@ -1753,6 +1778,7 @@ exportHistoryBtn.addEventListener("click", () => {
 
 // ---------- Initialization ----------
 applyTheme(settings.theme);
+applyPalette(settings.palette);
 syncSoundIcons();
 
 if (!restoreSession()) {

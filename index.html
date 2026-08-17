@@ -71,7 +71,7 @@
           <div class="toggle-field theme-toggle-row">
             <div class="toggle-info">
               <span class="toggle-title">Görünüm Teması</span>
-              <span class="toggle-desc">Aydınlık veya karanlık kütüphane modu</span>
+              <span class="toggle-desc">Aydınlık veya karanlık mod</span>
             </div>
             <div class="theme-segmented-control" role="group" aria-label="Tema Seçimi">
               <button type="button" id="themeBtnDark" class="theme-seg-btn is-active">
@@ -81,6 +81,28 @@
               <button type="button" id="themeBtnLight" class="theme-seg-btn">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
                 <span>Aydınlık</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Renk Paleti & Atmosfer Seçici -->
+          <div class="toggle-field palette-toggle-row">
+            <div class="toggle-info">
+              <span class="toggle-title">Renk Paleti & Atmosfer</span>
+              <span class="toggle-desc">Hangisi sana ve zihnine daha tatlı geliyorsa</span>
+            </div>
+            <div class="palette-grid" role="group" aria-label="Renk Paleti Seçimi">
+              <button type="button" class="palette-btn is-active" data-palette="coffee">
+                <span class="palette-dot dot-coffee"></span>
+                <span>☕ Sıcak Kahve</span>
+              </button>
+              <button type="button" class="palette-btn" data-palette="library">
+                <span class="palette-dot dot-library"></span>
+                <span>🌲 Gece Kütüphanesi</span>
+              </button>
+              <button type="button" class="palette-btn" data-palette="matcha">
+                <span class="palette-dot dot-matcha"></span>
+                <span>🍵 Matcha & Yulaf</span>
               </button>
             </div>
           </div>

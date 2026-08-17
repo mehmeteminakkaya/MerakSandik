@@ -220,6 +220,8 @@ class SoundEffects {
     this.ambienceGains = [];
     this.ambienceTimer = null;
     this.currentAmbienceType = "none";
+    this.meowAudio = null;
+    this.purrAudio = null;
   }
 
   init() {
@@ -231,6 +233,14 @@ class SoundEffects {
     }
     if (this.ctx && this.ctx.state === "suspended") {
       this.ctx.resume().catch(() => {});
+    }
+    if (!this.meowAudio && typeof Audio !== "undefined") {
+      try {
+        this.meowAudio = new Audio("/meow.wav");
+        this.meowAudio.preload = "auto";
+        this.purrAudio = new Audio("/purr.wav");
+        this.purrAudio.preload = "auto";
+      } catch { /* ignore */ }
     }
     return this.ctx;
   }
@@ -298,101 +308,27 @@ class SoundEffects {
   playPurr() {
     if (!settings.sound) return;
     this.init();
-    if (!this.ctx) return;
     try {
-      const now = this.ctx.currentTime;
-      const duration = 1.2;
-
-      // 26Hz titreşim modülasyonlu derin mırıltı
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      const mod = this.ctx.createOscillator();
-      const modGain = this.ctx.createGain();
-
-      mod.type = "sine";
-      mod.frequency.setValueAtTime(26, now);
-      modGain.gain.setValueAtTime(32, now);
-      mod.connect(osc.frequency);
-
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(92, now);
-
-      gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.48, now + 0.15);
-      gain.gain.setValueAtTime(0.48, now + 0.95);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      mod.start(now);
-      osc.start(now);
-      mod.stop(now + duration);
-      osc.stop(now + duration);
-    } catch { /* sessiz kal */ }
+      if (this.purrAudio) {
+        this.purrAudio.currentTime = 0;
+        this.purrAudio.volume = 0.9;
+        this.purrAudio.play().catch(() => {});
+        return;
+      }
+    } catch { /* ignore */ }
   }
 
   playMeow() {
     if (!settings.sound) return;
     this.init();
-    if (!this.ctx) return;
     try {
-      const now = this.ctx.currentTime;
-      const duration = 0.62;
-
-      // İki harmonik osilatör: üçgen (sıcak gövde) + testere dişi (ses teli tınısı)
-      const osc1 = this.ctx.createOscillator();
-      const osc2 = this.ctx.createOscillator();
-      const oscGain = this.ctx.createGain();
-
-      osc1.type = "triangle";
-      osc2.type = "sawtooth";
-
-      // Kedi ses tonu kayması (M-E-O-W: 480Hz -> 820Hz -> 380Hz)
-      osc1.frequency.setValueAtTime(480, now);
-      osc1.frequency.linearRampToValueAtTime(540, now + 0.08);
-      osc1.frequency.exponentialRampToValueAtTime(820, now + 0.28);
-      osc1.frequency.exponentialRampToValueAtTime(380, now + duration);
-
-      osc2.frequency.setValueAtTime(480, now);
-      osc2.frequency.linearRampToValueAtTime(540, now + 0.08);
-      osc2.frequency.exponentialRampToValueAtTime(820, now + 0.28);
-      osc2.frequency.exponentialRampToValueAtTime(380, now + duration);
-
-      // Tatlı kedi ses bükülmesi (vibrato)
-      const vibrato = this.ctx.createOscillator();
-      const vibratoGain = this.ctx.createGain();
-      vibrato.frequency.setValueAtTime(6.0, now);
-      vibratoGain.gain.setValueAtTime(16, now);
-      vibrato.connect(osc1.frequency);
-      vibrato.connect(osc2.frequency);
-      vibrato.start(now);
-      vibrato.stop(now + duration);
-
-      // Ses yolu rezonansı (vowel formant filter: M-EE-AA-WW)
-      const formant = this.ctx.createBiquadFilter();
-      formant.type = "bandpass";
-      formant.Q.setValueAtTime(3.6, now);
-      formant.frequency.setValueAtTime(850, now);
-      formant.frequency.linearRampToValueAtTime(1750, now + 0.26);
-      formant.frequency.exponentialRampToValueAtTime(700, now + duration);
-
-      // Genlik zarfı (net duyulabilir dolgun kedi miyavlaması)
-      oscGain.gain.setValueAtTime(0.001, now);
-      oscGain.gain.linearRampToValueAtTime(0.52, now + 0.09);
-      oscGain.gain.setValueAtTime(0.52, now + 0.32);
-      oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
-
-      osc1.connect(formant);
-      osc2.connect(formant);
-      formant.connect(oscGain);
-      oscGain.connect(this.ctx.destination);
-
-      osc1.start(now);
-      osc2.start(now);
-      osc1.stop(now + duration + 0.02);
-      osc2.stop(now + duration + 0.02);
-    } catch { /* sessiz kal */ }
+      if (this.meowAudio) {
+        this.meowAudio.currentTime = 0;
+        this.meowAudio.volume = 0.95;
+        this.meowAudio.play().catch(() => {});
+        return;
+      }
+    } catch { /* ignore */ }
   }
 
   playCatInteraction() {

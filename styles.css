@@ -2230,34 +2230,149 @@ input[type="range"]::-moz-range-thumb {
   }
 
   .cozy-cat-box {
-    top: -30px;
+    top: -28px;
     right: 8px;
-    width: 78px;
-    height: 42px;
-  }
-  .cozy-coffee-box {
-    bottom: -18px;
-    left: 6px;
-    width: 48px;
-    height: 54px;
+    width: 74px;
+    height: 40px;
   }
   .cozy-leaf-box {
-    top: -16px;
-    left: -6px;
-    width: 38px;
-    height: 44px;
+    top: -18px;
+    left: 8px;
+    width: 34px;
+    height: 38px;
   }
-  .cozy-scarf-box {
-    bottom: -16px;
-    right: -6px;
-    width: 44px;
-    height: 48px;
+  .desk-greeting-bar {
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .desk-greeting-title {
+    font-size: 13.5px;
+  }
+  .desk-greeting-sub {
+    font-size: 11.5px;
+  }
+  .cozy-coffee-widget {
+    width: 40px;
+    height: 44px;
   }
 }
 
 /* --------------------------------------------------------------------------
-   Cozy Atmospheric Companions (Kedi, Sıcak Kahve, Sonbahar Yaprağı, Atkı)
+   Masa Üstü / Çalışma Köşesi Atmosferi (Kedi, Sıcak Kahve, Sonbahar Ayracı)
    -------------------------------------------------------------------------- */
+
+/* Masa Üstü Karşılama Barı */
+.desk-greeting-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 18px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  position: relative;
+  overflow: visible;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+[data-theme="light"] .desk-greeting-bar {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(120, 80, 40, 0.15);
+  box-shadow: 0 4px 14px rgba(60, 40, 20, 0.05);
+}
+
+.desk-greeting-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.desk-greeting-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.desk-greeting-sub {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+/* Sıcak Kahve Fincanı Widget'ı (Masa Üstünde Dumanı Tüten) */
+.cozy-coffee-widget {
+  position: relative;
+  width: 46px;
+  height: 50px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transform-origin: 50% 85%;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+  user-select: none;
+}
+
+.cozy-coffee-widget:hover {
+  transform: scale(1.12) translateY(-2px);
+}
+
+.cozy-coffee-widget:active {
+  transform: scale(0.94);
+}
+
+.cozy-coffee-widget.is-sipping {
+  animation: coffeeSipPulse 0.6s ease-in-out;
+}
+
+.coffee-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.coffee-steam-burst {
+  position: absolute;
+  top: -10px;
+  right: 0px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+@keyframes coffeeSipPulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.15) rotate(4deg); }
+  65% { transform: scale(1.05) rotate(-3deg); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.steam-1 {
+  animation: steamRise 2.2s ease-in-out infinite;
+}
+
+.steam-2 {
+  animation: steamRise 2.6s ease-in-out infinite 0.7s;
+}
+
+.steam-3 {
+  animation: steamRise 2s ease-in-out infinite 1.3s;
+}
+
+@keyframes steamRise {
+  0% { opacity: 0; transform: translateY(3px) scaleX(0.8); }
+  45% { opacity: 0.75; transform: translateY(-3px) scaleX(1); }
+  100% { opacity: 0; transform: translateY(-9px) scaleX(0.9); }
+}
+
+/* Dekoratif Masa / Çekmece Süsleri (Kedi + Sonbahar Ayracı) */
 .cozy-decorations {
   position: relative;
   width: 100%;
@@ -2269,10 +2384,9 @@ input[type="range"]::-moz-range-thumb {
   z-index: 10;
   pointer-events: auto;
   transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  filter: drop-shadow(0 5px 14px rgba(0, 0, 0, 0.35));
 }
 
-/* Uyuyan & Nefes Alan Sandık Kedisi */
+/* Uyuyan & Nefes Alan Sandık Kedisi (Sağ üst kenarda) */
 .cozy-cat-box {
   top: -36px;
   right: 16px;
@@ -2282,6 +2396,7 @@ input[type="range"]::-moz-range-thumb {
   transform-origin: 50% 90%;
   animation: catBreathe 3.8s ease-in-out infinite;
   user-select: none;
+  filter: drop-shadow(0 5px 14px rgba(0, 0, 0, 0.35));
 }
 
 .cozy-cat-box:hover {
@@ -2355,21 +2470,60 @@ input[type="range"]::-moz-range-thumb {
   animation: heartPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* Sonbahar Yaprağı / Kitap Ayracı (Sol üst köşeye tutturulmuş) */
+.cozy-leaf-box {
+  top: -24px;
+  left: 18px;
+  width: 44px;
+  height: 48px;
+  cursor: pointer;
+  transform-origin: 50% 90%;
+  transform: rotate(-14deg);
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.25s ease;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+  user-select: none;
+}
+
+.cozy-leaf-box:hover {
+  transform: rotate(-4deg) translateY(-4px) scale(1.1);
+  filter: drop-shadow(0 7px 14px rgba(217, 119, 54, 0.45));
+}
+
+.cozy-leaf-box:active {
+  transform: rotate(-18deg) scale(0.95);
+}
+
+.cozy-leaf-box.is-fluttering {
+  animation: leafFlutter 0.7s ease-in-out;
+}
+
+.leaf-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+@keyframes leafFlutter {
+  0% { transform: rotate(-14deg) translateY(0); }
+  25% { transform: rotate(8deg) translateY(-6px); }
+  50% { transform: rotate(-18deg) translateY(-2px); }
+  75% { transform: rotate(-8deg) translateY(-4px); }
+  100% { transform: rotate(-14deg) translateY(0); }
+}
+
 /* Nefes Alma Animasyonları */
 @keyframes catBreathe {
   0% {
     transform: scale(1, 1) translateY(0);
   }
   38% {
-    /* Nefes alma (göğüs yükselir ve hafifçe genişler) */
     transform: scale(1.025, 1.055) translateY(-2.2px);
   }
   48% {
-    /* Nefes tutma tepesi */
     transform: scale(1.025, 1.05) translateY(-2px);
   }
   85% {
-    /* Yavaşça nefes verme (sakinleşme) */
     transform: scale(1, 1) translateY(0);
   }
   100% {
@@ -2452,91 +2606,11 @@ input[type="range"]::-moz-range-thumb {
   80% { transform: scale(1.02) rotate(1deg); }
 }
 
-/* Dumanı Tüten Kahve */
-.cozy-coffee-box {
-  bottom: -24px;
-  left: 12px;
-  width: 58px;
-  height: 64px;
-  animation: coffeeFloat 5s ease-in-out infinite;
-}
-
-.coffee-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.steam-1 {
-  animation: steamRise 2.2s ease-in-out infinite;
-}
-
-.steam-2 {
-  animation: steamRise 2.6s ease-in-out infinite 0.7s;
-}
-
-.steam-3 {
-  animation: steamRise 2s ease-in-out infinite 1.3s;
-}
-
-@keyframes steamRise {
-  0% { opacity: 0; transform: translateY(3px) scaleX(0.8); }
-  45% { opacity: 0.75; transform: translateY(-3px) scaleX(1); }
-  100% { opacity: 0; transform: translateY(-9px) scaleX(0.9); }
-}
-
-@keyframes coffeeFloat {
-  0%, 100% { transform: translateY(0) rotate(-1deg); }
-  50% { transform: translateY(-4px) rotate(1deg); }
-}
-
-/* Sonbahar Akçaağaç Yaprağı */
-.cozy-leaf-box {
-  top: -18px;
-  left: -10px;
-  width: 46px;
-  height: 52px;
-  animation: leafDrift 7s ease-in-out infinite alternate;
-}
-
-.leaf-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-@keyframes leafDrift {
-  0% { transform: rotate(-6deg) translateY(0); }
-  33% { transform: rotate(4deg) translateY(-3px); }
-  66% { transform: rotate(-2deg) translateY(-6px); }
-  100% { transform: rotate(10deg) translateY(-2px); }
-}
-
-/* Örgü Atkı */
-.cozy-scarf-box {
-  bottom: -18px;
-  right: -8px;
-  width: 54px;
-  height: 58px;
-  animation: scarfSway 6s ease-in-out infinite alternate;
-}
-
-.scarf-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-@keyframes scarfSway {
-  0% { transform: rotate(2deg) translateY(0); }
-  50% { transform: rotate(-4deg) translateY(-3px); }
-  100% { transform: rotate(6deg) translateY(-1px); }
-}
-
 /* Light Theme Variables for Cozy Items */
 [data-theme="light"] {
   --cup-color: #f7f1e6;
   --cup-plate: #dfd4c4;
+  --cup-plate-inner: #8a542a;
   --steam-color: rgba(120, 80, 40, 0.45);
 }
 

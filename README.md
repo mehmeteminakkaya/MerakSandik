@@ -4,7 +4,7 @@
 
 [![Vercel Deployment](https://img.shields.io/badge/Deploy-Vercel-black?style=flat&logo=vercel)](https://meraksandik.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
-[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-success.svg)]()
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-0-success.svg)](https://meraksandik.vercel.app)
 
 Canlı Sürüm: **[meraksandik.vercel.app](https://meraksandik.vercel.app)**
 
@@ -59,16 +59,28 @@ Projeyi bilgisayarınızda çalıştırmak için herhangi bir paket yöneticisi 
 
 ```bash
 # Depoyu klonlayın
-git clone https://github.com/mehmeteminakkaya/meraksandik.git
+git clone https://github.com/mehmeteminakkaya/MerakSandik.git
 
 # Proje dizinine girin
-cd meraksandik
+cd MerakSandik
 
 # Basit bir yerel sunucu başlatın (Python ile)
 python -m http.server 5173
 ```
 
 Tarayıcınızdan `http://localhost:5173` adresine giderek kullanmaya başlayabilirsiniz.
+
+---
+
+## 👨‍💻 Geliştirici & İletişim
+
+**Mehmet Emin Akkaya**  
+*İstinye Üniversitesi Bilgisayar Mühendisliği*
+
+* 🌐 **Portfolyo:** [mehmeteminakkaya.com](https://mehmeteminakkaya.com)
+* 💼 **LinkedIn:** [linkedin.com/in/mehmeteminakkaya](https://www.linkedin.com/in/mehmeteminakkaya/)
+* 🐙 **GitHub:** [@mehmeteminakkaya](https://github.com/mehmeteminakkaya)
+* 📬 **E-Posta:** [mehmeteminakkaya12@gmail.com](mailto:mehmeteminakkaya12@gmail.com)
 
 ---
 

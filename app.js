@@ -216,20 +216,23 @@ let sessionPetCount = 0;
 class SoundEffects {
   constructor() {
     this.ctx = null;
-    this.ambienceSource = null;
-    this.ambienceGain = null;
+    this.ambienceSources = [];
+    this.ambienceGains = [];
     this.ambienceTimer = null;
     this.currentAmbienceType = "none";
   }
 
   init() {
     if (!this.ctx) {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (AudioContext) this.ctx = new AudioContext();
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextClass) {
+        this.ctx = new AudioContextClass();
+      }
     }
     if (this.ctx && this.ctx.state === "suspended") {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
+    return this.ctx;
   }
 
   playTick() {
@@ -240,13 +243,13 @@ class SoundEffects {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(440 + Math.random() * 120, this.ctx.currentTime);
-      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.04);
+      osc.frequency.setValueAtTime(540 + Math.random() * 140, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.05);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.04);
+      osc.stop(this.ctx.currentTime + 0.05);
     } catch { /* sessiz kal */ }
   }
 
@@ -261,12 +264,12 @@ class SoundEffects {
       osc.type = "triangle";
       osc.frequency.setValueAtTime(523.25, now); // C5
       osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.15); // E5
-      gain.gain.setValueAtTime(0.12, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      gain.gain.setValueAtTime(0.30, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(now + 0.35);
+      osc.stop(now + 0.4);
     } catch { /* sessiz kal */ }
   }
 
@@ -282,12 +285,12 @@ class SoundEffects {
         const start = this.ctx.currentTime + i * 0.12;
         osc.type = "sine";
         osc.frequency.setValueAtTime(freq, start);
-        gain.gain.setValueAtTime(0.15, start);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.8);
+        gain.gain.setValueAtTime(0.35, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.9);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(start);
-        osc.stop(start + 0.8);
+        osc.stop(start + 0.9);
       });
     } catch { /* sessiz kal */ }
   }
@@ -298,7 +301,7 @@ class SoundEffects {
     if (!this.ctx) return;
     try {
       const now = this.ctx.currentTime;
-      const duration = 1.1;
+      const duration = 1.2;
 
       // 26Hz titreşim modülasyonlu derin mırıltı
       const osc = this.ctx.createOscillator();
@@ -308,15 +311,15 @@ class SoundEffects {
 
       mod.type = "sine";
       mod.frequency.setValueAtTime(26, now);
-      modGain.gain.setValueAtTime(24, now);
+      modGain.gain.setValueAtTime(32, now);
       mod.connect(osc.frequency);
 
       osc.type = "triangle";
-      osc.frequency.setValueAtTime(88, now);
+      osc.frequency.setValueAtTime(92, now);
 
       gain.gain.setValueAtTime(0.001, now);
-      gain.gain.linearRampToValueAtTime(0.24, now + 0.15);
-      gain.gain.setValueAtTime(0.24, now + 0.85);
+      gain.gain.linearRampToValueAtTime(0.48, now + 0.15);
+      gain.gain.setValueAtTime(0.48, now + 0.95);
       gain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
       osc.connect(gain);
@@ -335,7 +338,7 @@ class SoundEffects {
     if (!this.ctx) return;
     try {
       const now = this.ctx.currentTime;
-      const duration = 0.58;
+      const duration = 0.62;
 
       // İki harmonik osilatör: üçgen (sıcak gövde) + testere dişi (ses teli tınısı)
       const osc1 = this.ctx.createOscillator();
@@ -345,22 +348,22 @@ class SoundEffects {
       osc1.type = "triangle";
       osc2.type = "sawtooth";
 
-      // Kedi ses tonu kayması (M-E-O-W: 460Hz -> 780Hz -> 360Hz)
-      osc1.frequency.setValueAtTime(460, now);
-      osc1.frequency.linearRampToValueAtTime(520, now + 0.07);
-      osc1.frequency.exponentialRampToValueAtTime(780, now + 0.28);
-      osc1.frequency.exponentialRampToValueAtTime(360, now + duration);
+      // Kedi ses tonu kayması (M-E-O-W: 480Hz -> 820Hz -> 380Hz)
+      osc1.frequency.setValueAtTime(480, now);
+      osc1.frequency.linearRampToValueAtTime(540, now + 0.08);
+      osc1.frequency.exponentialRampToValueAtTime(820, now + 0.28);
+      osc1.frequency.exponentialRampToValueAtTime(380, now + duration);
 
-      osc2.frequency.setValueAtTime(460, now);
-      osc2.frequency.linearRampToValueAtTime(520, now + 0.07);
-      osc2.frequency.exponentialRampToValueAtTime(780, now + 0.28);
-      osc2.frequency.exponentialRampToValueAtTime(360, now + duration);
+      osc2.frequency.setValueAtTime(480, now);
+      osc2.frequency.linearRampToValueAtTime(540, now + 0.08);
+      osc2.frequency.exponentialRampToValueAtTime(820, now + 0.28);
+      osc2.frequency.exponentialRampToValueAtTime(380, now + duration);
 
       // Tatlı kedi ses bükülmesi (vibrato)
       const vibrato = this.ctx.createOscillator();
       const vibratoGain = this.ctx.createGain();
-      vibrato.frequency.setValueAtTime(5.8, now);
-      vibratoGain.gain.setValueAtTime(14, now);
+      vibrato.frequency.setValueAtTime(6.0, now);
+      vibratoGain.gain.setValueAtTime(16, now);
       vibrato.connect(osc1.frequency);
       vibrato.connect(osc2.frequency);
       vibrato.start(now);
@@ -369,15 +372,15 @@ class SoundEffects {
       // Ses yolu rezonansı (vowel formant filter: M-EE-AA-WW)
       const formant = this.ctx.createBiquadFilter();
       formant.type = "bandpass";
-      formant.Q.setValueAtTime(3.4, now);
-      formant.frequency.setValueAtTime(820, now);
-      formant.frequency.linearRampToValueAtTime(1680, now + 0.26);
-      formant.frequency.exponentialRampToValueAtTime(680, now + duration);
+      formant.Q.setValueAtTime(3.6, now);
+      formant.frequency.setValueAtTime(850, now);
+      formant.frequency.linearRampToValueAtTime(1750, now + 0.26);
+      formant.frequency.exponentialRampToValueAtTime(700, now + duration);
 
-      // Genlik zarfı (doğal yumuşak kedi miyavlaması)
+      // Genlik zarfı (net duyulabilir dolgun kedi miyavlaması)
       oscGain.gain.setValueAtTime(0.001, now);
-      oscGain.gain.linearRampToValueAtTime(0.22, now + 0.08);
-      oscGain.gain.setValueAtTime(0.22, now + 0.28);
+      oscGain.gain.linearRampToValueAtTime(0.52, now + 0.09);
+      oscGain.gain.setValueAtTime(0.52, now + 0.32);
       oscGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
 
       osc1.connect(formant);
@@ -393,7 +396,7 @@ class SoundEffects {
   }
 
   playCatInteraction() {
-    if (Math.random() < 0.6) {
+    if (Math.random() < 0.65) {
       this.playMeow();
     } else {
       this.playPurr();
@@ -411,7 +414,7 @@ class SoundEffects {
       const gain1 = this.ctx.createGain();
       osc1.type = "sine";
       osc1.frequency.setValueAtTime(1760, now);
-      gain1.gain.setValueAtTime(0.08, now);
+      gain1.gain.setValueAtTime(0.18, now);
       gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
       osc1.connect(gain1);
       gain1.connect(this.ctx.destination);
@@ -423,7 +426,7 @@ class SoundEffects {
       const gain2 = this.ctx.createGain();
       osc2.type = "triangle";
       osc2.frequency.setValueAtTime(440, now + 0.02);
-      gain2.gain.setValueAtTime(0.05, now + 0.02);
+      gain2.gain.setValueAtTime(0.12, now + 0.02);
       gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
       osc2.connect(gain2);
       gain2.connect(this.ctx.destination);
@@ -469,9 +472,9 @@ class SoundEffects {
       const osc1 = this.ctx.createOscillator();
       const gain1 = this.ctx.createGain();
       osc1.type = "sine";
-      osc1.frequency.setValueAtTime(120, now);
-      osc1.frequency.exponentialRampToValueAtTime(40, now + 0.12);
-      gain1.gain.setValueAtTime(0.18, now);
+      osc1.frequency.setValueAtTime(130, now);
+      osc1.frequency.exponentialRampToValueAtTime(45, now + 0.12);
+      gain1.gain.setValueAtTime(0.35, now);
       gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
       osc1.connect(gain1);
       gain1.connect(this.ctx.destination);
@@ -491,7 +494,7 @@ class SoundEffects {
       osc1.type = "triangle";
       osc1.frequency.setValueAtTime(1450, now);
       osc1.frequency.exponentialRampToValueAtTime(680, now + 0.05);
-      gain1.gain.setValueAtTime(0.24, now);
+      gain1.gain.setValueAtTime(0.40, now);
       gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       osc1.connect(gain1);
       gain1.connect(this.ctx.destination);
@@ -503,7 +506,7 @@ class SoundEffects {
       osc2.type = "sine";
       osc2.frequency.setValueAtTime(2600, now + 0.03);
       osc2.frequency.exponentialRampToValueAtTime(1100, now + 0.14);
-      gain2.gain.setValueAtTime(0.12, now + 0.03);
+      gain2.gain.setValueAtTime(0.25, now + 0.03);
       gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
       osc2.connect(gain2);
       gain2.connect(this.ctx.destination);
@@ -512,35 +515,51 @@ class SoundEffects {
     } catch { /* sessiz kal */ }
   }
 
-  createPinkNoiseBuffer(seconds = 3) {
+  createNoiseBuffer(type = "pink", seconds = 4) {
     const length = Math.floor(this.ctx.sampleRate * seconds);
     const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
     const data = buffer.getChannelData(0);
-    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
-    for (let i = 0; i < length; i++) {
-      const white = Math.random() * 2 - 1;
-      b0 = 0.99886 * b0 + white * 0.0555179;
-      b1 = 0.99332 * b1 + white * 0.0750759;
-      b2 = 0.96900 * b2 + white * 0.1538520;
-      b3 = 0.86650 * b3 + white * 0.3104856;
-      b4 = 0.55000 * b4 + white * 0.5329522;
-      b5 = -0.7616 * b5 - white * 0.0168980;
-      data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.38;
-      b6 = white * 0.115926;
-    }
-    return buffer;
-  }
 
-  createBrownNoiseBuffer(seconds = 3) {
-    const length = Math.floor(this.ctx.sampleRate * seconds);
-    const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    let lastOut = 0.0;
-    for (let i = 0; i < length; i++) {
-      const white = Math.random() * 2 - 1;
-      lastOut = (lastOut + 0.02 * white) / 1.02;
-      data[i] = lastOut * 8.5;
+    if (type === "white") {
+      for (let i = 0; i < length; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+    } else if (type === "brown") {
+      let lastOut = 0.0;
+      for (let i = 0; i < length; i++) {
+        const white = Math.random() * 2 - 1;
+        lastOut = (lastOut + 0.05 * white) / 1.02;
+        data[i] = lastOut;
+      }
+    } else {
+      // Pink noise (Paul Kellet filter)
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < length; i++) {
+        const white = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + white * 0.0555179;
+        b1 = 0.99332 * b1 + white * 0.0750759;
+        b2 = 0.96900 * b2 + white * 0.1538520;
+        b3 = 0.86650 * b3 + white * 0.3104856;
+        b4 = 0.55000 * b4 + white * 0.5329522;
+        b5 = -0.7616 * b5 - white * 0.0168980;
+        data[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362);
+        b6 = white * 0.115926;
+      }
     }
+
+    // Normalize so peak is 0.92
+    let max = 0;
+    for (let i = 0; i < length; i++) {
+      const abs = Math.abs(data[i]);
+      if (abs > max) max = abs;
+    }
+    if (max > 0) {
+      const scale = 0.92 / max;
+      for (let i = 0; i < length; i++) {
+        data[i] *= scale;
+      }
+    }
+
     return buffer;
   }
 
@@ -561,18 +580,18 @@ class SoundEffects {
   startRain() {
     try {
       // 1. Derin Uzak Yağmur Uğultusu (Warm Brown Noise Bed)
-      const brownBuf = this.createBrownNoiseBuffer(3);
+      const brownBuf = this.createNoiseBuffer("brown", 4);
       const brownSrc = this.ctx.createBufferSource();
       brownSrc.buffer = brownBuf;
       brownSrc.loop = true;
 
       const lowFilter = this.ctx.createBiquadFilter();
       lowFilter.type = "lowpass";
-      lowFilter.frequency.setValueAtTime(380, this.ctx.currentTime);
+      lowFilter.frequency.setValueAtTime(450, this.ctx.currentTime);
 
       const rainBedGain = this.ctx.createGain();
-      rainBedGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      rainBedGain.gain.linearRampToValueAtTime(0.24, this.ctx.currentTime + 0.8);
+      rainBedGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      rainBedGain.gain.linearRampToValueAtTime(0.42, this.ctx.currentTime + 0.6);
 
       brownSrc.connect(lowFilter);
       lowFilter.connect(rainBedGain);
@@ -580,24 +599,24 @@ class SoundEffects {
       brownSrc.start();
 
       // 2. Yumuşak Yağmur Çiselemesi & Rüzgar Dalgası (Pink Noise Mid-Drizzle with gentle LFO)
-      const pinkBuf = this.createPinkNoiseBuffer(3);
+      const pinkBuf = this.createNoiseBuffer("pink", 4);
       const pinkSrc = this.ctx.createBufferSource();
       pinkSrc.buffer = pinkBuf;
       pinkSrc.loop = true;
 
       const bandFilter = this.ctx.createBiquadFilter();
       bandFilter.type = "bandpass";
-      bandFilter.frequency.setValueAtTime(950, this.ctx.currentTime);
-      bandFilter.Q.setValueAtTime(1.1, this.ctx.currentTime);
+      bandFilter.frequency.setValueAtTime(1100, this.ctx.currentTime);
+      bandFilter.Q.setValueAtTime(0.9, this.ctx.currentTime);
 
       const drizzleGain = this.ctx.createGain();
-      drizzleGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      drizzleGain.gain.linearRampToValueAtTime(0.18, this.ctx.currentTime + 0.8);
+      drizzleGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      drizzleGain.gain.linearRampToValueAtTime(0.35, this.ctx.currentTime + 0.6);
 
       const lfo = this.ctx.createOscillator();
       const lfoGain = this.ctx.createGain();
-      lfo.frequency.setValueAtTime(0.15, this.ctx.currentTime);
-      lfoGain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+      lfo.frequency.setValueAtTime(0.18, this.ctx.currentTime);
+      lfoGain.gain.setValueAtTime(0.08, this.ctx.currentTime);
       lfo.connect(lfoGain);
       lfoGain.connect(drizzleGain.gain);
       lfo.start();
@@ -607,41 +626,60 @@ class SoundEffects {
       drizzleGain.connect(this.ctx.destination);
       pinkSrc.start();
 
-      this.ambienceSources = [brownSrc, pinkSrc, lfo];
-      this.ambienceGains = [rainBedGain, drizzleGain];
+      // 3. İnce Sis & Çatı Tıkırtısı (Gentle Highpass Mist)
+      const whiteBuf = this.createNoiseBuffer("white", 4);
+      const whiteSrc = this.ctx.createBufferSource();
+      whiteSrc.buffer = whiteBuf;
+      whiteSrc.loop = true;
 
-      // 3. Cama Vuran Doğal Tekil Damlalar (Organic ASMR Window Droplets)
+      const mistFilter = this.ctx.createBiquadFilter();
+      mistFilter.type = "highpass";
+      mistFilter.frequency.setValueAtTime(2600, this.ctx.currentTime);
+
+      const mistGain = this.ctx.createGain();
+      mistGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      mistGain.gain.linearRampToValueAtTime(0.18, this.ctx.currentTime + 0.6);
+
+      whiteSrc.connect(mistFilter);
+      mistFilter.connect(mistGain);
+      mistGain.connect(this.ctx.destination);
+      whiteSrc.start();
+
+      this.ambienceSources = [brownSrc, pinkSrc, whiteSrc, lfo];
+      this.ambienceGains = [rainBedGain, drizzleGain, mistGain];
+
+      // 4. Cama Vuran Doğal Tekil Damlalar (Organic ASMR Window Droplets)
       const scheduleNextDrop = () => {
         if (!this.ctx || this.currentAmbienceType !== "rain" || !settings.sound) return;
         try {
           const now = this.ctx.currentTime;
-          const dropBuffer = this.createPinkNoiseBuffer(0.06);
+          const dropBuffer = this.createNoiseBuffer("pink", 0.08);
           const dropSrc = this.ctx.createBufferSource();
           dropSrc.buffer = dropBuffer;
 
           const dropFilter = this.ctx.createBiquadFilter();
           dropFilter.type = "bandpass";
-          dropFilter.frequency.setValueAtTime(1600 + Math.random() * 1400, now);
-          dropFilter.Q.setValueAtTime(3.5, now);
+          dropFilter.frequency.setValueAtTime(1400 + Math.random() * 1800, now);
+          dropFilter.Q.setValueAtTime(4.0, now);
 
           const dropGain = this.ctx.createGain();
-          const vol = 0.06 + Math.random() * 0.12;
+          const vol = 0.15 + Math.random() * 0.25;
           dropGain.gain.setValueAtTime(vol, now);
-          dropGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+          dropGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
 
           dropSrc.connect(dropFilter);
           dropFilter.connect(dropGain);
           dropGain.connect(this.ctx.destination);
 
           dropSrc.start(now);
-          dropSrc.stop(now + 0.045);
+          dropSrc.stop(now + 0.055);
         } catch { /* ignore */ }
 
-        const nextDelay = 40 + Math.random() * 85;
+        const nextDelay = 35 + Math.random() * 80;
         this.ambienceTimer = setTimeout(scheduleNextDrop, nextDelay);
       };
 
-      this.ambienceTimer = setTimeout(scheduleNextDrop, 150);
+      this.ambienceTimer = setTimeout(scheduleNextDrop, 120);
 
     } catch { /* sessiz kal */ }
   }
@@ -649,18 +687,18 @@ class SoundEffects {
   startFire() {
     try {
       // 1. Taş Ocak / Şömine Hava Uğultusu (Warm Low Hearth Draft)
-      const brownBuf = this.createBrownNoiseBuffer(3);
+      const brownBuf = this.createNoiseBuffer("brown", 4);
       const brownSrc = this.ctx.createBufferSource();
       brownSrc.buffer = brownBuf;
       brownSrc.loop = true;
 
       const hearthFilter = this.ctx.createBiquadFilter();
       hearthFilter.type = "lowpass";
-      hearthFilter.frequency.setValueAtTime(220, this.ctx.currentTime);
+      hearthFilter.frequency.setValueAtTime(280, this.ctx.currentTime);
 
       const hearthGain = this.ctx.createGain();
-      hearthGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      hearthGain.gain.linearRampToValueAtTime(0.25, this.ctx.currentTime + 0.8);
+      hearthGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      hearthGain.gain.linearRampToValueAtTime(0.48, this.ctx.currentTime + 0.6);
 
       brownSrc.connect(hearthFilter);
       hearthFilter.connect(hearthGain);
@@ -668,19 +706,19 @@ class SoundEffects {
       brownSrc.start();
 
       // 2. Köz Fısıltısı (Gentle Mid Ember Shimmer)
-      const pinkBuf = this.createPinkNoiseBuffer(3);
+      const pinkBuf = this.createNoiseBuffer("pink", 4);
       const pinkSrc = this.ctx.createBufferSource();
       pinkSrc.buffer = pinkBuf;
       pinkSrc.loop = true;
 
       const emberFilter = this.ctx.createBiquadFilter();
       emberFilter.type = "bandpass";
-      emberFilter.frequency.setValueAtTime(700, this.ctx.currentTime);
-      emberFilter.Q.setValueAtTime(1.2, this.ctx.currentTime);
+      emberFilter.frequency.setValueAtTime(850, this.ctx.currentTime);
+      emberFilter.Q.setValueAtTime(1.4, this.ctx.currentTime);
 
       const emberGain = this.ctx.createGain();
-      emberGain.gain.setValueAtTime(0.001, this.ctx.currentTime);
-      emberGain.gain.linearRampToValueAtTime(0.14, this.ctx.currentTime + 0.8);
+      emberGain.gain.setValueAtTime(0.01, this.ctx.currentTime);
+      emberGain.gain.linearRampToValueAtTime(0.30, this.ctx.currentTime + 0.6);
 
       pinkSrc.connect(emberFilter);
       emberFilter.connect(emberGain);
@@ -695,48 +733,48 @@ class SoundEffects {
         if (!this.ctx || this.currentAmbienceType !== "fire" || !settings.sound) return;
         try {
           const now = this.ctx.currentTime;
-          const isDeepPop = Math.random() < 0.22;
+          const isDeepPop = Math.random() < 0.25;
 
           if (isDeepPop) {
             const osc = this.ctx.createOscillator();
             const gain = this.ctx.createGain();
             osc.type = "sine";
-            osc.frequency.setValueAtTime(150, now);
-            osc.frequency.exponentialRampToValueAtTime(45, now + 0.05);
-            gain.gain.setValueAtTime(0.20, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.06);
+            osc.frequency.setValueAtTime(160, now);
+            osc.frequency.exponentialRampToValueAtTime(50, now + 0.06);
+            gain.gain.setValueAtTime(0.38, now);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
             osc.connect(gain);
             gain.connect(this.ctx.destination);
             osc.start(now);
-            osc.stop(now + 0.065);
+            osc.stop(now + 0.075);
           } else {
-            const popBuf = this.createPinkNoiseBuffer(0.03);
+            const popBuf = this.createNoiseBuffer("white", 0.04);
             const popSrc = this.ctx.createBufferSource();
             popSrc.buffer = popBuf;
 
             const popFilter = this.ctx.createBiquadFilter();
             popFilter.type = "highpass";
-            popFilter.frequency.setValueAtTime(2200 + Math.random() * 2600, now);
+            popFilter.frequency.setValueAtTime(1800 + Math.random() * 2400, now);
 
             const popGain = this.ctx.createGain();
-            const vol = 0.12 + Math.random() * 0.16;
+            const vol = 0.25 + Math.random() * 0.35;
             popGain.gain.setValueAtTime(vol, now);
-            popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
+            popGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.028);
 
             popSrc.connect(popFilter);
             popFilter.connect(popGain);
             popGain.connect(this.ctx.destination);
 
             popSrc.start(now);
-            popSrc.stop(now + 0.03);
+            popSrc.stop(now + 0.035);
           }
         } catch { /* ignore */ }
 
-        const nextDelay = 70 + Math.random() * 260;
+        const nextDelay = 60 + Math.random() * 220;
         this.ambienceTimer = setTimeout(scheduleNextPop, nextDelay);
       };
 
-      this.ambienceTimer = setTimeout(scheduleNextPop, 120);
+      this.ambienceTimer = setTimeout(scheduleNextPop, 100);
 
     } catch { /* sessiz kal */ }
   }
@@ -744,25 +782,25 @@ class SoundEffects {
   stopAmbience() {
     if (this.ambienceTimer) {
       clearTimeout(this.ambienceTimer);
-      clearInterval(this.ambienceTimer);
       this.ambienceTimer = null;
     }
-    if (this.ambienceGains && this.ctx) {
-      const now = this.ctx.currentTime;
-      this.ambienceGains.forEach((g) => {
-        try { g.gain.linearRampToValueAtTime(0.0001, now + 0.4); } catch { /* ignore */ }
+    if (this.ambienceSources && this.ambienceSources.length) {
+      this.ambienceSources.forEach((src) => {
+        try {
+          src.stop();
+          src.disconnect();
+        } catch { /* ignore */ }
       });
+      this.ambienceSources = [];
     }
-    if (this.ambienceSources) {
-      const sources = this.ambienceSources;
-      setTimeout(() => {
-        sources.forEach((s) => {
-          try { s.stop(); s.disconnect(); } catch { /* ignore */ }
-        });
-      }, 450);
-      this.ambienceSources = null;
+    if (this.ambienceGains && this.ambienceGains.length) {
+      this.ambienceGains.forEach((g) => {
+        try {
+          g.disconnect();
+        } catch { /* ignore */ }
+      });
+      this.ambienceGains = [];
     }
-    this.ambienceGains = null;
   }
 }
 
@@ -2794,13 +2832,16 @@ applyLampFocus(settings.lampFocus);
 syncSoundIcons();
 syncAmbientButton();
 
-if (settings.sound && settings.ambience && settings.ambience !== "none") {
-  const startOnGesture = () => {
+const unlockAllAudio = () => {
+  sfx.init();
+  if (settings.sound && settings.ambience && settings.ambience !== "none" && !sfx.ambienceSources.length) {
     sfx.setAmbience(settings.ambience);
-  };
-  window.addEventListener("click", startOnGesture, { once: true });
-  window.addEventListener("keydown", startOnGesture, { once: true });
-}
+  }
+};
+window.addEventListener("pointerdown", unlockAllAudio, { passive: true });
+window.addEventListener("touchstart", unlockAllAudio, { passive: true });
+window.addEventListener("click", unlockAllAudio, { passive: true });
+window.addEventListener("keydown", unlockAllAudio, { passive: true });
 
 if (!restoreSession()) {
   render();

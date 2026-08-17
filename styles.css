@@ -199,6 +199,84 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Gerçekçi & Büyüleyici Kütüphane Arka Planı (Library Backdrop) */
+.library-backdrop {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url('library-bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0.36;
+  filter: brightness(0.78) contrast(1.1) saturate(0.95);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+
+.library-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(22, 19, 17, 0.42) 0%,
+    rgba(22, 19, 17, 0.86) 65%,
+    rgba(22, 19, 17, 0.98) 100%
+  );
+  transition: background 0.5s ease;
+}
+
+[data-theme="light"] .library-backdrop {
+  opacity: 0.12;
+  filter: brightness(1.22) contrast(0.92) sepia(0.2);
+}
+
+[data-theme="light"] .library-backdrop::after {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(248, 242, 231, 0.55) 0%,
+    rgba(248, 242, 231, 0.92) 70%,
+    rgba(248, 242, 231, 0.98) 100%
+  );
+}
+
+[data-palette="library"] .library-backdrop::after {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(16, 22, 20, 0.45) 0%,
+    rgba(16, 22, 20, 0.88) 65%,
+    rgba(16, 22, 20, 0.98) 100%
+  );
+}
+
+[data-theme="light"][data-palette="library"] .library-backdrop::after {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(241, 247, 244, 0.55) 0%,
+    rgba(241, 247, 244, 0.92) 70%,
+    rgba(241, 247, 244, 0.98) 100%
+  );
+}
+
+[data-palette="matcha"] .library-backdrop::after {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(17, 21, 16, 0.45) 0%,
+    rgba(17, 21, 16, 0.88) 65%,
+    rgba(17, 21, 16, 0.98) 100%
+  );
+}
+
+[data-theme="light"][data-palette="matcha"] .library-backdrop::after {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(245, 248, 242, 0.55) 0%,
+    rgba(245, 248, 242, 0.92) 70%,
+    rgba(245, 248, 242, 0.98) 100%
+  );
+}
+
 /* Sıcak Kütüphane Işık Ambiyansı */
 .background-glows {
   position: fixed;

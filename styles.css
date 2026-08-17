@@ -367,7 +367,7 @@ body {
   line-height: 1;
 }
 
-/* Mobilde SADECE sol üstte sade logo kalsın, isim yazmasın ve alan tasarrufu sağla */
+/* Mobilde sol üstte logo ve isim birlikte şık bir kapsülde yer alır */
 @media (max-width: 680px) {
   :root {
     --wheel-item: 48px;
@@ -376,24 +376,27 @@ body {
     padding: 12px 14px 20px;
     gap: 10px;
   }
-  .desktop-only-text {
-    display: none !important;
-  }
   .plate {
-    padding: 0;
-    width: 42px;
-    height: 42px;
-    justify-content: center;
-    border-radius: var(--radius-md);
+    padding: 5px 11px 5px 7px;
+    gap: 7px;
+    height: 36px;
+    border-radius: var(--radius-full);
   }
   .plate-icon {
-    width: 28px;
-    height: 28px;
-    background: transparent;
+    width: 24px;
+    height: 24px;
   }
   .brand-logo-svg {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
+  }
+  .plate-title {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    display: inline-block !important;
+  }
+  .topbar {
+    padding-right: 36px;
   }
   .roulette-header {
     padding: 12px 16px;
@@ -975,9 +978,9 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
-  margin-top: 24px;
-  padding: 24px;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 20px 16px;
   border-radius: var(--radius-md);
   background: var(--surface-raised);
   border: 1px solid var(--surface-border);
@@ -1026,12 +1029,14 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+  max-width: 130px;
   z-index: 1;
 }
 
 .timer-digits {
   font-family: var(--font-mono);
-  font-size: 38px;
+  font-size: 35px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
@@ -1042,11 +1047,16 @@ body {
 .timer-label {
   margin-top: 6px;
   font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 10.5px;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-soft);
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(201, 122, 62, 0.12);
+  color: var(--accent);
+  border: 1px solid rgba(201, 122, 62, 0.22);
+  line-height: 1.2;
 }
 
 .timer-section.is-paused .radial-progress {
@@ -1055,7 +1065,9 @@ body {
 }
 
 .timer-section.is-paused .timer-label {
+  background: rgba(217, 160, 70, 0.15);
   color: var(--gold);
+  border-color: rgba(217, 160, 70, 0.3);
 }
 
 /* Araştırma Not Defteri */

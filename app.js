@@ -1914,7 +1914,7 @@ function renderResearching() {
             </svg>
             <div class="radial-timer-content">
               <span id="timerDigits" class="timer-digits">00:00</span>
-              <span class="timer-label">${state.paused ? "DURAKLATILDI" : "ODAKLANMA SÜRESİ"}</span>
+              <span class="timer-label">${state.paused ? "Duraklatıldı" : "Odaklanma"}</span>
             </div>
           </div>
         </div>

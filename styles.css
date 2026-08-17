@@ -2468,75 +2468,66 @@ input[type="range"]::-moz-range-thumb {
 .lamp-pull-chain-wrap {
   position: fixed;
   top: 0;
-  right: 42px;
+  right: calc(50% - 320px);
   z-index: 999;
-  width: 44px;
-  height: 180px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: grab;
+  width: 280px;
+  height: 260px;
+  pointer-events: none;
   user-select: none;
-  touch-action: none;
 }
 
-.lamp-pull-chain-wrap:active {
-  cursor: grabbing;
+@media (max-width: 680px) {
+  .lamp-pull-chain-wrap {
+    right: -75px;
+  }
 }
 
 /* Tavana monte pirinç sabitleme aparatı */
 .chain-fixture {
+  position: absolute;
+  top: 0;
+  left: 132px;
   width: 16px;
   height: 8px;
   background: linear-gradient(180deg, #c48b3b 0%, #70471b 100%);
   border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
-  flex-shrink: 0;
+  pointer-events: none;
+  z-index: 10;
 }
 
-/* Sallanan boncuklu zincir izi */
-.chain-beads-track {
-  width: 16px;
-  height: 168px;
-  display: flex;
-  justify-content: center;
-  transform-origin: 8px 0px;
-  transition: transform 0.08s ease-out;
-  animation: chainIdleSway 5.5s ease-in-out infinite alternate;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
-}
-
-.chain-beads-svg {
-  width: 16px;
-  height: 168px;
+/* İnteraktif Fizik SVG Alanı */
+.chain-physics-svg {
+  width: 280px;
+  height: 260px;
   display: block;
   overflow: visible;
+  pointer-events: auto;
+  touch-action: none;
+  cursor: grab;
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.35));
 }
 
-/* Zincir bırakıldığında yaylanma / fizik tepkisi */
-.chain-beads-track.is-springing {
-  animation: chainSpringRelease 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+.chain-physics-svg:active,
+.chain-handle:active {
+  cursor: grabbing;
 }
 
-@keyframes chainIdleSway {
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(1.2deg); }
-  100% { transform: rotate(-0.8deg); }
+.chain-handle {
+  cursor: grab;
+  transform-origin: 0 0;
+  transition: filter 0.2s ease;
 }
 
-@keyframes chainSpringRelease {
-  0% { transform: translateY(34px); }
-  28% { transform: translateY(-10px); }
-  52% { transform: translateY(5px); }
-  74% { transform: translateY(-2px); }
-  100% { transform: translateY(0); }
+.chain-handle:hover {
+  filter: brightness(1.15) drop-shadow(0 0 8px rgba(255, 200, 100, 0.5));
 }
 
-/* İp Çekme İpucu Balonu */
+/* İp Çekme & Sallama İpucu Balonu */
 .chain-hint-pill {
   position: absolute;
-  bottom: 0px;
-  right: 36px;
+  top: 155px;
+  left: 20px;
   white-space: nowrap;
   background: var(--surface-raised, #241c18);
   color: var(--accent, #d9823b);
@@ -2544,7 +2535,7 @@ input[type="range"]::-moz-range-thumb {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
-  padding: 3px 9px;
+  padding: 4px 10px;
   border-radius: var(--radius-full);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   pointer-events: none;
@@ -2563,19 +2554,6 @@ input[type="range"]::-moz-range-thumb {
   50% { transform: translateY(-4px); }
 }
 
-/* Işık Açıkken Zincirin Parlaması */
-.lamp-pull-chain-wrap.is-lit .chain-beads-svg circle {
-  fill: #ffd58a;
-  stroke: #a0631c;
-  filter: drop-shadow(0 0 3px rgba(255, 210, 120, 0.6));
-}
-
-.lamp-pull-chain-wrap.is-lit .chain-beads-svg path {
-  fill: #f5b041;
-  stroke: #8a4a12;
-  filter: drop-shadow(0 0 6px rgba(255, 195, 80, 0.8));
-}
-
 /* --------------------------------------------------------------------------
    Sağ Üstten Vuran Dolgulu Masa Lambası Işığı (Volumetric Filled Spotlight)
    -------------------------------------------------------------------------- */
@@ -2584,44 +2562,36 @@ input[type="range"]::-moz-range-thumb {
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  opacity: 0;
+  opacity: 0.85;
   transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   background:
     radial-gradient(
       ellipse 100vw 90vh at 88% 0%,
-      rgba(255, 225, 150, 0.34) 0%,
-      rgba(240, 165, 75, 0.22) 32%,
-      rgba(180, 95, 25, 0.08) 62%,
-      rgba(0, 0, 0, 0.72) 88%
+      rgba(255, 225, 150, 0.28) 0%,
+      rgba(240, 165, 75, 0.18) 32%,
+      rgba(180, 95, 25, 0.06) 62%,
+      rgba(0, 0, 0, 0.68) 88%
     ),
     conic-gradient(
       from 190deg at 88% 0%,
       transparent 0deg,
-      rgba(255, 230, 160, 0.22) 18deg,
-      rgba(255, 200, 110, 0.32) 42deg,
-      rgba(240, 150, 50, 0.16) 68deg,
+      rgba(255, 230, 160, 0.18) 18deg,
+      rgba(255, 200, 110, 0.26) 42deg,
+      rgba(240, 150, 50, 0.14) 68deg,
       transparent 96deg
     );
   mix-blend-mode: screen;
 }
 
-body.focus-lamp-on .lamp-spotlight-beam {
-  opacity: 1;
-}
-
-/* Lamba Açıkken Arka Plan ve Kart Atmosferi */
-body.focus-lamp-on .library-backdrop {
-  opacity: 0.14;
-  filter: brightness(0.4) contrast(1.22);
-}
-
-body.focus-lamp-on .concept-card,
-body.focus-lamp-on .roulette-card,
-body.focus-lamp-on .curiosity-parchment-card,
-body.focus-lamp-on .desk-greeting-bar {
-  box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.4),
-    0 0 28px rgba(255, 200, 110, 0.1);
+[data-theme="light"] .lamp-spotlight-beam {
+  opacity: 0.35;
+  background:
+    radial-gradient(
+      ellipse 100vw 90vh at 88% 0%,
+      rgba(255, 240, 200, 0.35) 0%,
+      rgba(255, 220, 160, 0.15) 35%,
+      transparent 70%
+    );
 }
 
 /* Günün İlham Parşömeni (Curiosity Parchment Card) */

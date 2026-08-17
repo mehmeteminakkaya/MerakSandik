@@ -2153,76 +2153,251 @@ if (ambientSoundBtn) {
 }
 
 function setupHangingLampChain() {
-  if (!lampPullChain || !chainBeadsTrack) return;
+  const chainWrap = document.querySelector("#lampPullChain");
+  const svg = document.querySelector("#chainPhysicsSvg");
+  const cordPath = document.querySelector("#chainCordPath");
+  const beadsGroup = document.querySelector("#chainBeadsGroup");
+  const handleGroup = document.querySelector("#chainHandleGroup");
+  const hintPill = document.querySelector("#chainHint");
+  if (!chainWrap || !svg || !cordPath || !beadsGroup || !handleGroup) return;
+
+  // Geometry: SVG coordinates (viewBox 0 0 280 260)
+  const ANCHOR_X = 140;
+  const ANCHOR_Y = 0;
+  const NUM_POINTS = 9;
+  const SEGMENT_LEN = 16.5; // Total rest length ~148px
+
+  // Verlet Physics Nodes
+  const nodes = [];
+  for (let i = 0; i < NUM_POINTS; i++) {
+    const y = ANCHOR_Y + i * SEGMENT_LEN;
+    nodes.push({
+      x: ANCHOR_X,
+      y: y,
+      oldX: ANCHOR_X + (i > 0 ? (Math.random() - 0.5) * 2 : 0),
+      oldY: y,
+      pinned: i === 0
+    });
+  }
+
+  // Create SVG bead circles
+  beadsGroup.innerHTML = "";
+  const beadElements = [];
+  for (let i = 1; i < NUM_POINTS - 1; i++) {
+    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+    circle.setAttribute("r", "2.8");
+    circle.setAttribute("fill", "url(#brassBeadGrad)");
+    circle.setAttribute("stroke", "#613b0a");
+    circle.setAttribute("stroke-width", "0.6");
+    beadsGroup.appendChild(circle);
+    beadElements.push(circle);
+  }
 
   let isDragging = false;
-  let startY = 0;
-  let currentY = 0;
-  let pullDistance = 0;
+  let dragTargetX = ANCHOR_X;
+  let dragTargetY = ANCHOR_Y + (NUM_POINTS - 1) * SEGMENT_LEN;
+  let startPointerY = 0;
+  let maxStretchDistance = 0;
+  let animId = null;
+  let isSimulating = false;
 
-  const triggerChainPull = () => {
-    settings.lampFocus = !settings.lampFocus;
-    sfx.playChainClick();
-    applyLampFocus(settings.lampFocus);
+  function triggerThemeSwitch() {
+    const nextTheme = settings.theme === "light" ? "dark" : "light";
+    applyTheme(nextTheme);
     saveSettings();
+    sfx.playChainClick();
 
-    if (chainHint) {
-      chainHint.classList.add("is-dismissed");
-    }
+    if (hintPill) hintPill.classList.add("is-dismissed");
 
-    chainBeadsTrack.classList.remove("is-springing");
-    void chainBeadsTrack.offsetHeight;
-    chainBeadsTrack.classList.add("is-springing");
-    chainBeadsTrack.style.transform = "";
+    // Add lively oscillation impulse on click/pull
+    nodes[NUM_POINTS - 1].oldX -= (Math.random() > 0.5 ? 1 : -1) * 16;
+    nodes[NUM_POINTS - 1].oldY -= 14;
+    startSimulation();
 
-    showToast(settings.lampFocus ? "💡 Masa Lambası Açıldı (Sağ üstten odak ışığı vuruyor)" : "💡 Masa Lambası Kapatıldı");
-  };
+    showToast(
+      nextTheme === "light"
+        ? "☀️ Işıklar Açıldı — Aydınlık Kütüphane Modu"
+        : "🌙 Işıklar Kısıldı — Karanlık Kütüphane Modu"
+    );
+  }
 
-  const onPointerDown = (e) => {
+  function getSvgPoint(e) {
+    const rect = svg.getBoundingClientRect();
+    const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : ANCHOR_X);
+    const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 150);
+    const scaleX = 280 / rect.width;
+    const scaleY = 260 / rect.height;
+    return {
+      x: Math.max(15, Math.min(265, (clientX - rect.left) * scaleX)),
+      y: Math.max(8, Math.min(250, (clientY - rect.top) * scaleY))
+    };
+  }
+
+  function onPointerDown(e) {
     isDragging = true;
-    startY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-    pullDistance = 0;
-    chainBeadsTrack.classList.remove("is-springing");
-    try { lampPullChain.setPointerCapture(e.pointerId); } catch { /* ignore */ }
-  };
+    const pt = getSvgPoint(e);
+    dragTargetX = pt.x;
+    dragTargetY = pt.y;
+    startPointerY = pt.y;
+    maxStretchDistance = 0;
 
-  const onPointerMove = (e) => {
+    // Grab the handle
+    nodes[NUM_POINTS - 1].x = pt.x;
+    nodes[NUM_POINTS - 1].y = pt.y;
+    nodes[NUM_POINTS - 1].oldX = pt.x;
+    nodes[NUM_POINTS - 1].oldY = pt.y;
+
+    if (hintPill) hintPill.classList.add("is-dismissed");
+
+    startSimulation();
+    try { chainWrap.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+  }
+
+  function onPointerMove(e) {
     if (!isDragging) return;
-    currentY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-    const rawDy = Math.max(0, currentY - startY);
-    pullDistance = Math.min(55, rawDy * 0.75);
-    chainBeadsTrack.style.transform = `translateY(${pullDistance}px)`;
-  };
+    const pt = getSvgPoint(e);
+    dragTargetX = pt.x;
+    dragTargetY = pt.y;
+    const currentDist = Math.hypot(pt.x - ANCHOR_X, pt.y - ANCHOR_Y);
+    const restLen = (NUM_POINTS - 1) * SEGMENT_LEN;
+    const stretch = currentDist - restLen;
+    if (stretch > maxStretchDistance) {
+      maxStretchDistance = stretch;
+    }
+  }
 
-  const onPointerUp = (e) => {
+  function onPointerUp(e) {
     if (!isDragging) return;
     isDragging = false;
-    try { lampPullChain.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
-    if (pullDistance >= 18) {
-      triggerChainPull();
+    try { chainWrap.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+
+    // If pulled down (stretched >= 16px) OR simple fast tap
+    if (maxStretchDistance >= 16 || (Math.abs(nodes[NUM_POINTS - 1].y - startPointerY) < 6 && maxStretchDistance < 4)) {
+      triggerThemeSwitch();
     } else {
-      chainBeadsTrack.classList.add("is-springing");
-      chainBeadsTrack.style.transform = "";
+      // Swung in the air: let physics swing freely
+      startSimulation();
     }
-  };
+  }
 
-  lampPullChain.addEventListener("pointerdown", onPointerDown);
-  lampPullChain.addEventListener("pointermove", onPointerMove);
-  lampPullChain.addEventListener("pointerup", onPointerUp);
-  lampPullChain.addEventListener("pointercancel", onPointerUp);
+  function updatePhysics() {
+    const GRAVITY = 0.55;
+    const DAMPING = 0.985;
 
-  lampPullChain.addEventListener("click", () => {
-    if (pullDistance < 5) {
-      triggerChainPull();
+    for (let i = 0; i < NUM_POINTS; i++) {
+      const n = nodes[i];
+      if (n.pinned) continue;
+
+      if (isDragging && i === NUM_POINTS - 1) {
+        n.oldX = n.x;
+        n.oldY = n.y;
+        n.x = dragTargetX;
+        n.y = dragTargetY;
+        continue;
+      }
+
+      const vx = (n.x - n.oldX) * DAMPING;
+      const vy = (n.y - n.oldY) * DAMPING + GRAVITY;
+
+      n.oldX = n.x;
+      n.oldY = n.y;
+      n.x += vx;
+      n.y += vy;
     }
-  });
 
-  lampPullChain.addEventListener("keydown", (e) => {
+    // Solve distance constraints
+    const iterations = 6;
+    for (let iter = 0; iter < iterations; iter++) {
+      nodes[0].x = ANCHOR_X;
+      nodes[0].y = ANCHOR_Y;
+
+      for (let i = 0; i < NUM_POINTS - 1; i++) {
+        const n1 = nodes[i];
+        const n2 = nodes[i + 1];
+
+        const dx = n2.x - n1.x;
+        const dy = n2.y - n1.y;
+        const dist = Math.hypot(dx, dy) || 0.001;
+        const diff = (dist - SEGMENT_LEN) / dist;
+
+        if (n1.pinned) {
+          n2.x -= dx * diff;
+          n2.y -= dy * diff;
+        } else if (isDragging && i + 1 === NUM_POINTS - 1) {
+          n1.x += dx * diff;
+          n1.y += dy * diff;
+        } else {
+          n1.x += dx * 0.5 * diff;
+          n1.y += dy * 0.5 * diff;
+          n2.x -= dx * 0.5 * diff;
+          n2.y -= dy * 0.5 * diff;
+        }
+      }
+    }
+  }
+
+  function renderChain() {
+    // 1. Draw connecting cord line
+    let pathD = `M ${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)}`;
+    for (let i = 1; i < NUM_POINTS; i++) {
+      pathD += ` L ${nodes[i].x.toFixed(1)} ${nodes[i].y.toFixed(1)}`;
+    }
+    cordPath.setAttribute("d", pathD);
+
+    // 2. Position beads
+    for (let i = 1; i < NUM_POINTS - 1; i++) {
+      const bead = beadElements[i - 1];
+      if (bead) {
+        bead.setAttribute("cx", nodes[i].x.toFixed(1));
+        bead.setAttribute("cy", nodes[i].y.toFixed(1));
+      }
+    }
+
+    // 3. Position and rotate brass teardrop handle
+    const handleNode = nodes[NUM_POINTS - 1];
+    const prevNode = nodes[NUM_POINTS - 2];
+    const angle = Math.atan2(handleNode.x - prevNode.x, handleNode.y - prevNode.y) * (-180 / Math.PI);
+    handleGroup.setAttribute("transform", `translate(${handleNode.x.toFixed(1)}, ${handleNode.y.toFixed(1)}) rotate(${(-angle).toFixed(1)})`);
+  }
+
+  function loop() {
+    updatePhysics();
+    renderChain();
+
+    let totalVelocity = 0;
+    for (let i = 1; i < NUM_POINTS; i++) {
+      totalVelocity += Math.hypot(nodes[i].x - nodes[i].oldX, nodes[i].y - nodes[i].oldY);
+    }
+
+    if (isDragging || totalVelocity > 0.04) {
+      animId = requestAnimationFrame(loop);
+    } else {
+      isSimulating = false;
+      animId = null;
+    }
+  }
+
+  function startSimulation() {
+    if (!isSimulating) {
+      isSimulating = true;
+      animId = requestAnimationFrame(loop);
+    }
+  }
+
+  chainWrap.addEventListener("pointerdown", onPointerDown);
+  window.addEventListener("pointermove", onPointerMove);
+  window.addEventListener("pointerup", onPointerUp);
+  window.addEventListener("pointercancel", onPointerUp);
+
+  chainWrap.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
-      triggerChainPull();
+      triggerThemeSwitch();
     }
   });
+
+  renderChain();
+  startSimulation();
 }
 
 setupHangingLampChain();

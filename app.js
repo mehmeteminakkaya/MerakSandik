@@ -2765,6 +2765,21 @@ window.addEventListener("touchstart", unlockAllAudio, { passive: true });
 window.addEventListener("click", unlockAllAudio, { passive: true });
 window.addEventListener("keydown", unlockAllAudio, { passive: true });
 
+let resizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (state.phase === "idle" && !state.spinning) {
+      const track = document.querySelector("#wheelTrack");
+      if (track) {
+        const pool = availableTopicPool();
+        const initialOffset = getWheelInitialOffset(pool);
+        track.style.transform = `translateY(-${initialOffset}px)`;
+      }
+    }
+  }, 100);
+});
+
 if (!restoreSession()) {
   render();
 }

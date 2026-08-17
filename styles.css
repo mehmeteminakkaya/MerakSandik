@@ -420,6 +420,53 @@ body {
   }
 }
 
+/* 24" ve Üzeri Masaüstü Monitörleri: Çark daha yüksek ve heybetli (Laptop 15" boyutunu korur) */
+@media (min-width: 1200px) and (min-height: 850px) {
+  :root {
+    --wheel-item: 72px;
+  }
+  .app {
+    max-width: 730px;
+    gap: 22px;
+  }
+  .wheel-track li b {
+    font-size: 21px;
+  }
+  .wheel-track li small {
+    font-size: 13.5px;
+  }
+  .roulette-header {
+    padding: 18px 24px;
+  }
+  .roulette-header-title {
+    font-size: 14.5px;
+  }
+  .roulette-footer {
+    padding: 18px 24px 20px;
+  }
+  .roulette-footer .btn {
+    padding: 14px 28px;
+    font-size: 15.5px;
+  }
+}
+
+/* 27"+ 2K / 4K Ekstra Geniş Monitörler */
+@media (min-width: 1600px) and (min-height: 960px) {
+  :root {
+    --wheel-item: 78px;
+  }
+  .app {
+    max-width: 760px;
+    gap: 26px;
+  }
+  .wheel-track li b {
+    font-size: 22px;
+  }
+  .wheel-track li small {
+    font-size: 14px;
+  }
+}
+
 .topbar-actions {
   display: flex;
   align-items: center;

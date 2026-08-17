@@ -1,10 +1,11 @@
-const CACHE_NAME = "meraksandik-v31";
+const CACHE_NAME = "meraksandik-v32";
 const PRECACHE_URLS = [
   "/",
   "/index.html",
   "/app.js",
   "/styles.css",
   "/manifest.json",
+  "/logo.jpg",
   "/icon-192.png",
   "/icon-512.png",
   "/library-bg.jpg",

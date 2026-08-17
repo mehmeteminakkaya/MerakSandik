@@ -732,7 +732,6 @@ function loadSettings() {
     researchMinutes: 15,
     sound: true,
     theme: "dark",
-    palette: "coffee",
     category: "general",
     waxColor: "ruby",
     ambience: "none",
@@ -744,10 +743,11 @@ function loadSettings() {
     const parsed = JSON.parse(raw);
     const loaded = { ...fallback, ...parsed };
 
-    const hadLegacyFields = "provider" in loaded || "apiKeys" in loaded || "models" in loaded;
+    const hadLegacyFields = "provider" in loaded || "apiKeys" in loaded || "models" in loaded || "palette" in loaded;
     delete loaded.provider;
     delete loaded.apiKeys;
     delete loaded.models;
+    delete loaded.palette;
     if (hadLegacyFields) {
       try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(loaded)); } catch { /* ignore */ }
     }
@@ -765,7 +765,6 @@ function saveSettings() {
   syncSoundIcons();
   syncAmbientButton();
   applyTheme(settings.theme);
-  applyPalette(settings.palette);
   applySeal(settings.waxColor);
   applyLampFocus(settings.lampFocus);
 }
@@ -790,15 +789,6 @@ function applyTheme(theme = settings.theme || "dark") {
     if (themeBtnDark) themeBtnDark.classList.add("is-active");
     if (themeBtnLight) themeBtnLight.classList.remove("is-active");
   }
-}
-
-function applyPalette(palette = settings.palette || "coffee") {
-  settings.palette = palette;
-  document.documentElement.setAttribute("data-palette", palette);
-
-  document.querySelectorAll(".palette-btn").forEach((btn) => {
-    btn.classList.toggle("is-active", btn.dataset.palette === palette);
-  });
 }
 
 function applySeal(waxColor = settings.waxColor || "ruby") {
@@ -2195,20 +2185,6 @@ if (themeBtnLight) {
   });
 }
 
-document.querySelectorAll(".palette-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const pal = btn.dataset.palette;
-    applyPalette(pal);
-    saveSettings();
-    const names = {
-      coffee: "☕ Sıcak Kahve paleti uygulandı",
-      library: "🌲 Gece Kütüphanesi paleti uygulandı",
-      matcha: "🍵 Matcha & Yulaf paleti uygulandı"
-    };
-    showToast(names[pal] || "Renk paleti güncellendi");
-  });
-});
-
 document.querySelectorAll(".wax-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     const seal = btn.dataset.seal;
@@ -2245,6 +2221,7 @@ if (ambientSoundBtn) {
 function setupHangingLampChain() {
   const chainWrap = document.querySelector("#lampPullChain");
   const svg = document.querySelector("#chainPhysicsSvg");
+  const touchArea = document.querySelector("#chainTouchArea");
   const cordPath = document.querySelector("#chainCordPath");
   const beadsGroup = document.querySelector("#chainBeadsGroup");
   const handleGroup = document.querySelector("#chainHandleGroup");
@@ -2322,6 +2299,7 @@ function setupHangingLampChain() {
 
   function onPointerDown(e) {
     e.stopPropagation();
+    e.preventDefault();
     isDragging = true;
     const pt = getSvgPoint(e);
     dragTargetX = pt.x;
@@ -2424,6 +2402,7 @@ function setupHangingLampChain() {
       pathD += ` L ${nodes[i].x.toFixed(1)} ${nodes[i].y.toFixed(1)}`;
     }
     cordPath.setAttribute("d", pathD);
+    if (touchArea) touchArea.setAttribute("d", pathD);
 
     for (let i = 1; i < NUM_POINTS - 1; i++) {
       const bead = beadElements[i - 1];
@@ -2463,6 +2442,7 @@ function setupHangingLampChain() {
     }
   }
 
+  if (touchArea) touchArea.addEventListener("pointerdown", onPointerDown);
   handleGroup.addEventListener("pointerdown", onPointerDown);
   cordPath.addEventListener("pointerdown", onPointerDown);
   beadsGroup.addEventListener("pointerdown", onPointerDown);

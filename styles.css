@@ -83,96 +83,6 @@
   --shadow-main: 0 24px 54px -10px rgba(60, 40, 20, 0.15), 0 8px 24px -4px rgba(60, 40, 20, 0.08), 0 0 0 1px rgba(120, 80, 40, 0.12);
 }
 
-/* --------------------------------------------------------------------------
-   PALET 2: Gece Kütüphanesi & Pirinç Masa Lambası (Library & Brass)
-   -------------------------------------------------------------------------- */
-[data-palette="library"] {
-  color-scheme: dark;
-  --bg: #101614;
-  --bg-subtle: #17211e;
-  --surface: #1e2c28;
-  --surface-raised: #283a34;
-  --surface-glass: rgba(30, 44, 40, 0.92);
-  --surface-border: rgba(195, 225, 215, 0.16);
-  --surface-border-hover: rgba(195, 225, 215, 0.3);
-
-  --text-main: #f5fbf8;
-  --text-muted: #c4ded5;
-  --text-soft: #91b5a9;
-
-  --accent: #e0a94e;
-  --accent-light: #f3c26f;
-  --accent-glow: rgba(224, 169, 78, 0.3);
-  --accent-ink: #141b17;
-  --gold: #e0a94e;
-}
-
-[data-theme="light"][data-palette="library"] {
-  color-scheme: light;
-  --bg: #f1f7f4;
-  --bg-subtle: #e1ede7;
-  --surface: #ffffff;
-  --surface-raised: #f4faf6;
-  --surface-glass: rgba(255, 255, 255, 0.96);
-  --surface-border: rgba(35, 75, 55, 0.15);
-  --surface-border-hover: rgba(35, 75, 55, 0.3);
-
-  --text-main: #142820;
-  --text-muted: #3a5c4e;
-  --text-soft: #638677;
-
-  --accent: #246d4e;
-  --accent-light: #378b67;
-  --accent-glow: rgba(36, 109, 78, 0.2);
-  --accent-ink: #ffffff;
-  --gold: #9e7330;
-}
-
-/* --------------------------------------------------------------------------
-   PALET 3: Japon Kırtasiye & Matcha Yulaf (Matcha & Oat)
-   -------------------------------------------------------------------------- */
-[data-palette="matcha"] {
-  color-scheme: dark;
-  --bg: #141713;
-  --bg-subtle: #1c211a;
-  --surface: #242c22;
-  --surface-raised: #2f3a2c;
-  --surface-glass: rgba(36, 44, 34, 0.92);
-  --surface-border: rgba(205, 225, 195, 0.16);
-  --surface-border-hover: rgba(205, 225, 195, 0.3);
-
-  --text-main: #f8faf6;
-  --text-muted: #cbd8c5;
-  --text-soft: #98a992;
-
-  --accent: #7ca856;
-  --accent-light: #9bc574;
-  --accent-glow: rgba(124, 168, 86, 0.3);
-  --accent-ink: #141a12;
-  --gold: #d4a373;
-}
-
-[data-theme="light"][data-palette="matcha"] {
-  color-scheme: light;
-  --bg: #f8f6f0;
-  --bg-subtle: #ece7db;
-  --surface: #ffffff;
-  --surface-raised: #fbf9f4;
-  --surface-glass: rgba(255, 255, 255, 0.96);
-  --surface-border: rgba(70, 90, 50, 0.15);
-  --surface-border-hover: rgba(70, 90, 50, 0.3);
-
-  --text-main: #1f241a;
-  --text-muted: #54604c;
-  --text-soft: #7c8874;
-
-  --accent: #5e843c;
-  --accent-light: #76a24e;
-  --accent-glow: rgba(94, 132, 60, 0.2);
-  --accent-ink: #ffffff;
-  --gold: #b3824f;
-}
-
 * {
   box-sizing: border-box;
 }
@@ -239,42 +149,6 @@ body {
     rgba(250, 246, 238, 0.45) 0%,
     rgba(250, 246, 238, 0.82) 65%,
     rgba(250, 246, 238, 0.96) 100%
-  );
-}
-
-[data-palette="library"] .library-backdrop::after {
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(16, 22, 20, 0.45) 0%,
-    rgba(16, 22, 20, 0.88) 65%,
-    rgba(16, 22, 20, 0.98) 100%
-  );
-}
-
-[data-theme="light"][data-palette="library"] .library-backdrop::after {
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(241, 247, 244, 0.45) 0%,
-    rgba(241, 247, 244, 0.82) 65%,
-    rgba(241, 247, 244, 0.96) 100%
-  );
-}
-
-[data-palette="matcha"] .library-backdrop::after {
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(17, 21, 16, 0.45) 0%,
-    rgba(17, 21, 16, 0.88) 65%,
-    rgba(17, 21, 16, 0.98) 100%
-  );
-}
-
-[data-theme="light"][data-palette="matcha"] .library-backdrop::after {
-  background: radial-gradient(
-    circle at 50% 30%,
-    rgba(245, 248, 242, 0.45) 0%,
-    rgba(245, 248, 242, 0.82) 65%,
-    rgba(245, 248, 242, 0.96) 100%
   );
 }
 
@@ -2510,6 +2384,18 @@ input[type="range"]::-moz-range-thumb {
 
 .chain-handle:hover {
   filter: brightness(1.18) drop-shadow(0 0 8px rgba(255, 200, 100, 0.5));
+}
+
+.chain-touch-target {
+  pointer-events: stroke !important;
+  cursor: grab;
+  touch-action: none;
+}
+
+.handle-touch-target {
+  pointer-events: all !important;
+  cursor: grab;
+  touch-action: none;
 }
 
 #chainBeadsGroup circle {

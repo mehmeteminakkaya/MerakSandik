@@ -1,4 +1,4 @@
-const CACHE_NAME = "meraksandik-v43";
+const CACHE_NAME = "meraksandik-v44";
 const PRECACHE_URLS = [
   "/",
   "/index.html",
@@ -13,9 +13,9 @@ const PRECACHE_URLS = [
   "/meow.mp3",
   "/purr.mp3"
 ];
-// fireplace.mp3/rain.mp3 (~15MB combined) are NOT precached — the fetch
-// handler below caches them opportunistically the first time ambience is
-// played, so install stays light for users who never touch that toggle.
+// fireplace.mp3/rain.mp3/ocean.mp3 (~13MB combined) are NOT precached — the
+// fetch handler below caches them opportunistically the first time ambience
+// is played, so install stays light for users who never touch that toggle.
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS)));

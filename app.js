@@ -222,6 +222,7 @@ class SoundEffects {
     this.purrAudio = null;
     this.rainAudio = null;
     this.fireAudio = null;
+    this.oceanAudio = null;
   }
 
   init() {
@@ -246,13 +247,20 @@ class SoundEffects {
         this.fireAudio = new Audio("/fireplace.mp3");
         this.fireAudio.preload = "auto";
         this.fireAudio.loop = true;
+        this.oceanAudio = new Audio("/ocean.mp3");
+        this.oceanAudio.preload = "auto";
+        this.oceanAudio.loop = true;
       } catch { /* ignore */ }
     }
     return this.ctx;
   }
 
   isAmbiencePlaying() {
-    return !!((this.rainAudio && !this.rainAudio.paused) || (this.fireAudio && !this.fireAudio.paused));
+    return !!(
+      (this.rainAudio && !this.rainAudio.paused) ||
+      (this.fireAudio && !this.fireAudio.paused) ||
+      (this.oceanAudio && !this.oceanAudio.paused)
+    );
   }
 
   playTick() {
@@ -466,7 +474,7 @@ class SoundEffects {
     this.stopAmbience();
     if (!settings.sound || type === "none") return;
     this.init();
-    const track = type === "rain" ? this.rainAudio : type === "fire" ? this.fireAudio : null;
+    const track = { rain: this.rainAudio, fire: this.fireAudio, ocean: this.oceanAudio }[type] || null;
     if (!track) return;
     try {
       track.currentTime = 0;
@@ -493,7 +501,7 @@ class SoundEffects {
       clearInterval(this.ambienceFade);
       this.ambienceFade = null;
     }
-    [this.rainAudio, this.fireAudio].forEach((track) => {
+    [this.rainAudio, this.fireAudio, this.oceanAudio].forEach((track) => {
       if (track && !track.paused) {
         track.pause();
         track.currentTime = 0;
@@ -644,7 +652,8 @@ function syncAmbientButton() {
   const map = {
     none: { icon: "🔇", title: "Arka Plan Ambiyansı: Kapalı (Açmak için tıkla)" },
     rain: { icon: "🌧️", title: "Arka Plan Ambiyansı: Yağmur Sesi" },
-    fire: { icon: "🔥", title: "Arka Plan Ambiyansı: Şömine Çıtırtısı" }
+    fire: { icon: "🔥", title: "Arka Plan Ambiyansı: Şömine Çıtırtısı" },
+    ocean: { icon: "🌊", title: "Arka Plan Ambiyansı: Deniz Dalgaları" }
   };
   const cur = map[settings.ambience] || map.none;
   ambientIcon.textContent = cur.icon;
@@ -2078,7 +2087,7 @@ if (ambientSoundBtn) {
       settings.sound = true;
       syncSoundIcons();
     }
-    const sequence = ["none", "rain", "fire"];
+    const sequence = ["none", "rain", "fire", "ocean"];
     const currentIdx = sequence.indexOf(settings.ambience);
     const nextAmbience = sequence[(currentIdx + 1) % sequence.length];
     settings.ambience = nextAmbience;
@@ -2088,7 +2097,8 @@ if (ambientSoundBtn) {
     const msgs = {
       none: "🔇 Ambiyans sesi kapatıldı",
       rain: "🌧️ Yağmur ambiyansı açıldı (Cama vuran damlalar)",
-      fire: "🔥 Şömine çıtırtısı açıldı (Sıcacık çalışma ambiyansı)"
+      fire: "🔥 Şömine çıtırtısı açıldı (Sıcacık çalışma ambiyansı)",
+      ocean: "🌊 Deniz dalgaları açıldı (Sahil ambiyansı)"
     };
     showToast(msgs[nextAmbience]);
   });

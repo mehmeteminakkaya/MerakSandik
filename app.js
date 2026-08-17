@@ -1175,7 +1175,6 @@ function renderIdle() {
             ${categoryIcon(cat)}
             <span>${cat.tr} Çekmecesi</span>
           </div>
-          <span class="roulette-badge${isAllCompleted ? " ai-badge" : ""}">${badgeText}</span>
         </div>
 
         <div class="wheel-viewport" id="wheelViewport" aria-hidden="true">

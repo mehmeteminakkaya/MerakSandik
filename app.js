@@ -2486,22 +2486,6 @@ function setupHangingLampChain() {
 
 setupHangingLampChain();
 
-researchRange.addEventListener("input", () => {
-  settings.researchMinutes = Number(researchRange.value);
-  researchLabel.textContent = `${settings.researchMinutes} dk`;
-  saveSettings();
-});
-
-soundToggle.addEventListener("change", () => {
-  settings.sound = soundToggle.checked;
-  if (!settings.sound) {
-    sfx.stopAmbience();
-  } else if (settings.ambience !== "none") {
-    sfx.setAmbience(settings.ambience);
-  }
-  saveSettings();
-});
-
 if (soundQuickToggle) {
   soundQuickToggle.addEventListener("click", () => {
     settings.sound = !settings.sound;

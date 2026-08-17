@@ -19,9 +19,39 @@
 </head>
 <body>
   <div class="library-backdrop" aria-hidden="true"></div>
+  <div class="lamp-spotlight-beam" aria-hidden="true"></div>
   <div class="background-glows" aria-hidden="true">
     <div class="glow-sphere glow-1"></div>
     <div class="glow-sphere glow-2"></div>
+  </div>
+
+  <!-- Gerçek Çekilebilir & Sallanan Nostaljik Masa Lambası Zinciri -->
+  <div class="lamp-pull-chain-wrap" id="lampPullChain" role="button" tabindex="0" title="Masa Lambası Zinciri — ışığı açıp kapatmak için çek! 💡" aria-label="Masa Lambası Zinciri">
+    <div class="chain-fixture"></div>
+    <div class="chain-beads-track" id="chainBeadsTrack">
+      <svg viewBox="0 0 16 168" class="chain-beads-svg" preserveAspectRatio="none">
+        <!-- Zincir teli -->
+        <line x1="8" y1="0" x2="8" y2="140" stroke="#d49a4b" stroke-width="1.2"/>
+        <!-- Pirinç Zincir Boncukları -->
+        <circle cx="8" cy="6" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="17" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="28" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="39" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="50" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="61" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="72" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="83" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="94" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="105" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="116" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="127" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <circle cx="8" cy="138" r="2.5" fill="#e5b86f" stroke="#8a5a22" stroke-width="0.8"/>
+        <!-- Pirinç Damla Ağırlık / Tutamaç -->
+        <path d="M 8 140 C 3.5 140, 1.5 147, 3.5 155 C 5.5 163, 8 167, 8 167 C 8 167, 10.5 163, 12.5 155 C 14.5 147, 12.5 140, 8 140 Z" fill="#d99a4e" stroke="#8a5a22" stroke-width="1.2"/>
+        <ellipse cx="8" cy="153" rx="2.5" ry="4" fill="#faebd7" opacity="0.75"/>
+      </svg>
+    </div>
+    <div class="chain-hint-pill" id="chainHint">İpi Çek 💡</div>
   </div>
 
   <div class="app">
@@ -42,11 +72,6 @@
       <div class="topbar-actions">
         <button id="ambientSoundBtn" class="icon-button ambient-btn" type="button" title="Arka Plan Ambiyansı (Yağmur / Şömine)" aria-label="Ambiyans Sesi">
           <span id="ambientIcon">🔇</span>
-        </button>
-        <button id="lampPullCordBtn" class="icon-button lamp-cord-btn" type="button" title="Masa Lambası Odak İpi" aria-label="Odak Lambası">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 2v8M9 10h6l-3 4-3-4zM12 14v5M12 21a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
-          </svg>
         </button>
         <button id="profileBtn" class="icon-button" type="button" title="Katalog & Geçmiş" aria-label="Katalog">
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 4v16M14 14h3"/></svg>

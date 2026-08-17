@@ -2342,12 +2342,19 @@ input[type="range"]::-moz-range-thumb {
     padding: 7px 6px;
     font-size: 12px;
   }
-  .curiosity-parchment-card {
-    padding: 10px 14px;
-    gap: 6px;
+  .lamp-pull-chain-wrap {
+    right: 12px;
+    width: 38px;
+    height: 145px;
   }
-  .parchment-quote {
-    font-size: 12.5px;
+  .chain-beads-track {
+    height: 135px;
+  }
+  .chain-beads-svg {
+    height: 135px;
+  }
+  .chain-hint-pill {
+    display: none;
   }
 }
 
@@ -2455,46 +2462,166 @@ input[type="range"]::-moz-range-thumb {
   100% { box-shadow: 0 0 16px var(--accent-glow); }
 }
 
-.lamp-cord-btn {
-  transition: transform 0.2s ease, border-color 0.2s ease;
+/* --------------------------------------------------------------------------
+   Nostaljik Masa Lambası Zinciri (Hanging Pull-Chain Widget)
+   -------------------------------------------------------------------------- */
+.lamp-pull-chain-wrap {
+  position: fixed;
+  top: 0;
+  right: 42px;
+  z-index: 999;
+  width: 44px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
 }
 
-.lamp-cord-btn.is-lamp-active {
-  border-color: #dfac77;
-  color: #dfac77;
-  box-shadow: 0 0 14px rgba(223, 172, 119, 0.4);
+.lamp-pull-chain-wrap:active {
+  cursor: grabbing;
 }
 
-.lamp-cord-btn.is-pulled {
-  animation: lampPull 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+/* Tavana monte pirinç sabitleme aparatı */
+.chain-fixture {
+  width: 16px;
+  height: 8px;
+  background: linear-gradient(180deg, #c48b3b 0%, #70471b 100%);
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+  flex-shrink: 0;
 }
 
-@keyframes lampPull {
-  0% { transform: translateY(0); }
-  35% { transform: translateY(8px); }
-  65% { transform: translateY(-3px); }
+/* Sallanan boncuklu zincir izi */
+.chain-beads-track {
+  width: 16px;
+  height: 168px;
+  display: flex;
+  justify-content: center;
+  transform-origin: 8px 0px;
+  transition: transform 0.08s ease-out;
+  animation: chainIdleSway 5.5s ease-in-out infinite alternate;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+}
+
+.chain-beads-svg {
+  width: 16px;
+  height: 168px;
+  display: block;
+  overflow: visible;
+}
+
+/* Zincir bırakıldığında yaylanma / fizik tepkisi */
+.chain-beads-track.is-springing {
+  animation: chainSpringRelease 0.65s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes chainIdleSway {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(1.2deg); }
+  100% { transform: rotate(-0.8deg); }
+}
+
+@keyframes chainSpringRelease {
+  0% { transform: translateY(34px); }
+  28% { transform: translateY(-10px); }
+  52% { transform: translateY(5px); }
+  74% { transform: translateY(-2px); }
   100% { transform: translateY(0); }
 }
 
-/* Masa Lambası Odak Modu (Spotlight Focus Effect) */
-body.focus-lamp-on .library-backdrop {
-  opacity: 0.18;
-  filter: brightness(0.48) contrast(1.15);
+/* İp Çekme İpucu Balonu */
+.chain-hint-pill {
+  position: absolute;
+  bottom: 0px;
+  right: 36px;
+  white-space: nowrap;
+  background: var(--surface-raised, #241c18);
+  color: var(--accent, #d9823b);
+  border: 1px solid var(--surface-border);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  animation: hintFloat 2.6s ease-in-out infinite;
+  transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
-body.focus-lamp-on .app::before {
-  content: "";
+.chain-hint-pill.is-dismissed,
+.lamp-pull-chain-wrap:hover .chain-hint-pill {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+@keyframes hintFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Işık Açıkken Zincirin Parlaması */
+.lamp-pull-chain-wrap.is-lit .chain-beads-svg circle {
+  fill: #ffd58a;
+  stroke: #a0631c;
+  filter: drop-shadow(0 0 3px rgba(255, 210, 120, 0.6));
+}
+
+.lamp-pull-chain-wrap.is-lit .chain-beads-svg path {
+  fill: #f5b041;
+  stroke: #8a4a12;
+  filter: drop-shadow(0 0 6px rgba(255, 195, 80, 0.8));
+}
+
+/* --------------------------------------------------------------------------
+   Sağ Üstten Vuran Dolgulu Masa Lambası Işığı (Volumetric Filled Spotlight)
+   -------------------------------------------------------------------------- */
+.lamp-spotlight-beam {
   position: fixed;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
-  z-index: -1;
-  background: radial-gradient(
-    circle at 50% 35%,
-    rgba(223, 172, 119, 0.12) 0%,
-    rgba(217, 119, 54, 0.05) 45%,
-    rgba(0, 0, 0, 0.55) 85%
-  );
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background:
+    radial-gradient(
+      ellipse 100vw 90vh at 88% 0%,
+      rgba(255, 225, 150, 0.34) 0%,
+      rgba(240, 165, 75, 0.22) 32%,
+      rgba(180, 95, 25, 0.08) 62%,
+      rgba(0, 0, 0, 0.72) 88%
+    ),
+    conic-gradient(
+      from 190deg at 88% 0%,
+      transparent 0deg,
+      rgba(255, 230, 160, 0.22) 18deg,
+      rgba(255, 200, 110, 0.32) 42deg,
+      rgba(240, 150, 50, 0.16) 68deg,
+      transparent 96deg
+    );
   mix-blend-mode: screen;
+}
+
+body.focus-lamp-on .lamp-spotlight-beam {
+  opacity: 1;
+}
+
+/* Lamba Açıkken Arka Plan ve Kart Atmosferi */
+body.focus-lamp-on .library-backdrop {
+  opacity: 0.14;
+  filter: brightness(0.4) contrast(1.22);
+}
+
+body.focus-lamp-on .concept-card,
+body.focus-lamp-on .roulette-card,
+body.focus-lamp-on .curiosity-parchment-card,
+body.focus-lamp-on .desk-greeting-bar {
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    0 0 28px rgba(255, 200, 110, 0.1);
 }
 
 /* Günün İlham Parşömeni (Curiosity Parchment Card) */

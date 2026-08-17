@@ -576,7 +576,9 @@ const soundIconOn = document.querySelector("#soundIconOn");
 const soundIconOff = document.querySelector("#soundIconOff");
 const ambientSoundBtn = document.querySelector("#ambientSoundBtn");
 const ambientIcon = document.querySelector("#ambientIcon");
-const lampPullCordBtn = document.querySelector("#lampPullCordBtn");
+const lampPullChain = document.querySelector("#lampPullChain");
+const chainBeadsTrack = document.querySelector("#chainBeadsTrack");
+const chainHint = document.querySelector("#chainHint");
 
 const researchRange = document.querySelector("#researchRange");
 const researchLabel = document.querySelector("#researchLabel");
@@ -684,8 +686,8 @@ function applySeal(waxColor = settings.waxColor || "ruby") {
 function applyLampFocus(isFocus = settings.lampFocus || false) {
   settings.lampFocus = isFocus;
   document.body.classList.toggle("focus-lamp-on", isFocus);
-  if (lampPullCordBtn) {
-    lampPullCordBtn.classList.toggle("is-lamp-active", isFocus);
+  if (lampPullChain) {
+    lampPullChain.classList.toggle("is-lit", isFocus);
   }
 }
 
@@ -2150,17 +2152,80 @@ if (ambientSoundBtn) {
   });
 }
 
-if (lampPullCordBtn) {
-  lampPullCordBtn.addEventListener("click", () => {
+function setupHangingLampChain() {
+  if (!lampPullChain || !chainBeadsTrack) return;
+
+  let isDragging = false;
+  let startY = 0;
+  let currentY = 0;
+  let pullDistance = 0;
+
+  const triggerChainPull = () => {
     settings.lampFocus = !settings.lampFocus;
     sfx.playChainClick();
-    lampPullCordBtn.classList.add("is-pulled");
-    setTimeout(() => lampPullCordBtn.classList.remove("is-pulled"), 400);
     applyLampFocus(settings.lampFocus);
     saveSettings();
-    showToast(settings.lampFocus ? "💡 Odak Lambası Açıldı — Derin çalışma modu" : "💡 Odak Lambası Kapatıldı");
+
+    if (chainHint) {
+      chainHint.classList.add("is-dismissed");
+    }
+
+    chainBeadsTrack.classList.remove("is-springing");
+    void chainBeadsTrack.offsetHeight;
+    chainBeadsTrack.classList.add("is-springing");
+    chainBeadsTrack.style.transform = "";
+
+    showToast(settings.lampFocus ? "💡 Masa Lambası Açıldı (Sağ üstten odak ışığı vuruyor)" : "💡 Masa Lambası Kapatıldı");
+  };
+
+  const onPointerDown = (e) => {
+    isDragging = true;
+    startY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    pullDistance = 0;
+    chainBeadsTrack.classList.remove("is-springing");
+    try { lampPullChain.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+  };
+
+  const onPointerMove = (e) => {
+    if (!isDragging) return;
+    currentY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+    const rawDy = Math.max(0, currentY - startY);
+    pullDistance = Math.min(55, rawDy * 0.75);
+    chainBeadsTrack.style.transform = `translateY(${pullDistance}px)`;
+  };
+
+  const onPointerUp = (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    try { lampPullChain.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    if (pullDistance >= 18) {
+      triggerChainPull();
+    } else {
+      chainBeadsTrack.classList.add("is-springing");
+      chainBeadsTrack.style.transform = "";
+    }
+  };
+
+  lampPullChain.addEventListener("pointerdown", onPointerDown);
+  lampPullChain.addEventListener("pointermove", onPointerMove);
+  lampPullChain.addEventListener("pointerup", onPointerUp);
+  lampPullChain.addEventListener("pointercancel", onPointerUp);
+
+  lampPullChain.addEventListener("click", () => {
+    if (pullDistance < 5) {
+      triggerChainPull();
+    }
+  });
+
+  lampPullChain.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      triggerChainPull();
+    }
   });
 }
+
+setupHangingLampChain();
 
 researchRange.addEventListener("input", () => {
   settings.researchMinutes = Number(researchRange.value);

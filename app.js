@@ -2138,7 +2138,6 @@ function syncSettingsUI() {
   syncSoundIcons();
   syncAmbientButton();
   applyTheme(settings.theme);
-  applyPalette(settings.palette);
   applySeal(settings.waxColor);
   applyLampFocus(settings.lampFocus);
 }
@@ -2690,7 +2689,6 @@ exportHistoryBtn.addEventListener("click", () => {
 
 // ---------- Initialization ----------
 applyTheme(settings.theme);
-applyPalette(settings.palette);
 applySeal(settings.waxColor);
 applyLampFocus(settings.lampFocus);
 syncSoundIcons();

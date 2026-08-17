@@ -111,61 +111,79 @@ const TOPICS = [
 const CATEGORIES = [
   {
     id: "general",
-    tr: "Günün Merakı",
-    en: "Daily Curiosity",
+    tr: "Genel",
+    en: "General",
     icon: '<circle cx="12" cy="12" r="8"/><path d="M15.2 8.8l-2.3 5.1-5.1 2.3 2.3-5.1 5.1-2.3z"/><circle cx="12" cy="12" r="0.7" fill="currentColor" stroke="none"/>'
   },
   {
-    id: "philosophy",
-    tr: "Felsefe & Düşünce",
-    en: "Philosophy",
-    icon: '<path d="M20 4c-6.2.9-11.3 6-13.3 13.2L4.6 20l2.9-2c6.9-.9 11.7-5.9 12.6-12.9 0-.4-.5-1.1-1.1-1.1z"/><path d="M9.2 14.8L5 19"/>'
-  },
-  {
-    id: "psychology",
-    tr: "İnsan & Zihin",
-    en: "Psychology",
-    icon: '<path d="M9.3 4.2c-2.4 0-3.9 2-3.6 4.1C4.1 8.9 3.4 10.4 4.1 11.5c-.7 1.2 0 2.7 1.2 3.2-.2 1.3.7 2.6 2.2 2.8.2 1.4 1.7 2.4 3.1 1.9.6.4 1.5.4 2.1 0 1.4.5 2.9-.5 3.1-1.9 1.5-.2 2.4-1.5 2.2-2.8 1.2-.5 1.9-2 1.2-3.2.7-1.1 0-2.6-1.2-3.2.3-2.1-1.4-4-3.7-3.9-.9 0-1.6.4-2.1 1-.7-.6-1.6-1-2.6-1z"/><path d="M12 4.2v13"/>'
-  },
-  {
     id: "technology",
-    tr: "Teknoloji & Dijital",
+    tr: "Teknoloji",
     en: "Technology",
     icon: '<rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M9 7V4M15 7V4M9 20v-3M15 20v-3M7 9H4M7 15H4M20 9h-3M20 15h-3"/>'
   },
   {
     id: "science",
-    tr: "Bilim & Doğa",
+    tr: "Bilim",
     en: "Science",
     icon: '<path d="M10 3h4M10 3v5.2L5.6 16c-.9 1.6.3 3.5 2.1 3.5h8.6c1.8 0 3-1.9 2.1-3.5L14 8.2V3"/><path d="M8.3 14h7.4"/>'
   },
   {
+    id: "philosophy",
+    tr: "Felsefe",
+    en: "Philosophy",
+    icon: '<path d="M20 4c-6.2.9-11.3 6-13.3 13.2L4.6 20l2.9-2c6.9-.9 11.7-5.9 12.6-12.9 0-.4-.5-1.1-1.1-1.1z"/><path d="M9.2 14.8L5 19"/>'
+  },
+  {
+    id: "psychology",
+    tr: "Psikoloji",
+    en: "Psychology",
+    icon: '<path d="M9.3 4.2c-2.4 0-3.9 2-3.6 4.1C4.1 8.9 3.4 10.4 4.1 11.5c-.7 1.2 0 2.7 1.2 3.2-.2 1.3.7 2.6 2.2 2.8.2 1.4 1.7 2.4 3.1 1.9.6.4 1.5.4 2.1 0 1.4.5 2.9-.5 3.1-1.9 1.5-.2 2.4-1.5 2.2-2.8 1.2-.5 1.9-2 1.2-3.2.7-1.1 0-2.6-1.2-3.2.3-2.1-1.4-4-3.7-3.9-.9 0-1.6.4-2.1 1-.7-.6-1.6-1-2.6-1z"/><path d="M12 4.2v13"/>'
+  },
+  {
     id: "history",
-    tr: "Tarih & Zaman",
+    tr: "Tarih",
     en: "History",
     icon: '<path d="M6 3h12M6 21h12M7 3c0 5 4 6 5 9-1 3-5 4-5 9M17 3c0 5-4 6-5 9 1 3 5 4 5 9"/>'
   },
   {
     id: "economy",
-    tr: "Hayat & Kararlar",
-    en: "Life & Decisions",
+    tr: "Ekonomi",
+    en: "Economy",
     icon: '<path d="M5 20V14M10.5 20V10M16 20V13M21 20V6"/>'
   },
   {
+    id: "advertising",
+    tr: "Pazarlama & Reklam",
+    en: "Advertising",
+    icon: '<path d="M3 10.2v3.6h3l6.2 4V6.2l-6.2 4H3z"/><path d="M13.5 8.3c1.7.9 1.7 6.5 0 7.4M17.3 5.8c2.9 1.8 2.9 10.6 0 12.4"/>'
+  },
+  {
     id: "art",
-    tr: "Sanat & İlham",
+    tr: "Sanat",
     en: "Art",
     icon: '<path d="M12 3C6.5 3 3 6.8 3 11c0 3 2 5 5 5h1.2c.7 0 1.3.6 1.3 1.3 0 .5-.2.9-.5 1.2-.4.4-.6.9-.6 1.5 0 1.1 1 2 2.6 2 5 0 9-4.5 9-10C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="11" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1" fill="currentColor" stroke="none"/>'
   },
   {
+    id: "law",
+    tr: "Hukuk",
+    en: "Law",
+    icon: '<path d="M14 3l4 4-2.4 2.4-4-4L14 3z"/><path d="M12.4 7.6L3.8 16.2"/><path d="M3 21h7.5"/><path d="M6.3 17.5l3.2 3.2"/>'
+  },
+  {
     id: "astronomy",
-    tr: "Evren & Astronomi",
+    tr: "Astronomi",
     en: "Astronomy",
     icon: '<circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="9.5" ry="3" transform="rotate(-20 12 12)"/>'
   },
   {
+    id: "mathematics",
+    tr: "Matematik",
+    en: "Mathematics",
+    icon: '<path d="M12 3v3"/><path d="M12 6L6 20"/><path d="M12 6l6 14"/><path d="M9 14h6"/>'
+  },
+  {
     id: "health",
-    tr: "Sağlık & Beden",
+    tr: "Sağlık & Biyoloji",
     en: "Health",
     icon: '<path d="M3 12h3.5l1.8-6 3 12 2.2-9 1.5 3H21"/>'
   }

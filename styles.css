@@ -537,13 +537,13 @@ body {
   cursor: pointer;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  box-shadow: none;
 }
 
 [data-theme="light"] .cat-pill {
   background: #ffffff;
   border: 1px solid rgba(120, 80, 40, 0.16);
-  box-shadow: 0 2px 8px rgba(60, 40, 20, 0.05);
+  box-shadow: none;
 }
 
 .cat-pill svg {
@@ -556,7 +556,7 @@ body {
   opacity: 0.9;
 }
 
-.cat-pill:hover:not(:disabled) {
+.cat-pill:hover:not(.is-active):not(:disabled) {
   color: var(--text-main);
   background: var(--surface);
   border-color: var(--surface-border-hover);
@@ -568,10 +568,17 @@ body {
 }
 
 .cat-pill.is-active {
-  color: #ffffff;
-  background: linear-gradient(180deg, #d97736 0%, #b8541e 100%);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 14px var(--accent-glow), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  color: #ffffff !important;
+  background: linear-gradient(180deg, #d97736 0%, #b8541e 100%) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: none !important;
+}
+
+.cat-pill.is-active:hover {
+  color: #ffffff !important;
+  background: linear-gradient(180deg, #e28242 0%, #c45b24 100%) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-1px);
 }
 
 .cat-pill.is-active svg {

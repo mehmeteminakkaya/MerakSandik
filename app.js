@@ -2161,11 +2161,11 @@ function setupHangingLampChain() {
   const hintPill = document.querySelector("#chainHint");
   if (!chainWrap || !svg || !cordPath || !beadsGroup || !handleGroup) return;
 
-  // Geometry: SVG coordinates (viewBox 0 0 280 260)
-  const ANCHOR_X = 140;
+  // Geometry: SVG coordinates (viewBox 0 0 160 250)
+  const ANCHOR_X = 80;
   const ANCHOR_Y = 0;
   const NUM_POINTS = 9;
-  const SEGMENT_LEN = 16.5; // Total rest length ~148px
+  const SEGMENT_LEN = 16; // Rest length ~128px
 
   // Verlet Physics Nodes
   const nodes = [];
@@ -2174,7 +2174,7 @@ function setupHangingLampChain() {
     nodes.push({
       x: ANCHOR_X,
       y: y,
-      oldX: ANCHOR_X + (i > 0 ? (Math.random() - 0.5) * 2 : 0),
+      oldX: ANCHOR_X + (i > 0 ? (Math.random() - 0.5) * 1.5 : 0),
       oldY: y,
       pinned: i === 0
     });
@@ -2209,9 +2209,9 @@ function setupHangingLampChain() {
 
     if (hintPill) hintPill.classList.add("is-dismissed");
 
-    // Add lively oscillation impulse on click/pull
-    nodes[NUM_POINTS - 1].oldX -= (Math.random() > 0.5 ? 1 : -1) * 16;
-    nodes[NUM_POINTS - 1].oldY -= 14;
+    // Add oscillation impulse
+    nodes[NUM_POINTS - 1].oldX -= (Math.random() > 0.5 ? 1 : -1) * 14;
+    nodes[NUM_POINTS - 1].oldY -= 12;
     startSimulation();
 
     showToast(
@@ -2224,16 +2224,17 @@ function setupHangingLampChain() {
   function getSvgPoint(e) {
     const rect = svg.getBoundingClientRect();
     const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : ANCHOR_X);
-    const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 150);
-    const scaleX = 280 / rect.width;
-    const scaleY = 260 / rect.height;
+    const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 130);
+    const scaleX = 160 / rect.width;
+    const scaleY = 250 / rect.height;
     return {
-      x: Math.max(15, Math.min(265, (clientX - rect.left) * scaleX)),
-      y: Math.max(8, Math.min(250, (clientY - rect.top) * scaleY))
+      x: Math.max(8, Math.min(152, (clientX - rect.left) * scaleX)),
+      y: Math.max(6, Math.min(240, (clientY - rect.top) * scaleY))
     };
   }
 
   function onPointerDown(e) {
+    e.stopPropagation();
     isDragging = true;
     const pt = getSvgPoint(e);
     dragTargetX = pt.x;
@@ -2241,7 +2242,6 @@ function setupHangingLampChain() {
     startPointerY = pt.y;
     maxStretchDistance = 0;
 
-    // Grab the handle
     nodes[NUM_POINTS - 1].x = pt.x;
     nodes[NUM_POINTS - 1].y = pt.y;
     nodes[NUM_POINTS - 1].oldX = pt.x;
@@ -2250,7 +2250,7 @@ function setupHangingLampChain() {
     if (hintPill) hintPill.classList.add("is-dismissed");
 
     startSimulation();
-    try { chainWrap.setPointerCapture(e.pointerId); } catch { /* ignore */ }
+    try { handleGroup.setPointerCapture(e.pointerId); } catch { /* ignore */ }
   }
 
   function onPointerMove(e) {
@@ -2269,13 +2269,11 @@ function setupHangingLampChain() {
   function onPointerUp(e) {
     if (!isDragging) return;
     isDragging = false;
-    try { chainWrap.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    try { handleGroup.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
 
-    // If pulled down (stretched >= 16px) OR simple fast tap
-    if (maxStretchDistance >= 16 || (Math.abs(nodes[NUM_POINTS - 1].y - startPointerY) < 6 && maxStretchDistance < 4)) {
+    if (maxStretchDistance >= 15 || (Math.abs(nodes[NUM_POINTS - 1].y - startPointerY) < 6 && maxStretchDistance < 4)) {
       triggerThemeSwitch();
     } else {
-      // Swung in the air: let physics swing freely
       startSimulation();
     }
   }
@@ -2305,7 +2303,6 @@ function setupHangingLampChain() {
       n.y += vy;
     }
 
-    // Solve distance constraints
     const iterations = 6;
     for (let iter = 0; iter < iterations; iter++) {
       nodes[0].x = ANCHOR_X;
@@ -2337,14 +2334,12 @@ function setupHangingLampChain() {
   }
 
   function renderChain() {
-    // 1. Draw connecting cord line
     let pathD = `M ${nodes[0].x.toFixed(1)} ${nodes[0].y.toFixed(1)}`;
     for (let i = 1; i < NUM_POINTS; i++) {
       pathD += ` L ${nodes[i].x.toFixed(1)} ${nodes[i].y.toFixed(1)}`;
     }
     cordPath.setAttribute("d", pathD);
 
-    // 2. Position beads
     for (let i = 1; i < NUM_POINTS - 1; i++) {
       const bead = beadElements[i - 1];
       if (bead) {
@@ -2353,7 +2348,6 @@ function setupHangingLampChain() {
       }
     }
 
-    // 3. Position and rotate brass teardrop handle
     const handleNode = nodes[NUM_POINTS - 1];
     const prevNode = nodes[NUM_POINTS - 2];
     const angle = Math.atan2(handleNode.x - prevNode.x, handleNode.y - prevNode.y) * (-180 / Math.PI);
@@ -2384,7 +2378,10 @@ function setupHangingLampChain() {
     }
   }
 
-  chainWrap.addEventListener("pointerdown", onPointerDown);
+  handleGroup.addEventListener("pointerdown", onPointerDown);
+  cordPath.addEventListener("pointerdown", onPointerDown);
+  beadsGroup.addEventListener("pointerdown", onPointerDown);
+
   window.addEventListener("pointermove", onPointerMove);
   window.addEventListener("pointerup", onPointerUp);
   window.addEventListener("pointercancel", onPointerUp);

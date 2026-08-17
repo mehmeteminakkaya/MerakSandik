@@ -341,8 +341,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 12px;
   padding-bottom: 8px;
+  padding-right: 46px;
 }
 
 .plate {
@@ -2468,17 +2469,17 @@ input[type="range"]::-moz-range-thumb {
 .lamp-pull-chain-wrap {
   position: fixed;
   top: 0;
-  right: calc(50% - 320px);
-  z-index: 999;
-  width: 280px;
-  height: 260px;
-  pointer-events: none;
+  right: calc(50% - 340px);
+  z-index: 99;
+  width: 160px;
+  height: 250px;
+  pointer-events: none !important;
   user-select: none;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 720px) {
   .lamp-pull-chain-wrap {
-    right: -75px;
+    right: -20px;
   }
 }
 
@@ -2486,9 +2487,9 @@ input[type="range"]::-moz-range-thumb {
 .chain-fixture {
   position: absolute;
   top: 0;
-  left: 132px;
+  left: 72px;
   width: 16px;
-  height: 8px;
+  height: 7px;
   background: linear-gradient(180deg, #c48b3b 0%, #70471b 100%);
   border-radius: 0 0 4px 4px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
@@ -2496,38 +2497,46 @@ input[type="range"]::-moz-range-thumb {
   z-index: 10;
 }
 
-/* İnteraktif Fizik SVG Alanı */
+/* İnteraktif Fizik SVG Alanı (Kendi şeffaf alanı butonları bloke etmez) */
 .chain-physics-svg {
-  width: 280px;
-  height: 260px;
+  width: 160px;
+  height: 250px;
   display: block;
   overflow: visible;
-  pointer-events: auto;
+  pointer-events: none !important;
   touch-action: none;
-  cursor: grab;
-  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.35));
-}
-
-.chain-physics-svg:active,
-.chain-handle:active {
-  cursor: grabbing;
 }
 
 .chain-handle {
+  pointer-events: auto !important;
   cursor: grab;
   transform-origin: 0 0;
   transition: filter 0.2s ease;
 }
 
+.chain-handle:active {
+  cursor: grabbing;
+}
+
 .chain-handle:hover {
-  filter: brightness(1.15) drop-shadow(0 0 8px rgba(255, 200, 100, 0.5));
+  filter: brightness(1.18) drop-shadow(0 0 8px rgba(255, 200, 100, 0.5));
+}
+
+#chainBeadsGroup circle {
+  pointer-events: auto !important;
+  cursor: grab;
+}
+
+#chainCordPath {
+  pointer-events: stroke !important;
+  cursor: grab;
 }
 
 /* İp Çekme & Sallama İpucu Balonu */
 .chain-hint-pill {
   position: absolute;
   top: 155px;
-  left: 20px;
+  left: -15px;
   white-space: nowrap;
   background: var(--surface-raised, #241c18);
   color: var(--accent, #d9823b);
@@ -2535,7 +2544,7 @@ input[type="range"]::-moz-range-thumb {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   pointer-events: none;

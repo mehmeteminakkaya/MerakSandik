@@ -492,18 +492,6 @@ body {
 .tabs-scroll-area {
   position: relative;
   width: 100%;
-  overflow: hidden;
-}
-
-.tabs-scroll-area::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 32px;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent, var(--bg));
 }
 
 .category-tabs {
@@ -515,30 +503,15 @@ body {
   overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-x pan-y;
-  padding: 4px 2px 10px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(201, 122, 62, 0.38) rgba(255, 255, 255, 0.03);
+  padding: 4px 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .category-tabs::-webkit-scrollbar {
-  height: 5px;
-  display: block;
-}
-
-.category-tabs::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: 9999px;
-  margin: 0 4px;
-}
-
-.category-tabs::-webkit-scrollbar-thumb {
-  background: rgba(201, 122, 62, 0.38);
-  border-radius: 9999px;
-  transition: background 0.2s ease;
-}
-
-.category-tabs::-webkit-scrollbar-thumb:hover {
-  background: rgba(201, 122, 62, 0.7);
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .cat-pill {

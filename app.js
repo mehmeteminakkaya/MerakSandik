@@ -2337,32 +2337,21 @@ function setupHangingLampChain() {
   let dragTargetY = ANCHOR_Y + (NUM_POINTS - 1) * SEGMENT_LEN;
   let startPointerY = 0;
   let startPointerX = 0;
-  let maxStretchDistance = 0;
+  let totalChainRestLen = (NUM_POINTS - 1) * SEGMENT_LEN; // 128px
+  let maxAllowedLen = totalChainRestLen + 14; // Maksimum 14px anahtar çekiş payı (asla lastik gibi uzamaz)
   let lastMoveTime = 0;
   let lastMoveX = ANCHOR_X;
-  let lastMoveY = ANCHOR_Y + (NUM_POINTS - 1) * SEGMENT_LEN;
+  let lastMoveY = ANCHOR_Y + totalChainRestLen;
   let releaseVx = 0;
   let releaseVy = 0;
   let animId = null;
   let isSimulating = false;
 
-  function triggerThemeSwitch(isQuickTap = false, pullStrength = 0) {
+  function triggerThemeSwitch(isQuickTap = false) {
     const nextTheme = settings.theme === "light" ? "dark" : "light";
     applyTheme(nextTheme);
     saveSettings();
     sfx.playChainClick();
-
-    // Yaylanma tepkisi: rastgele değil, kullanıcının çekiş gücüne orantılı minik bir anahtar geri tepmesi
-    const endNode = nodes[NUM_POINTS - 1];
-    if (isQuickTap) {
-      endNode.oldY = endNode.y + 4; // Ufak mekanik tık geri tepmesi
-      endNode.oldX = endNode.x + (Math.random() - 0.5) * 2;
-    } else {
-      // Çekiş yönüne göre orantılı yaylanma
-      const recoil = Math.min(8, Math.max(2, pullStrength * 0.15));
-      endNode.oldY = endNode.y + recoil;
-    }
-    startSimulation();
 
     showToast(
       nextTheme === "light"
@@ -2378,8 +2367,8 @@ function setupHangingLampChain() {
     const scaleX = 100 / rect.width;
     const scaleY = 240 / rect.height;
     return {
-      x: Math.max(6, Math.min(94, (clientX - rect.left) * scaleX)),
-      y: Math.max(4, Math.min(235, (clientY - rect.top) * scaleY))
+      x: Math.max(8, Math.min(92, (clientX - rect.left) * scaleX)),
+      y: Math.max(4, Math.min(220, (clientY - rect.top) * scaleY))
     };
   }
 
@@ -2388,21 +2377,30 @@ function setupHangingLampChain() {
     e.preventDefault();
     isDragging = true;
     const pt = getSvgPoint(e);
-    dragTargetX = pt.x;
-    dragTargetY = pt.y;
     startPointerX = pt.x;
     startPointerY = pt.y;
-    maxStretchDistance = 0;
     lastMoveTime = performance.now();
     lastMoveX = pt.x;
     lastMoveY = pt.y;
     releaseVx = 0;
     releaseVy = 0;
 
-    nodes[NUM_POINTS - 1].x = pt.x;
-    nodes[NUM_POINTS - 1].y = pt.y;
-    nodes[NUM_POINTS - 1].oldX = pt.x;
-    nodes[NUM_POINTS - 1].oldY = pt.y;
+    // Hedef noktayı zincir boyuna göre sınırla
+    const dx = pt.x - ANCHOR_X;
+    const dy = Math.max(0, pt.y - ANCHOR_Y);
+    const dist = Math.hypot(dx, dy);
+    if (dist > maxAllowedLen) {
+      dragTargetX = ANCHOR_X + (dx / dist) * maxAllowedLen;
+      dragTargetY = ANCHOR_Y + (dy / dist) * maxAllowedLen;
+    } else {
+      dragTargetX = pt.x;
+      dragTargetY = pt.y;
+    }
+
+    nodes[NUM_POINTS - 1].x = dragTargetX;
+    nodes[NUM_POINTS - 1].y = dragTargetY;
+    nodes[NUM_POINTS - 1].oldX = dragTargetX;
+    nodes[NUM_POINTS - 1].oldY = dragTargetY;
 
     startSimulation();
     try { handleGroup.setPointerCapture(e.pointerId); } catch { /* ignore */ }
@@ -2411,26 +2409,29 @@ function setupHangingLampChain() {
   function onPointerMove(e) {
     if (!isDragging) return;
     const pt = getSvgPoint(e);
-    dragTargetX = pt.x;
-    dragTargetY = pt.y;
 
-    // Gerçek el hızı ve momentum takibi
-    const now = performance.now();
-    const dt = Math.max(8, Math.min(100, now - lastMoveTime));
-    const instVx = ((pt.x - lastMoveX) / dt) * 16.6;
-    const instVy = ((pt.y - lastMoveY) / dt) * 16.6;
-    releaseVx = releaseVx * 0.35 + instVx * 0.65;
-    releaseVy = releaseVy * 0.35 + instVy * 0.65;
-    lastMoveTime = now;
-    lastMoveX = pt.x;
-    lastMoveY = pt.y;
-
-    const currentDist = Math.hypot(pt.x - ANCHOR_X, pt.y - ANCHOR_Y);
-    const restLen = (NUM_POINTS - 1) * SEGMENT_LEN;
-    const stretch = currentDist - restLen;
-    if (stretch > maxStretchDistance) {
-      maxStretchDistance = stretch;
+    // Zincirin lastik gibi uzamasını engelle (katı pirinç boncuk zincir uzunluğu)
+    const dx = pt.x - ANCHOR_X;
+    const dy = Math.max(0, pt.y - ANCHOR_Y);
+    const dist = Math.hypot(dx, dy) || 1;
+    if (dist > maxAllowedLen) {
+      dragTargetX = ANCHOR_X + (dx / dist) * maxAllowedLen;
+      dragTargetY = ANCHOR_Y + (dy / dist) * maxAllowedLen;
+    } else {
+      dragTargetX = pt.x;
+      dragTargetY = pt.y;
     }
+
+    // Gerçek el savurma hızını takip et (momentum)
+    const now = performance.now();
+    const dt = Math.max(8, Math.min(80, now - lastMoveTime));
+    const instVx = ((dragTargetX - lastMoveX) / dt) * 16.6;
+    const instVy = ((dragTargetY - lastMoveY) / dt) * 16.6;
+    releaseVx = releaseVx * 0.4 + instVx * 0.6;
+    releaseVy = releaseVy * 0.4 + instVy * 0.6;
+    lastMoveTime = now;
+    lastMoveX = dragTargetX;
+    lastMoveY = dragTargetY;
   }
 
   function onPointerUp(e) {
@@ -2439,31 +2440,34 @@ function setupHangingLampChain() {
     try { handleGroup.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
 
     const endNode = nodes[NUM_POINTS - 1];
-    const restY = ANCHOR_Y + (NUM_POINTS - 1) * SEGMENT_LEN;
+    const restY = ANCHOR_Y + totalChainRestLen;
     const dragDistanceY = endNode.y - restY;
     const totalMoveDist = Math.hypot(endNode.x - startPointerX, endNode.y - startPointerY);
 
-    // Bırakılan andaki gerçek momentumu ipin ucuna aktar (kullanıcının fırlatma hızı)
-    const momentumX = Math.max(-14, Math.min(14, releaseVx));
-    const momentumY = Math.max(-14, Math.min(14, releaseVy));
-    endNode.oldX = endNode.x - momentumX;
-    endNode.oldY = endNode.y - momentumY;
+    // Bütün boğumların eski pozisyonlarını mevcut konuma eşitle (böylece fırlama/sapan etkisi sıfırlanır)
+    for (let i = 0; i < NUM_POINTS; i++) {
+      nodes[i].oldX = nodes[i].x;
+      nodes[i].oldY = nodes[i].y;
+    }
 
-    // Tetikleme eşiği: Aşağı doğru yeterince çekildiyse (18px) veya hızlı aşağı kaydırma yapıldıysa
-    const isPulledEnough = dragDistanceY >= 18 || (releaseVy > 5 && dragDistanceY > 8);
-    const isQuickTap = totalMoveDist < 6 && maxStretchDistance < 5;
+    // Yalnızca kullanıcının elini savurduğu yatay momentumu aktar (tatlı sarkaç salınımı)
+    const horizontalMomentum = Math.max(-10, Math.min(10, releaseVx));
+    endNode.oldX = endNode.x - horizontalMomentum;
+    endNode.oldY = endNode.y; // Dikeyde zıplamayı tamamen engelle
+
+    // Tetikleme: Aşağı çekildiyse veya hızlı dokunulduysa
+    const isPulledEnough = dragDistanceY >= 8 || releaseVy > 4;
+    const isQuickTap = totalMoveDist < 6;
 
     if (isPulledEnough || isQuickTap) {
-      triggerThemeSwitch(isQuickTap, Math.max(dragDistanceY, maxStretchDistance));
-    } else {
-      // Yalnızca yana sallanıp bırakıldıysa tema değişmez, fiziksel momentumuyla doğal sallanır
-      startSimulation();
+      triggerThemeSwitch(isQuickTap);
     }
+    startSimulation();
   }
 
   function updatePhysics() {
-    const GRAVITY = 0.48;
-    const DAMPING = 0.988;
+    const GRAVITY = 0.65;
+    const DAMPING = 0.94; // Ağır pirinç zincir sönümlemesi (zıplamaz, asilce durulur)
 
     for (let i = 0; i < NUM_POINTS; i++) {
       const n = nodes[i];
@@ -2478,7 +2482,9 @@ function setupHangingLampChain() {
       }
 
       const vx = (n.x - n.oldX) * DAMPING;
-      const vy = (n.y - n.oldY) * DAMPING + GRAVITY;
+      // Dikey hızı sınırla: asla yukarı doğru fırlamasın
+      let vy = (n.y - n.oldY) * DAMPING + GRAVITY;
+      if (vy < -3.5) vy = -3.5;
 
       n.oldX = n.x;
       n.oldY = n.y;
@@ -2486,7 +2492,7 @@ function setupHangingLampChain() {
       n.y += vy;
     }
 
-    const iterations = 6;
+    const iterations = 8;
     for (let iter = 0; iter < iterations; iter++) {
       nodes[0].x = ANCHOR_X;
       nodes[0].y = ANCHOR_Y;

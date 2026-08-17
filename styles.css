@@ -1345,7 +1345,7 @@ body {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1361,7 +1361,16 @@ body {
 }
 
 .modal-overlay.is-hidden {
-  display: none;
+  display: none !important;
+}
+
+/* Modal açıkken lamba ipini tamamen gizle (çarpı butonunu ve modalı asla kapatmasın) */
+body.modal-open .lamp-pull-chain-wrap,
+body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  transition: opacity 0.2s ease;
 }
 
 @keyframes fadeIn {
@@ -2502,7 +2511,7 @@ input[type="range"]::-moz-range-thumb {
 
 @media (max-width: 768px) {
   .lamp-pull-chain-wrap {
-    right: 0px;
+    right: -6px;
   }
 }
 

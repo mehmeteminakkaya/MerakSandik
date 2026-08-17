@@ -2213,13 +2213,28 @@ function syncSettingsUI() {
   applyLampFocus(settings.lampFocus);
 }
 
-settingsBtn.addEventListener("click", () => {
-  syncSettingsUI();
-  settingsModal.classList.remove("is-hidden");
-});
+function openModal(modal) {
+  if (!modal) return;
+  modal.classList.remove("is-hidden");
+  document.body.classList.add("modal-open");
+}
+
+function closeModal(modal) {
+  if (!modal) return;
+  modal.classList.add("is-hidden");
+  const anyOpen = document.querySelectorAll(".modal-overlay:not(.is-hidden)").length > 0;
+  if (!anyOpen) document.body.classList.remove("modal-open");
+}
+
+if (settingsBtn) {
+  settingsBtn.addEventListener("click", () => {
+    syncSettingsUI();
+    openModal(settingsModal);
+  });
+}
 
 function closeSettingsModal() {
-  settingsModal.classList.add("is-hidden");
+  closeModal(settingsModal);
   render();
 }
 
@@ -2791,17 +2806,17 @@ if (profileBtn) {
     if (historySearchInput) historySearchInput.value = "";
     historyActiveCategory = "all";
     syncProfileUI();
-    if (profileModal) profileModal.classList.remove("is-hidden");
+    openModal(profileModal);
   });
 }
 
 if (closeProfile && profileModal) {
-  closeProfile.addEventListener("click", () => profileModal.classList.add("is-hidden"));
+  closeProfile.addEventListener("click", () => closeModal(profileModal));
 }
 
 if (profileModal) {
   profileModal.addEventListener("click", (e) => {
-    if (e.target === profileModal) profileModal.classList.add("is-hidden");
+    if (e.target === profileModal) closeModal(profileModal);
   });
 }
 

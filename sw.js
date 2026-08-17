@@ -1,4 +1,4 @@
-const CACHE_NAME = "meraksandik-v32";
+const CACHE_NAME = "meraksandik-v33";
 const PRECACHE_URLS = [
   "/",
   "/index.html",

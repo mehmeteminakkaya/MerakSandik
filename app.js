@@ -577,8 +577,6 @@ const soundIconOff = document.querySelector("#soundIconOff");
 const ambientSoundBtn = document.querySelector("#ambientSoundBtn");
 const ambientIcon = document.querySelector("#ambientIcon");
 const lampPullChain = document.querySelector("#lampPullChain");
-const chainBeadsTrack = document.querySelector("#chainBeadsTrack");
-const chainHint = document.querySelector("#chainHint");
 
 const researchRange = document.querySelector("#researchRange");
 const researchLabel = document.querySelector("#researchLabel");
@@ -2121,11 +2119,10 @@ function setupHangingLampChain() {
   const cordPath = document.querySelector("#chainCordPath");
   const beadsGroup = document.querySelector("#chainBeadsGroup");
   const handleGroup = document.querySelector("#chainHandleGroup");
-  const hintPill = document.querySelector("#chainHint");
   if (!chainWrap || !svg || !cordPath || !beadsGroup || !handleGroup) return;
 
-  // Geometry: SVG coordinates (viewBox 0 0 160 250)
-  const ANCHOR_X = 80;
+  // Geometry: SVG coordinates (viewBox 0 0 100 240)
+  const ANCHOR_X = 64;
   const ANCHOR_Y = 0;
   const NUM_POINTS = 9;
   const SEGMENT_LEN = 16; // Rest length ~128px
@@ -2170,8 +2167,6 @@ function setupHangingLampChain() {
     saveSettings();
     sfx.playChainClick();
 
-    if (hintPill) hintPill.classList.add("is-dismissed");
-
     // Add oscillation impulse
     nodes[NUM_POINTS - 1].oldX -= (Math.random() > 0.5 ? 1 : -1) * 14;
     nodes[NUM_POINTS - 1].oldY -= 12;
@@ -2188,11 +2183,11 @@ function setupHangingLampChain() {
     const rect = svg.getBoundingClientRect();
     const clientX = e.clientX ?? (e.touches && e.touches[0] ? e.touches[0].clientX : ANCHOR_X);
     const clientY = e.clientY ?? (e.touches && e.touches[0] ? e.touches[0].clientY : 130);
-    const scaleX = 160 / rect.width;
-    const scaleY = 250 / rect.height;
+    const scaleX = 100 / rect.width;
+    const scaleY = 240 / rect.height;
     return {
-      x: Math.max(8, Math.min(152, (clientX - rect.left) * scaleX)),
-      y: Math.max(6, Math.min(240, (clientY - rect.top) * scaleY))
+      x: Math.max(8, Math.min(92, (clientX - rect.left) * scaleX)),
+      y: Math.max(6, Math.min(230, (clientY - rect.top) * scaleY))
     };
   }
 
@@ -2209,8 +2204,6 @@ function setupHangingLampChain() {
     nodes[NUM_POINTS - 1].y = pt.y;
     nodes[NUM_POINTS - 1].oldX = pt.x;
     nodes[NUM_POINTS - 1].oldY = pt.y;
-
-    if (hintPill) hintPill.classList.add("is-dismissed");
 
     startSimulation();
     try { handleGroup.setPointerCapture(e.pointerId); } catch { /* ignore */ }

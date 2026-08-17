@@ -2452,20 +2452,23 @@ input[type="range"]::-moz-range-thumb {
 /* --------------------------------------------------------------------------
    Nostaljik Masa Lambası Zinciri (Hanging Pull-Chain Widget)
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Nostaljik Masa Lambası Zinciri (Hanging Pull-Chain Widget)
+   -------------------------------------------------------------------------- */
 .lamp-pull-chain-wrap {
   position: fixed;
   top: 0;
-  right: calc(50% - 340px);
+  right: max(8px, calc((100vw - 680px) / 2 - 40px));
   z-index: 99;
-  width: 160px;
-  height: 250px;
+  width: 100px;
+  height: 240px;
   pointer-events: none !important;
   user-select: none;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .lamp-pull-chain-wrap {
-    right: -20px;
+    right: 0px;
   }
 }
 
@@ -2473,8 +2476,8 @@ input[type="range"]::-moz-range-thumb {
 .chain-fixture {
   position: absolute;
   top: 0;
-  left: 72px;
-  width: 16px;
+  right: 28px;
+  width: 14px;
   height: 7px;
   background: linear-gradient(180deg, #c48b3b 0%, #70471b 100%);
   border-radius: 0 0 4px 4px;
@@ -2485,8 +2488,8 @@ input[type="range"]::-moz-range-thumb {
 
 /* İnteraktif Fizik SVG Alanı (Kendi şeffaf alanı butonları bloke etmez) */
 .chain-physics-svg {
-  width: 160px;
-  height: 250px;
+  width: 100px;
+  height: 240px;
   display: block;
   overflow: visible;
   pointer-events: none !important;
@@ -2516,37 +2519,6 @@ input[type="range"]::-moz-range-thumb {
 #chainCordPath {
   pointer-events: stroke !important;
   cursor: grab;
-}
-
-/* İp Çekme & Sallama İpucu Balonu */
-.chain-hint-pill {
-  position: absolute;
-  top: 155px;
-  left: -15px;
-  white-space: nowrap;
-  background: var(--surface-raised, #241c18);
-  color: var(--accent, #d9823b);
-  border: 1px solid var(--surface-border);
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: var(--radius-full);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  pointer-events: none;
-  animation: hintFloat 2.6s ease-in-out infinite;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.chain-hint-pill.is-dismissed,
-.lamp-pull-chain-wrap:hover .chain-hint-pill {
-  opacity: 0;
-  transform: translateY(4px);
-}
-
-@keyframes hintFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
 }
 
 /* --------------------------------------------------------------------------

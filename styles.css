@@ -191,17 +191,15 @@ body {
   gap: 12px;
   padding: 10px 18px;
   border-radius: var(--radius-md);
-  background: var(--surface-glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--surface-border);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(180deg, var(--surface-raised), var(--surface));
+  border: 1px solid rgba(212, 163, 115, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 [data-theme="light"] .plate {
-  background: #ffffff;
-  border: 1px solid rgba(120, 80, 40, 0.16);
-  box-shadow: 0 6px 20px -4px rgba(60, 40, 20, 0.08), 0 0 0 1px rgba(120, 80, 40, 0.08);
+  background: linear-gradient(180deg, #ffffff, #f7f2e8);
+  border: 1px solid rgba(120, 80, 40, 0.2);
+  box-shadow: 0 6px 20px -4px rgba(60, 40, 20, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .plate-icon {
@@ -211,8 +209,9 @@ body {
   width: 36px;
   height: 36px;
   border-radius: var(--radius-sm);
-  background: rgba(201, 122, 62, 0.15);
+  background: rgba(201, 122, 62, 0.18);
   color: var(--accent);
+  border: 1px solid rgba(201, 122, 62, 0.25);
 }
 
 .plate-icon svg {
@@ -226,20 +225,12 @@ body {
 }
 
 .plate-title {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-weight: 800;
-  font-size: 13px;
-  letter-spacing: 0.1em;
+  font-size: 15px;
+  letter-spacing: 0.06em;
   color: var(--text-main);
   line-height: 1.1;
-}
-
-.plate-sub {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  letter-spacing: 0.02em;
 }
 
 .topbar-actions {
@@ -1020,20 +1011,23 @@ body {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #c97a3e, #b26429);
+  background: linear-gradient(180deg, #d97736 0%, #b8541e 100%);
   color: #ffffff;
-  box-shadow: 0 4px 20px rgba(201, 122, 62, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 0 #87360c, 0 8px 18px rgba(184, 84, 30, 0.35);
+  font-weight: 700;
+  font-size: 14px;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #df9358, #c97a3e);
-  box-shadow: 0 6px 24px rgba(201, 122, 62, 0.55);
+  background: linear-gradient(180deg, #e48647 0%, #c45d25 100%);
+  box-shadow: 0 5px 0 #87360c, 0 10px 22px rgba(184, 84, 30, 0.45);
   transform: translateY(-1px);
 }
 
 .btn-primary:active:not(:disabled) {
-  transform: translateY(1px);
-  box-shadow: 0 2px 10px rgba(201, 122, 62, 0.3);
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #87360c, 0 3px 8px rgba(184, 84, 30, 0.25);
 }
 
 .btn-primary:disabled {
@@ -1044,21 +1038,28 @@ body {
 }
 
 .btn-secondary {
-  background: var(--surface-glass);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--surface-raised);
   border: 1px solid var(--surface-border);
   color: var(--text-main);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25), 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .btn-secondary {
+  background: #ffffff;
+  border: 1px solid rgba(120, 80, 40, 0.2);
+  box-shadow: 0 3px 0 rgba(120, 80, 40, 0.15), 0 4px 10px rgba(60, 40, 20, 0.06);
 }
 
 .btn-secondary:hover {
-  background: var(--surface-raised);
+  background: var(--surface);
   border-color: var(--surface-border-hover);
   transform: translateY(-1px);
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25), 0 6px 14px rgba(0, 0, 0, 0.2);
 }
 
 .btn-secondary:active {
-  transform: translateY(1px);
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .btn-sm {

@@ -1189,8 +1189,8 @@ function renderIdle() {
 
         <div class="roulette-footer">
           <button id="spinBtn" class="btn btn-primary" type="button" ${state.spinning ? "disabled" : ""}>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-            ${state.spinning ? "🌿 Sandık Açılıyor…" : "✨ Rastgele Bir Fikir Çek"}
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+            ${state.spinning ? "Kart Çekiliyor…" : "Sandıktan Çek"}
           </button>
         </div>
       </section>
@@ -1211,7 +1211,7 @@ function renderQuickTools(topic) {
     <div class="quick-tools-row">
       <a href="https://www.google.com/search?q=${googleQuery}" target="_blank" rel="noopener noreferrer" class="quick-tool-btn" title="Google'da yeni sekmede araştır">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span>Google'da İncele</span>
+        <span>Google'da Ara</span>
       </a>
       <button type="button" id="copyTopicBtn" class="quick-tool-btn" title="Kavram adını panoya kopyala">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -1240,16 +1240,16 @@ function renderLanded() {
 
       <div class="card-instruction">
         <p>
-          ☕ <strong>${settings.researchMinutes} dakika</strong> boyunca bu kavramı dilediğin gibi keşfet. İster makale oku, ister video izle; zihnini serbest bırak.
+          <strong>${settings.researchMinutes} dakika</strong> boyunca bu kavramı araştırıp öğrenmek için süreyi başlatabilirsin.
         </p>
       </div>
 
       <div class="actions-row">
         <button id="startResearchBtn" class="btn btn-primary" type="button">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          ⏱️ 15 Dakikalık Mola Başlat
+          Araştırmaya Başla
         </button>
-        <button id="cancelBtn" class="btn btn-secondary" type="button">Başka Çek 🔄</button>
+        <button id="cancelBtn" class="btn btn-secondary" type="button">Başka Kart Çek</button>
       </div>
     </article>
   `;
@@ -1280,17 +1280,16 @@ function renderResearching() {
           </svg>
           <div class="radial-timer-content">
             <span id="timerDigits" class="timer-digits">00:00</span>
-            <span class="timer-label">${state.paused ? "☕ MOLA VERİLDİ" : "🌱 ZİHİN MOLASI AKIYOR"}</span>
+            <span class="timer-label">${state.paused ? "DURAKLATILDI" : "ODAKLANMA SÜRESİ"}</span>
           </div>
         </div>
       </div>
 
       <div class="notes-container">
         <label class="notes-label" for="researchNotesInput">
-          <span>📝 Küçük Not Defterim (Kendi Kelimelerinle)</span>
+          <span>Not Defteri</span>
         </label>
-        <textarea id="researchNotesInput" class="notes-textarea" placeholder="Aklında kalan en çarpıcı cümleyi veya kendi kelimelerinle özetini buraya not al...">${esc(state.notes)}</textarea>
-        <p class="notes-hint" style="font-size: 0.8rem; color: var(--text-soft); margin-top: 6px;">💡 İpucu: Kendi cümlelerinle 2 satır not almak, bilginin zihninde kalıcı olmasını sağlar.</p>
+        <textarea id="researchNotesInput" class="notes-textarea" placeholder="Öğrendiğin ana fikirleri veya kendi cümlelerinle özetini buraya not al...">${esc(state.notes)}</textarea>
       </div>
 
       <div class="actions-row">
@@ -1302,7 +1301,7 @@ function renderResearching() {
         </button>
         <button id="finishResearchBtn" class="btn btn-primary" type="button">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
-          ✨ Öğrendim, Sandığa Kaydet!
+          Tamamla ve Kaydet
         </button>
       </div>
     </article>
@@ -1327,28 +1326,23 @@ function renderDone() {
       <div class="completion-badge-wrap">
         <div class="stamp-badge">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          SANDIĞA EKLENDİ 💎
+          TAMAMLANDI
         </div>
-      </div>
-
-      <div class="cozy-done-message" style="text-align: center; margin: 16px 0;">
-        <h3 style="font-size: 1.15rem; color: var(--text-main); font-family: var(--font-serif); margin-bottom: 4px;">Harika bir 15 dakikaydı! 🎉</h3>
-        <p style="font-size: 0.9rem; color: var(--text-muted);">Bugün kendine zaman ayırdın ve zihnine yepyeni bir tohum ektin. 🌱</p>
       </div>
 
       ${state.notes ? `
         <div class="completion-notes-recap">
-          <h4>📝 Kaydettiğin Not</h4>
+          <h4>Kaydedilen Not</h4>
           <p>${esc(state.notes)}</p>
         </div>
       ` : ""}
 
       <div class="actions-row">
         <button id="newRoundBtn" class="btn btn-primary" type="button">
-          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-          ☕ Yeni Bir Merak Çek
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M12 8v8M8 12h8"/></svg>
+          Yeni Kart Çek
         </button>
-        <button id="viewInCatalogBtn" class="btn btn-secondary" type="button">📖 Not Defterimi İncele</button>
+        <button id="viewInCatalogBtn" class="btn btn-secondary" type="button">Notlarımı Gör</button>
       </div>
     </article>
   `;

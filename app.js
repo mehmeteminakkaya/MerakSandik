@@ -2336,19 +2336,32 @@ function setupHangingLampChain() {
   let dragTargetX = ANCHOR_X;
   let dragTargetY = ANCHOR_Y + (NUM_POINTS - 1) * SEGMENT_LEN;
   let startPointerY = 0;
+  let startPointerX = 0;
   let maxStretchDistance = 0;
+  let lastMoveTime = 0;
+  let lastMoveX = ANCHOR_X;
+  let lastMoveY = ANCHOR_Y + (NUM_POINTS - 1) * SEGMENT_LEN;
+  let releaseVx = 0;
+  let releaseVy = 0;
   let animId = null;
   let isSimulating = false;
 
-  function triggerThemeSwitch() {
+  function triggerThemeSwitch(isQuickTap = false, pullStrength = 0) {
     const nextTheme = settings.theme === "light" ? "dark" : "light";
     applyTheme(nextTheme);
     saveSettings();
     sfx.playChainClick();
 
-    // Add oscillation impulse
-    nodes[NUM_POINTS - 1].oldX -= (Math.random() > 0.5 ? 1 : -1) * 14;
-    nodes[NUM_POINTS - 1].oldY -= 12;
+    // Yaylanma tepkisi: rastgele değil, kullanıcının çekiş gücüne orantılı minik bir anahtar geri tepmesi
+    const endNode = nodes[NUM_POINTS - 1];
+    if (isQuickTap) {
+      endNode.oldY = endNode.y + 4; // Ufak mekanik tık geri tepmesi
+      endNode.oldX = endNode.x + (Math.random() - 0.5) * 2;
+    } else {
+      // Çekiş yönüne göre orantılı yaylanma
+      const recoil = Math.min(8, Math.max(2, pullStrength * 0.15));
+      endNode.oldY = endNode.y + recoil;
+    }
     startSimulation();
 
     showToast(
@@ -2365,8 +2378,8 @@ function setupHangingLampChain() {
     const scaleX = 100 / rect.width;
     const scaleY = 240 / rect.height;
     return {
-      x: Math.max(8, Math.min(92, (clientX - rect.left) * scaleX)),
-      y: Math.max(6, Math.min(230, (clientY - rect.top) * scaleY))
+      x: Math.max(6, Math.min(94, (clientX - rect.left) * scaleX)),
+      y: Math.max(4, Math.min(235, (clientY - rect.top) * scaleY))
     };
   }
 
@@ -2377,8 +2390,14 @@ function setupHangingLampChain() {
     const pt = getSvgPoint(e);
     dragTargetX = pt.x;
     dragTargetY = pt.y;
+    startPointerX = pt.x;
     startPointerY = pt.y;
     maxStretchDistance = 0;
+    lastMoveTime = performance.now();
+    lastMoveX = pt.x;
+    lastMoveY = pt.y;
+    releaseVx = 0;
+    releaseVy = 0;
 
     nodes[NUM_POINTS - 1].x = pt.x;
     nodes[NUM_POINTS - 1].y = pt.y;
@@ -2394,6 +2413,18 @@ function setupHangingLampChain() {
     const pt = getSvgPoint(e);
     dragTargetX = pt.x;
     dragTargetY = pt.y;
+
+    // Gerçek el hızı ve momentum takibi
+    const now = performance.now();
+    const dt = Math.max(8, Math.min(100, now - lastMoveTime));
+    const instVx = ((pt.x - lastMoveX) / dt) * 16.6;
+    const instVy = ((pt.y - lastMoveY) / dt) * 16.6;
+    releaseVx = releaseVx * 0.35 + instVx * 0.65;
+    releaseVy = releaseVy * 0.35 + instVy * 0.65;
+    lastMoveTime = now;
+    lastMoveX = pt.x;
+    lastMoveY = pt.y;
+
     const currentDist = Math.hypot(pt.x - ANCHOR_X, pt.y - ANCHOR_Y);
     const restLen = (NUM_POINTS - 1) * SEGMENT_LEN;
     const stretch = currentDist - restLen;
@@ -2407,16 +2438,32 @@ function setupHangingLampChain() {
     isDragging = false;
     try { handleGroup.releasePointerCapture(e.pointerId); } catch { /* ignore */ }
 
-    if (maxStretchDistance >= 15 || (Math.abs(nodes[NUM_POINTS - 1].y - startPointerY) < 6 && maxStretchDistance < 4)) {
-      triggerThemeSwitch();
+    const endNode = nodes[NUM_POINTS - 1];
+    const restY = ANCHOR_Y + (NUM_POINTS - 1) * SEGMENT_LEN;
+    const dragDistanceY = endNode.y - restY;
+    const totalMoveDist = Math.hypot(endNode.x - startPointerX, endNode.y - startPointerY);
+
+    // Bırakılan andaki gerçek momentumu ipin ucuna aktar (kullanıcının fırlatma hızı)
+    const momentumX = Math.max(-14, Math.min(14, releaseVx));
+    const momentumY = Math.max(-14, Math.min(14, releaseVy));
+    endNode.oldX = endNode.x - momentumX;
+    endNode.oldY = endNode.y - momentumY;
+
+    // Tetikleme eşiği: Aşağı doğru yeterince çekildiyse (18px) veya hızlı aşağı kaydırma yapıldıysa
+    const isPulledEnough = dragDistanceY >= 18 || (releaseVy > 5 && dragDistanceY > 8);
+    const isQuickTap = totalMoveDist < 6 && maxStretchDistance < 5;
+
+    if (isPulledEnough || isQuickTap) {
+      triggerThemeSwitch(isQuickTap, Math.max(dragDistanceY, maxStretchDistance));
     } else {
+      // Yalnızca yana sallanıp bırakıldıysa tema değişmez, fiziksel momentumuyla doğal sallanır
       startSimulation();
     }
   }
 
   function updatePhysics() {
-    const GRAVITY = 0.55;
-    const DAMPING = 0.985;
+    const GRAVITY = 0.48;
+    const DAMPING = 0.988;
 
     for (let i = 0; i < NUM_POINTS; i++) {
       const n = nodes[i];

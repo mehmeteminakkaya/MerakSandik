@@ -216,10 +216,15 @@ let rapidPetStreak = 0;
 const RAPID_PET_WINDOW_MS = 1000; // bu aralıkta üst üste 3+ tıklama kediyi huysuzlandırır
 const RAPID_PET_ANNOY_THRESHOLD = 3;
 
+// Ambiyans kayıtları farklı seviyelerde masterlanmış (yağmur belirgin şekilde
+// yağmur/deniz'den daha yüksek); tip başına hedef seviye bunu dengeler.
+const AMBIENCE_TARGET_VOLUME = { rain: 0.35, fire: 0.95, ocean: 0.75 };
+
 // ---------- Audio Synthesizer (Zero Dependency Web Audio API) ----------
 class SoundEffects {
   constructor() {
     this.ctx = null;
+    this.masterGain = null;
     this.currentAmbienceType = "none";
     this.ambienceFade = null;
     this.meowAudio = null;
@@ -240,6 +245,11 @@ class SoundEffects {
     }
     if (this.ctx && this.ctx.state === "suspended") {
       this.ctx.resume().catch(() => {});
+    }
+    if (this.ctx && !this.masterGain) {
+      this.masterGain = this.ctx.createGain();
+      this.masterGain.gain.value = this.masterVolume();
+      this.masterGain.connect(this.ctx.destination);
     }
     if (!this.meowAudio && typeof Audio !== "undefined") {
       try {
@@ -273,6 +283,22 @@ class SoundEffects {
     );
   }
 
+  masterVolume() {
+    return typeof settings.soundVolume === "number" ? settings.soundVolume : 0.7;
+  }
+
+  // Kullanıcı ses seviyesi kaydırıcısını hareket ettirdiğinde çağrılır: hem
+  // sentezlenen bliplerin ortak çıkış kazancını hem de o an çalan ambiyans
+  // parçasının ses seviyesini anında (yeniden başlatmadan) günceller.
+  setMasterVolume(v) {
+    settings.soundVolume = v;
+    if (this.masterGain) this.masterGain.gain.value = v;
+    const activeAmbience = { rain: this.rainAudio, fire: this.fireAudio, ocean: this.oceanAudio }[this.currentAmbienceType];
+    if (activeAmbience && !activeAmbience.paused) {
+      activeAmbience.volume = (AMBIENCE_TARGET_VOLUME[this.currentAmbienceType] || 0.5) * v;
+    }
+  }
+
   playTick() {
     if (!settings.sound) return;
     this.init();
@@ -285,7 +311,7 @@ class SoundEffects {
       gain.gain.setValueAtTime(0.18, this.ctx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.05);
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.masterGain);
       osc.start();
       osc.stop(this.ctx.currentTime + 0.05);
     } catch { /* sessiz kal */ }
@@ -305,7 +331,7 @@ class SoundEffects {
       gain.gain.setValueAtTime(0.30, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
       osc.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.masterGain);
       osc.start();
       osc.stop(now + 0.4);
     } catch { /* sessiz kal */ }
@@ -326,7 +352,7 @@ class SoundEffects {
         gain.gain.setValueAtTime(0.35, start);
         gain.gain.exponentialRampToValueAtTime(0.001, start + 0.9);
         osc.connect(gain);
-        gain.connect(this.ctx.destination);
+        gain.connect(this.masterGain);
         osc.start(start);
         osc.stop(start + 0.9);
       });
@@ -339,7 +365,7 @@ class SoundEffects {
     try {
       if (this.purrAudio) {
         this.purrAudio.currentTime = 0;
-        this.purrAudio.volume = 0.9;
+        this.purrAudio.volume = 0.9 * this.masterVolume();
         this.purrAudio.play().catch(() => {});
         return;
       }
@@ -350,10 +376,14 @@ class SoundEffects {
     if (!settings.sound) return;
     this.init();
     try {
-      const track = Math.random() < 0.5 ? this.meowAudio : this.meowSweetAudio || this.meowAudio;
+      const useSweet = Math.random() < 0.5 && this.meowSweetAudio;
+      const track = useSweet ? this.meowSweetAudio : this.meowAudio;
+      // meow.mp3 is a hotter master than meow-sweet.mp3 (near-clipping vs.
+      // soft) — different base levels keep the two feeling similarly loud.
+      const base = useSweet ? 0.95 : 0.7;
       if (track) {
         track.currentTime = 0;
-        track.volume = 0.95;
+        track.volume = base * this.masterVolume();
         track.play().catch(() => {});
         return;
       }
@@ -366,7 +396,7 @@ class SoundEffects {
     try {
       if (this.growlAudio) {
         this.growlAudio.currentTime = 0;
-        this.growlAudio.volume = 0.85;
+        this.growlAudio.volume = 0.85 * this.masterVolume();
         this.growlAudio.play().catch(() => {});
         return;
       }
@@ -399,7 +429,7 @@ class SoundEffects {
       gain1.gain.setValueAtTime(0.18, now);
       gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
       osc1.connect(gain1);
-      gain1.connect(this.ctx.destination);
+      gain1.connect(this.masterGain);
       osc1.start(now);
       osc1.stop(now + 0.25);
 
@@ -411,7 +441,7 @@ class SoundEffects {
       gain2.gain.setValueAtTime(0.12, now + 0.02);
       gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
       osc2.connect(gain2);
-      gain2.connect(this.ctx.destination);
+      gain2.connect(this.masterGain);
       osc2.start(now + 0.02);
       osc2.stop(now + 0.3);
     } catch { /* sessiz kal */ }
@@ -440,7 +470,7 @@ class SoundEffects {
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
       noise.connect(filter);
       filter.connect(gain);
-      gain.connect(this.ctx.destination);
+      gain.connect(this.masterGain);
       noise.start(now);
     } catch { /* sessiz kal */ }
   }
@@ -459,7 +489,7 @@ class SoundEffects {
       gain1.gain.setValueAtTime(0.35, now);
       gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
       osc1.connect(gain1);
-      gain1.connect(this.ctx.destination);
+      gain1.connect(this.masterGain);
       osc1.start(now);
       osc1.stop(now + 0.15);
     } catch { /* sessiz kal */ }
@@ -479,7 +509,7 @@ class SoundEffects {
       gain1.gain.setValueAtTime(0.40, now);
       gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       osc1.connect(gain1);
-      gain1.connect(this.ctx.destination);
+      gain1.connect(this.masterGain);
       osc1.start(now);
       osc1.stop(now + 0.08);
 
@@ -491,7 +521,7 @@ class SoundEffects {
       gain2.gain.setValueAtTime(0.25, now + 0.03);
       gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
       osc2.connect(gain2);
-      gain2.connect(this.ctx.destination);
+      gain2.connect(this.masterGain);
       osc2.start(now + 0.03);
       osc2.stop(now + 0.18);
     } catch { /* sessiz kal */ }
@@ -508,7 +538,8 @@ class SoundEffects {
       track.currentTime = 0;
       track.volume = 0.01;
       track.play().catch(() => {});
-      this.fadeAmbienceVolume(track, 0.55, 600);
+      const target = (AMBIENCE_TARGET_VOLUME[type] || 0.5) * this.masterVolume();
+      this.fadeAmbienceVolume(track, target, 600);
     } catch { /* sessiz kal */ }
   }
 
@@ -577,6 +608,8 @@ const lampPullChain = document.querySelector("#lampPullChain");
 const researchRange = document.querySelector("#researchRange");
 const researchLabel = document.querySelector("#researchLabel");
 const soundToggle = document.querySelector("#soundToggle");
+const soundVolumeRange = document.querySelector("#soundVolumeRange");
+const soundVolumeLabel = document.querySelector("#soundVolumeLabel");
 
 const statsContainer = document.querySelector("#statsContainer");
 const historyListContainer = document.querySelector("#historyListContainer");
@@ -598,6 +631,7 @@ function loadSettings() {
   const fallback = {
     researchMinutes: 15,
     sound: true,
+    soundVolume: 0.7,
     theme: "dark",
     palette: "coffee",
     category: "general",
@@ -2015,6 +2049,11 @@ function syncSettingsUI() {
   researchRange.value = settings.researchMinutes;
   researchLabel.textContent = `${settings.researchMinutes} dk`;
   soundToggle.checked = settings.sound;
+  if (soundVolumeRange) {
+    const pct = Math.round((typeof settings.soundVolume === "number" ? settings.soundVolume : 0.7) * 100);
+    soundVolumeRange.value = pct;
+    if (soundVolumeLabel) soundVolumeLabel.textContent = `%${pct}`;
+  }
   syncSoundIcons();
   syncAmbientButton();
   applyTheme(settings.theme);
@@ -2074,6 +2113,19 @@ if (soundToggle) {
     }
     syncAmbientButton();
     saveSettings();
+  });
+}
+
+if (soundVolumeRange) {
+  soundVolumeRange.addEventListener("input", (e) => {
+    const pct = parseInt(e.target.value, 10) || 0;
+    if (soundVolumeLabel) soundVolumeLabel.textContent = `%${pct}`;
+    sfx.setMasterVolume(pct / 100);
+    saveSettings();
+  });
+  soundVolumeRange.addEventListener("change", () => {
+    sfx.init();
+    sfx.playTick();
   });
 }
 

@@ -732,8 +732,8 @@ function loadSettings() {
     researchMinutes: 15,
     sound: true,
     theme: "dark",
+    palette: "coffee",
     category: "general",
-    waxColor: "ruby",
     ambience: "none",
     lampFocus: false
   };
@@ -743,11 +743,11 @@ function loadSettings() {
     const parsed = JSON.parse(raw);
     const loaded = { ...fallback, ...parsed };
 
-    const hadLegacyFields = "provider" in loaded || "apiKeys" in loaded || "models" in loaded || "palette" in loaded;
+    const hadLegacyFields = "provider" in loaded || "apiKeys" in loaded || "models" in loaded || "waxColor" in loaded;
     delete loaded.provider;
     delete loaded.apiKeys;
     delete loaded.models;
-    delete loaded.palette;
+    delete loaded.waxColor;
     if (hadLegacyFields) {
       try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(loaded)); } catch { /* ignore */ }
     }
@@ -765,7 +765,7 @@ function saveSettings() {
   syncSoundIcons();
   syncAmbientButton();
   applyTheme(settings.theme);
-  applySeal(settings.waxColor);
+  applyPalette(settings.palette);
   applyLampFocus(settings.lampFocus);
 }
 
@@ -791,12 +791,12 @@ function applyTheme(theme = settings.theme || "dark") {
   }
 }
 
-function applySeal(waxColor = settings.waxColor || "ruby") {
-  settings.waxColor = waxColor;
-  document.documentElement.setAttribute("data-seal", waxColor);
+function applyPalette(palette = settings.palette || "coffee") {
+  settings.palette = palette;
+  document.documentElement.setAttribute("data-palette", palette);
 
-  document.querySelectorAll(".wax-btn").forEach((btn) => {
-    btn.classList.toggle("is-active", btn.dataset.seal === waxColor);
+  document.querySelectorAll(".palette-btn").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.palette === palette);
   });
 }
 
@@ -2138,7 +2138,7 @@ function syncSettingsUI() {
   syncSoundIcons();
   syncAmbientButton();
   applyTheme(settings.theme);
-  applySeal(settings.waxColor);
+  applyPalette(settings.palette);
   applyLampFocus(settings.lampFocus);
 }
 
@@ -2184,19 +2184,18 @@ if (themeBtnLight) {
   });
 }
 
-document.querySelectorAll(".wax-btn").forEach((btn) => {
+document.querySelectorAll(".palette-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
-    const seal = btn.dataset.seal;
+    const pal = btn.dataset.palette;
     sfx.playTick();
-    applySeal(seal);
+    applyPalette(pal);
     saveSettings();
     const names = {
-      ruby: "🔴 Yakut Kırmızısı Mührü seçildi",
-      gold: "🟡 Antik Altın Mührü seçildi",
-      emerald: "🟢 Zümrüt Yeşili Mührü seçildi",
-      sapphire: "🔵 Gece Safiri Mührü seçildi"
+      coffee: "☕ Sıcak Kahve paleti uygulandı",
+      library: "🌲 Gece Kütüphanesi paleti uygulandı",
+      matcha: "🍵 Matcha & Yulaf paleti uygulandı"
     };
-    showToast(names[seal] || "Balmumu mührü güncellendi");
+    showToast(names[pal] || "Renk paleti güncellendi");
   });
 });
 
@@ -2689,7 +2688,7 @@ exportHistoryBtn.addEventListener("click", () => {
 
 // ---------- Initialization ----------
 applyTheme(settings.theme);
-applySeal(settings.waxColor);
+applyPalette(settings.palette);
 applyLampFocus(settings.lampFocus);
 syncSoundIcons();
 syncAmbientButton();

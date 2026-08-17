@@ -83,6 +83,96 @@
   --shadow-main: 0 24px 54px -10px rgba(60, 40, 20, 0.15), 0 8px 24px -4px rgba(60, 40, 20, 0.08), 0 0 0 1px rgba(120, 80, 40, 0.12);
 }
 
+/* --------------------------------------------------------------------------
+   PALET 2: Gece Kütüphanesi & Pirinç Masa Lambası (Library & Brass)
+   -------------------------------------------------------------------------- */
+[data-palette="library"] {
+  color-scheme: dark;
+  --bg: #101614;
+  --bg-subtle: #17211e;
+  --surface: #1e2c28;
+  --surface-raised: #283a34;
+  --surface-glass: rgba(30, 44, 40, 0.92);
+  --surface-border: rgba(195, 225, 215, 0.16);
+  --surface-border-hover: rgba(195, 225, 215, 0.3);
+
+  --text-main: #f5fbf8;
+  --text-muted: #c4ded5;
+  --text-soft: #91b5a9;
+
+  --accent: #e0a94e;
+  --accent-light: #f3c26f;
+  --accent-glow: rgba(224, 169, 78, 0.3);
+  --accent-ink: #141b17;
+  --gold: #e0a94e;
+}
+
+[data-theme="light"][data-palette="library"] {
+  color-scheme: light;
+  --bg: #f1f7f4;
+  --bg-subtle: #e1ede7;
+  --surface: #ffffff;
+  --surface-raised: #f4faf6;
+  --surface-glass: rgba(255, 255, 255, 0.96);
+  --surface-border: rgba(35, 75, 55, 0.15);
+  --surface-border-hover: rgba(35, 75, 55, 0.3);
+
+  --text-main: #142820;
+  --text-muted: #3a5c4e;
+  --text-soft: #638677;
+
+  --accent: #246d4e;
+  --accent-light: #378b67;
+  --accent-glow: rgba(36, 109, 78, 0.2);
+  --accent-ink: #ffffff;
+  --gold: #9e7330;
+}
+
+/* --------------------------------------------------------------------------
+   PALET 3: Japon Kırtasiye & Matcha Yulaf (Matcha & Oat)
+   -------------------------------------------------------------------------- */
+[data-palette="matcha"] {
+  color-scheme: dark;
+  --bg: #141713;
+  --bg-subtle: #1c211a;
+  --surface: #242c22;
+  --surface-raised: #2f3a2c;
+  --surface-glass: rgba(36, 44, 34, 0.92);
+  --surface-border: rgba(205, 225, 195, 0.16);
+  --surface-border-hover: rgba(205, 225, 195, 0.3);
+
+  --text-main: #f8faf6;
+  --text-muted: #cbd8c5;
+  --text-soft: #98a992;
+
+  --accent: #7ca856;
+  --accent-light: #9bc574;
+  --accent-glow: rgba(124, 168, 86, 0.3);
+  --accent-ink: #141a12;
+  --gold: #d4a373;
+}
+
+[data-theme="light"][data-palette="matcha"] {
+  color-scheme: light;
+  --bg: #f8f6f0;
+  --bg-subtle: #ece7db;
+  --surface: #ffffff;
+  --surface-raised: #fbf9f4;
+  --surface-glass: rgba(255, 255, 255, 0.96);
+  --surface-border: rgba(70, 90, 50, 0.15);
+  --surface-border-hover: rgba(70, 90, 50, 0.3);
+
+  --text-main: #1f241a;
+  --text-muted: #54604c;
+  --text-soft: #7c8874;
+
+  --accent: #5e843c;
+  --accent-light: #76a24e;
+  --accent-glow: rgba(94, 132, 60, 0.2);
+  --accent-ink: #ffffff;
+  --gold: #b3824f;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -2248,8 +2338,8 @@ input[type="range"]::-moz-range-thumb {
   --seal-bg: rgba(59, 116, 175, 0.14);
 }
 
-/* Ayarlar Modal: Balmumu Mührü Grid */
-.wax-toggle-row {
+/* Ayarlar Modal: Renk Paleti Grid */
+.palette-toggle-row {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -2258,53 +2348,52 @@ input[type="range"]::-moz-range-thumb {
   margin-bottom: 2px;
 }
 
-.wax-grid {
+.palette-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 6px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
   width: 100%;
 }
 
-.wax-btn {
+.palette-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px 6px;
+  gap: 7px;
+  padding: 9px 8px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--surface-border);
   background: var(--bg);
   color: var(--text-muted);
   font-family: var(--font-sans);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.wax-btn:hover {
+.palette-btn:hover {
   color: var(--text-main);
   border-color: var(--surface-border-hover);
 }
 
-.wax-btn.is-active {
+.palette-btn.is-active {
   border-color: var(--accent);
   background: var(--surface-raised);
   color: var(--text-main);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
 }
 
-.wax-dot {
+.palette-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-.dot-ruby { background: #d64545; box-shadow: 0 0 6px rgba(214, 69, 69, 0.5); }
-.dot-gold { background: #d4a34b; box-shadow: 0 0 6px rgba(212, 163, 75, 0.5); }
-.dot-emerald { background: #2d6a4f; box-shadow: 0 0 6px rgba(45, 106, 79, 0.5); }
-.dot-sapphire { background: #3b74af; box-shadow: 0 0 6px rgba(59, 116, 175, 0.5); }
+.dot-coffee { background: #d97736; box-shadow: 0 0 6px rgba(217, 119, 54, 0.5); }
+.dot-library { background: #e0a94e; box-shadow: 0 0 6px rgba(224, 169, 78, 0.5); }
+.dot-matcha { background: #7ca856; box-shadow: 0 0 6px rgba(124, 168, 86, 0.5); }
 
 /* Üst Bar: Ambiyans & Masa Lambası İpi Butonları */
 .ambient-btn {

@@ -1329,40 +1329,66 @@ body {
 }
 
 .theme-toggle-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--surface-border);
   margin-bottom: 2px;
 }
 
+.theme-toggle-row .toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.theme-toggle-row .toggle-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.theme-toggle-row .toggle-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
 .theme-segmented-control {
-  display: inline-flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
   gap: 4px;
   padding: 4px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-md);
   background: var(--bg);
   border: 1px solid var(--surface-border);
+  box-sizing: border-box;
 }
 
 .theme-seg-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  border-radius: var(--radius-full);
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-radius: var(--radius-sm);
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-muted);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 700;
   cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .theme-seg-btn svg {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
@@ -1849,36 +1875,203 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* --------------------------------------------------------------------------
-   Mobil & Dar Ekranlar
+   Mobil & Dar Ekranlar (Kapsamlı ve Kusursuz Uyumluluk)
    -------------------------------------------------------------------------- */
 
-@media (max-width: 540px) {
+@media (max-width: 600px) {
   :root {
-    --wheel-item: 52px;
+    --wheel-item: 54px;
   }
+
   .app {
-    padding: 16px 14px 28px;
-    gap: 16px;
+    padding: 14px 12px 24px;
+    gap: 14px;
   }
-  .concept-card {
-    padding: 20px 18px 24px;
+
+  /* Üst Bar & Başlık */
+  .topbar {
+    gap: 8px;
   }
-  .timer-section {
-    padding: 18px 12px;
+
+  .plate {
+    padding: 8px 12px;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
   }
-  .radial-timer-wrap {
-    width: 150px;
-    height: 150px;
+
+  .plate-icon {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
   }
-  .timer-digits {
-    font-size: 30px;
+
+  .plate-title {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+
+  .plate-sub {
+    font-size: 10.5px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .topbar-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .icon-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Modallar & Ayarlar */
+  .modal-overlay {
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .modal {
+    max-width: 100%;
+    max-height: 86dvh;
+    padding: 20px 16px 26px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .modal-wide {
+    padding: 20px 16px 26px;
+  }
+
+  .modal-head {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .modal-title-group h2 {
+    font-size: 20px;
+  }
+
+  .settings-card {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .theme-toggle-row {
+    gap: 10px;
+  }
+
+  .theme-segmented-control {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .theme-seg-btn {
+    padding: 8px 10px;
+    font-size: 12.5px;
+  }
+
+  /* Çark & Katalog Kartı */
   .roulette-header,
   .roulette-footer {
-    padding: 12px 16px;
+    padding: 12px 14px;
   }
-  .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+
+  .wheel-track li b {
+    font-size: 16px;
+  }
+
+  .wheel-track li small {
+    font-size: 11.5px;
+  }
+
+  /* Kart & Aksiyon Butonları */
+  .concept-card {
+    padding: 18px 14px 22px;
+  }
+
+  .card-headline {
+    font-size: 1.45rem;
+    line-height: 1.25;
+  }
+
+  .card-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .actions-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .actions-row .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+
+  .quick-tools-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .quick-tool-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .timer-section {
+    padding: 14px 10px;
+  }
+
+  .radial-timer-wrap {
+    width: 140px;
+    height: 140px;
+  }
+
+  .timer-digits {
+    font-size: 28px;
+  }
+
+  /* İstatistikler & Geçmiş */
+  .stats-metrics-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .stat-metric-item {
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .stat-metric-divider {
+    display: none;
+  }
+
+  .history-card {
+    padding: 12px 14px;
+  }
+
+  .history-card-header {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .history-card-title {
+    font-size: 14.5px;
+    max-width: 180px;
   }
 }
 

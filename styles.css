@@ -248,6 +248,41 @@ body {
   gap: 8px;
 }
 
+/* --------------------------------------------------------------------------
+   Sıcak ve Samimi Karşılama Kartı
+   -------------------------------------------------------------------------- */
+.cozy-greeting-card {
+  background: var(--surface-glass);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+
+[data-theme="light"] .cozy-greeting-card {
+  background: #ffffff;
+  border: 1px solid rgba(120, 80, 40, 0.15);
+  box-shadow: 0 8px 24px -6px rgba(60, 40, 20, 0.06);
+}
+
+.cozy-greeting-card h3 {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 4px 0;
+}
+
+.cozy-greeting-card p {
+  font-family: var(--font-sans);
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
 .icon-button {
   display: inline-flex;
   align-items: center;

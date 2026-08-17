@@ -111,79 +111,61 @@ const TOPICS = [
 const CATEGORIES = [
   {
     id: "general",
-    tr: "Genel",
-    en: "General",
+    tr: "Günün Merakı",
+    en: "Daily Curiosity",
     icon: '<circle cx="12" cy="12" r="8"/><path d="M15.2 8.8l-2.3 5.1-5.1 2.3 2.3-5.1 5.1-2.3z"/><circle cx="12" cy="12" r="0.7" fill="currentColor" stroke="none"/>'
   },
   {
-    id: "technology",
-    tr: "Teknoloji",
-    en: "Technology",
-    icon: '<rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M9 7V4M15 7V4M9 20v-3M15 20v-3M7 9H4M7 15H4M20 9h-3M20 15h-3"/>'
-  },
-  {
-    id: "science",
-    tr: "Bilim",
-    en: "Science",
-    icon: '<path d="M10 3h4M10 3v5.2L5.6 16c-.9 1.6.3 3.5 2.1 3.5h8.6c1.8 0 3-1.9 2.1-3.5L14 8.2V3"/><path d="M8.3 14h7.4"/>'
-  },
-  {
     id: "philosophy",
-    tr: "Felsefe",
+    tr: "Felsefe & Düşünce",
     en: "Philosophy",
     icon: '<path d="M20 4c-6.2.9-11.3 6-13.3 13.2L4.6 20l2.9-2c6.9-.9 11.7-5.9 12.6-12.9 0-.4-.5-1.1-1.1-1.1z"/><path d="M9.2 14.8L5 19"/>'
   },
   {
     id: "psychology",
-    tr: "Psikoloji",
+    tr: "İnsan & Zihin",
     en: "Psychology",
     icon: '<path d="M9.3 4.2c-2.4 0-3.9 2-3.6 4.1C4.1 8.9 3.4 10.4 4.1 11.5c-.7 1.2 0 2.7 1.2 3.2-.2 1.3.7 2.6 2.2 2.8.2 1.4 1.7 2.4 3.1 1.9.6.4 1.5.4 2.1 0 1.4.5 2.9-.5 3.1-1.9 1.5-.2 2.4-1.5 2.2-2.8 1.2-.5 1.9-2 1.2-3.2.7-1.1 0-2.6-1.2-3.2.3-2.1-1.4-4-3.7-3.9-.9 0-1.6.4-2.1 1-.7-.6-1.6-1-2.6-1z"/><path d="M12 4.2v13"/>'
   },
   {
+    id: "technology",
+    tr: "Teknoloji & Dijital",
+    en: "Technology",
+    icon: '<rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M9 7V4M15 7V4M9 20v-3M15 20v-3M7 9H4M7 15H4M20 9h-3M20 15h-3"/>'
+  },
+  {
+    id: "science",
+    tr: "Bilim & Doğa",
+    en: "Science",
+    icon: '<path d="M10 3h4M10 3v5.2L5.6 16c-.9 1.6.3 3.5 2.1 3.5h8.6c1.8 0 3-1.9 2.1-3.5L14 8.2V3"/><path d="M8.3 14h7.4"/>'
+  },
+  {
     id: "history",
-    tr: "Tarih",
+    tr: "Tarih & Zaman",
     en: "History",
     icon: '<path d="M6 3h12M6 21h12M7 3c0 5 4 6 5 9-1 3-5 4-5 9M17 3c0 5-4 6-5 9 1 3 5 4 5 9"/>'
   },
   {
     id: "economy",
-    tr: "Ekonomi",
-    en: "Economy",
+    tr: "Hayat & Kararlar",
+    en: "Life & Decisions",
     icon: '<path d="M5 20V14M10.5 20V10M16 20V13M21 20V6"/>'
   },
   {
-    id: "advertising",
-    tr: "Pazarlama & Reklam",
-    en: "Advertising",
-    icon: '<path d="M3 10.2v3.6h3l6.2 4V6.2l-6.2 4H3z"/><path d="M13.5 8.3c1.7.9 1.7 6.5 0 7.4M17.3 5.8c2.9 1.8 2.9 10.6 0 12.4"/>'
-  },
-  {
     id: "art",
-    tr: "Sanat",
+    tr: "Sanat & İlham",
     en: "Art",
     icon: '<path d="M12 3C6.5 3 3 6.8 3 11c0 3 2 5 5 5h1.2c.7 0 1.3.6 1.3 1.3 0 .5-.2.9-.5 1.2-.4.4-.6.9-.6 1.5 0 1.1 1 2 2.6 2 5 0 9-4.5 9-10C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="10.5" r="1" fill="currentColor" stroke="none"/><circle cx="11" cy="7.5" r="1" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1" fill="currentColor" stroke="none"/>'
   },
   {
-    id: "law",
-    tr: "Hukuk",
-    en: "Law",
-    icon: '<path d="M14 3l4 4-2.4 2.4-4-4L14 3z"/><path d="M12.4 7.6L3.8 16.2"/><path d="M3 21h7.5"/><path d="M6.3 17.5l3.2 3.2"/>'
-  },
-  {
     id: "astronomy",
-    tr: "Astronomi",
+    tr: "Evren & Astronomi",
     en: "Astronomy",
     icon: '<circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="9.5" ry="3" transform="rotate(-20 12 12)"/>'
   },
   {
-    id: "mathematics",
-    tr: "Matematik",
-    en: "Mathematics",
-    icon: '<path d="M12 3v3"/><path d="M12 6L6 20"/><path d="M12 6l6 14"/><path d="M9 14h6"/>'
-  },
-  {
     id: "health",
-    tr: "Sağlık & Biyoloji",
+    tr: "Sağlık & Beden",
     en: "Health",
     icon: '<path d="M3 12h3.5l1.8-6 3 12 2.2-9 1.5 3H21"/>'
   }
@@ -1138,6 +1120,14 @@ function renderCategoryTabs() {
   return `<div class="tabs-scroll-area"><div class="category-tabs" role="group" aria-label="Kategori seç">${tabs}</div></div>`;
 }
 
+function getGreeting() {
+  const hour = new Date().getHours();
+  if (hour >= 5 && hour < 12) return { text: "Günaydın! ☕ Kahveni aldın mı?", sub: "Bugün zihnini taze ve ilham verici bir kavramla besleyelim." };
+  if (hour >= 12 && hour < 18) return { text: "İyi günler! 🌿 Tatlı bir zihin molası", sub: "Günün koşturmacasına 15 dakika ara ver, yeni bir merak keşfet." };
+  if (hour >= 18 && hour < 23) return { text: "İyi akşamlar! 🕯️ Dinlenme vakti", sub: "Günün yorgunluğunu merakla dinlendir; sakin ve derin bir keşif." };
+  return { text: "Gece kuşu! 🌙 Sakin saatler", sub: "Gecenin sessizliğinde zihnine yeni bir tohum ekelim." };
+}
+
 function renderRecall() {
   const due = dueForReview();
   if (!due) return "";
@@ -1145,13 +1135,13 @@ function renderRecall() {
   return `
     <div class="recall-banner">
       <div class="recall-info">
-        <strong>Tekrar Vakti</strong>
+        <strong>Hatırlatma Çanı 🔔</strong>
         <span>${esc(due.tr)}</span>
-        <em>${days} gün önce araştırdın — pekiştirmek ister misin?</em>
+        <em>${days} gün önce sandığına eklemiştin — hafızanı tazelemek ister misin?</em>
       </div>
       <div class="recall-actions">
-        <button id="reviewAgainBtn" class="btn btn-primary btn-sm" type="button" data-tr="${esc(due.tr)}" data-en="${esc(due.en)}" data-category="${esc(due.category)}">Hemen İncele</button>
-        <button id="dismissReviewBtn" class="link-btn" type="button" data-key="${esc(reviewTopicKey(due))}">Ertele</button>
+        <button id="reviewAgainBtn" class="btn btn-primary btn-sm" type="button" data-tr="${esc(due.tr)}" data-en="${esc(due.en)}" data-category="${esc(due.category)}">Hemen Hatırla ✨</button>
+        <button id="dismissReviewBtn" class="link-btn" type="button" data-key="${esc(reviewTopicKey(due))}">Sonra</button>
       </div>
     </div>
   `;
@@ -1164,6 +1154,7 @@ function renderIdle() {
   const remainingCount = fullPool.filter((t) => !researched.has(`${t.tr}|${t.en}`)).length;
   const isAllCompleted = remainingCount === 0;
   const cat = CATEGORIES.find((c) => c.id === activeCategory()) || CATEGORIES[0];
+  const greeting = getGreeting();
 
   const wheelItems = generateWheelItems(pool);
   const items = wheelItems.map(
@@ -1171,14 +1162,19 @@ function renderIdle() {
   ).join("");
 
   const initialOffset = getWheelInitialOffset(pool);
-  const badgeText = isAllCompleted ? "Tümü Tamamlandı 🏆" : `${remainingCount} / ${fullPool.length} Fiş`;
+  const badgeText = isAllCompleted ? "Tümü Keşfedildi 🏆" : `${remainingCount} / ${fullPool.length} Merak`;
   const note = isAllCompleted
-    ? "Bu çekmecedeki tüm kavramları keşfettin! Yeniden çekip pekiştirebilirsin."
-    : `${settings.researchMinutes} dakika odaklı araştırma · Gerçek kaynaklar`;
+    ? "Bu çekmecedeki tüm güzellikleri keşfettin! Yeniden çekip hafızanı tazeleyebilirsin."
+    : `Günde sadece 15 dakika · Kahveni al ve öğrenmenin tadını çıkar ☕`;
 
   return `
     ${renderRecall()}
     <div class="catalog-wrapper">
+      <div class="cozy-greeting-card">
+        <h3>${greeting.text}</h3>
+        <p>${greeting.sub}</p>
+      </div>
+
       ${renderCategoryTabs()}
       <section class="roulette-card">
         <div class="roulette-header">
@@ -1202,7 +1198,7 @@ function renderIdle() {
         <div class="roulette-footer">
           <button id="spinBtn" class="btn btn-primary" type="button" ${state.spinning ? "disabled" : ""}>
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-            ${state.spinning ? "Fiş Çekiliyor…" : "Katalogdan Çek"}
+            ${state.spinning ? "🌿 Sandık Açılıyor…" : "✨ Rastgele Bir Fikir Çek"}
           </button>
           <p class="roulette-status">${note}</p>
         </div>
@@ -1215,7 +1211,7 @@ function callNumber(topic) {
   const category = activeCategory();
   const cat = CATEGORIES.find((c) => c.id === category);
   const prefix = category !== "general" && cat ? `${cat.tr} · ` : "";
-  return `${prefix}Katalog Fişi`;
+  return `${prefix}Günün Fişi`;
 }
 
 function renderQuickTools(topic) {
@@ -1224,7 +1220,7 @@ function renderQuickTools(topic) {
     <div class="quick-tools-row">
       <a href="https://www.google.com/search?q=${googleQuery}" target="_blank" rel="noopener noreferrer" class="quick-tool-btn" title="Google'da yeni sekmede araştır">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <span>Google'da Ara</span>
+        <span>Google'da İncele</span>
       </a>
       <button type="button" id="copyTopicBtn" class="quick-tool-btn" title="Kavram adını panoya kopyala">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -1253,16 +1249,16 @@ function renderLanded() {
 
       <div class="card-instruction">
         <p>
-          <strong>${settings.researchMinutes} dakika</strong> boyunca bu kavramı kitaplardan, makalelerden ve güvenilir kaynaklardan keşfet.
+          ☕ <strong>${settings.researchMinutes} dakika</strong> boyunca bu kavramı dilediğin gibi keşfet. İster makale oku, ister video izle; zihnini serbest bırak.
         </p>
       </div>
 
       <div class="actions-row">
         <button id="startResearchBtn" class="btn btn-primary" type="button">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-          Süreyi Başlat
+          ⏱️ 15 Dakikalık Mola Başlat
         </button>
-        <button id="cancelBtn" class="btn btn-secondary" type="button">Geri Dön</button>
+        <button id="cancelBtn" class="btn btn-secondary" type="button">Başka Çek 🔄</button>
       </div>
     </article>
   `;
@@ -1293,16 +1289,17 @@ function renderResearching() {
           </svg>
           <div class="radial-timer-content">
             <span id="timerDigits" class="timer-digits">00:00</span>
-            <span class="timer-label">${state.paused ? "DURAKLATILDI" : "ODAKLANMA SÜRESİ"}</span>
+            <span class="timer-label">${state.paused ? "☕ MOLA VERİLDİ" : "🌱 ZİHİN MOLASI AKIYOR"}</span>
           </div>
         </div>
       </div>
 
       <div class="notes-container">
         <label class="notes-label" for="researchNotesInput">
-          <span>Araştırma Notlarım (İsteğe Bağlı)</span>
+          <span>📝 Küçük Not Defterim (Kendi Kelimelerinle)</span>
         </label>
-        <textarea id="researchNotesInput" class="notes-textarea" placeholder="Bu kavramla ilgili öğrendiğin anahtar fikirleri veya örnekleri buraya not al...">${esc(state.notes)}</textarea>
+        <textarea id="researchNotesInput" class="notes-textarea" placeholder="Aklında kalan en çarpıcı cümleyi veya kendi kelimelerinle özetini buraya not al...">${esc(state.notes)}</textarea>
+        <p class="notes-hint" style="font-size: 0.8rem; color: var(--text-soft); margin-top: 6px;">💡 İpucu: Kendi cümlelerinle 2 satır not almak, bilginin zihninde kalıcı olmasını sağlar.</p>
       </div>
 
       <div class="actions-row">
@@ -1314,7 +1311,7 @@ function renderResearching() {
         </button>
         <button id="finishResearchBtn" class="btn btn-primary" type="button">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
-          Bitir ve Damgala
+          ✨ Öğrendim, Sandığa Kaydet!
         </button>
       </div>
     </article>
@@ -1339,13 +1336,18 @@ function renderDone() {
       <div class="completion-badge-wrap">
         <div class="stamp-badge">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          ARAŞTIRILDI
+          SANDIĞA EKLENDİ 💎
         </div>
+      </div>
+
+      <div class="cozy-done-message" style="text-align: center; margin: 16px 0;">
+        <h3 style="font-size: 1.15rem; color: var(--text-main); font-family: var(--font-serif); margin-bottom: 4px;">Harika bir 15 dakikaydı! 🎉</h3>
+        <p style="font-size: 0.9rem; color: var(--text-muted);">Bugün kendine zaman ayırdın ve zihnine yepyeni bir tohum ektin. 🌱</p>
       </div>
 
       ${state.notes ? `
         <div class="completion-notes-recap">
-          <h4>Kaydedilen Not</h4>
+          <h4>📝 Kaydettiğin Not</h4>
           <p>${esc(state.notes)}</p>
         </div>
       ` : ""}
@@ -1353,9 +1355,9 @@ function renderDone() {
       <div class="actions-row">
         <button id="newRoundBtn" class="btn btn-primary" type="button">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-          Yeni Kavram Çek
+          ☕ Yeni Bir Merak Çek
         </button>
-        <button id="viewInCatalogBtn" class="btn btn-secondary" type="button">Kataloğu Gör</button>
+        <button id="viewInCatalogBtn" class="btn btn-secondary" type="button">📖 Not Defterimi İncele</button>
       </div>
     </article>
   `;
@@ -1551,11 +1553,11 @@ soundQuickToggle.addEventListener("click", () => {
 
 // ---------- Profile & Catalog UI ----------
 function getRankInfo(total) {
-  if (total >= 20) return { title: "Ansiklopedik Zihin", desc: "20+ kavram tamamlandı", icon: "💎" };
-  if (total >= 10) return { title: "Kavram Avcısı", desc: "10+ kavram tamamlandı", icon: "🔥" };
-  if (total >= 5)  return { title: "Kavram Kaşifi", desc: "5+ kavram tamamlandı", icon: "✨" };
-  if (total >= 1)  return { title: "Meraklı Çırak", desc: "Araştırma yolculuğun başladı", icon: "🌱" };
-  return { title: "Yeni Meraklı", desc: "Henüz fiş çekilmedi", icon: "🧭" };
+  if (total >= 20) return { title: "Bilge Kaşif 💎", desc: "20+ merak sandığa eklendi!", icon: "💎" };
+  if (total >= 10) return { title: "Kahve & Kitap Filozofu ☕", desc: "10+ merak tamamlandı", icon: "☕" };
+  if (total >= 5)  return { title: "Merak Kaşifi ✨", desc: "5+ merak sandıkta birikti", icon: "✨" };
+  if (total >= 1)  return { title: "Meraklı Çırak 🌱", desc: "Harika bir alışkanlık başladı!", icon: "🌱" };
+  return { title: "Yeni Meraklı 🧭", desc: "Sandığını doldurmaya hazır mısın?", icon: "🧭" };
 }
 
 function computeStats(list) {
@@ -1596,17 +1598,17 @@ function renderStats(list) {
       <div class="stats-metrics-row">
         <div class="stat-metric-item">
           <span class="stat-metric-val">${total}</span>
-          <span class="stat-metric-label">Kavram</span>
+          <span class="stat-metric-label">Öğrenilen Merak</span>
         </div>
         <div class="stat-metric-divider"></div>
         <div class="stat-metric-item">
           <span class="stat-metric-val">${streak} Gün</span>
-          <span class="stat-metric-label">Seri 🔥</span>
+          <span class="stat-metric-label">Öğrenme Serisi 🔥</span>
         </div>
         <div class="stat-metric-divider"></div>
         <div class="stat-metric-item">
           <span class="stat-metric-val">${topCat ? esc(topCat.tr) : "—"}</span>
-          <span class="stat-metric-label">Lider Alan</span>
+          <span class="stat-metric-label">En Sevilen Alan</span>
         </div>
       </div>
     </div>

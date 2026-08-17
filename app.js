@@ -2338,7 +2338,7 @@ function setupHangingLampChain() {
   let startPointerY = 0;
   let startPointerX = 0;
   let totalChainRestLen = (NUM_POINTS - 1) * SEGMENT_LEN; // 128px
-  let maxAllowedLen = totalChainRestLen + 14; // Maksimum 14px anahtar çekiş payı (asla lastik gibi uzamaz)
+  let maxAllowedLen = totalChainRestLen + 36; // 36px rahat çekiş mesafesi
   let lastMoveTime = 0;
   let lastMoveX = ANCHOR_X;
   let lastMoveY = ANCHOR_Y + totalChainRestLen;
@@ -2367,8 +2367,8 @@ function setupHangingLampChain() {
     const scaleX = 100 / rect.width;
     const scaleY = 240 / rect.height;
     return {
-      x: Math.max(8, Math.min(92, (clientX - rect.left) * scaleX)),
-      y: Math.max(4, Math.min(220, (clientY - rect.top) * scaleY))
+      x: Math.max(6, Math.min(94, (clientX - rect.left) * scaleX)),
+      y: Math.max(4, Math.min(225, (clientY - rect.top) * scaleY))
     };
   }
 
@@ -2385,7 +2385,6 @@ function setupHangingLampChain() {
     releaseVx = 0;
     releaseVy = 0;
 
-    // Hedef noktayı zincir boyuna göre sınırla
     const dx = pt.x - ANCHOR_X;
     const dy = Math.max(0, pt.y - ANCHOR_Y);
     const dist = Math.hypot(dx, dy);
@@ -2410,7 +2409,6 @@ function setupHangingLampChain() {
     if (!isDragging) return;
     const pt = getSvgPoint(e);
 
-    // Zincirin lastik gibi uzamasını engelle (katı pirinç boncuk zincir uzunluğu)
     const dx = pt.x - ANCHOR_X;
     const dy = Math.max(0, pt.y - ANCHOR_Y);
     const dist = Math.hypot(dx, dy) || 1;
@@ -2422,13 +2420,13 @@ function setupHangingLampChain() {
       dragTargetY = pt.y;
     }
 
-    // Gerçek el savurma hızını takip et (momentum)
+    // Kullanıcının anlık savurma hızını takip et
     const now = performance.now();
     const dt = Math.max(8, Math.min(80, now - lastMoveTime));
     const instVx = ((dragTargetX - lastMoveX) / dt) * 16.6;
     const instVy = ((dragTargetY - lastMoveY) / dt) * 16.6;
-    releaseVx = releaseVx * 0.4 + instVx * 0.6;
-    releaseVy = releaseVy * 0.4 + instVy * 0.6;
+    releaseVx = releaseVx * 0.35 + instVx * 0.65;
+    releaseVy = releaseVy * 0.35 + instVy * 0.65;
     lastMoveTime = now;
     lastMoveX = dragTargetX;
     lastMoveY = dragTargetY;
@@ -2444,19 +2442,22 @@ function setupHangingLampChain() {
     const dragDistanceY = endNode.y - restY;
     const totalMoveDist = Math.hypot(endNode.x - startPointerX, endNode.y - startPointerY);
 
-    // Bütün boğumların eski pozisyonlarını mevcut konuma eşitle (böylece fırlama/sapan etkisi sıfırlanır)
+    // Boğumların konumunu yumuşakça eşitle
     for (let i = 0; i < NUM_POINTS; i++) {
       nodes[i].oldX = nodes[i].x;
       nodes[i].oldY = nodes[i].y;
     }
 
-    // Yalnızca kullanıcının elini savurduğu yatay momentumu aktar (tatlı sarkaç salınımı)
-    const horizontalMomentum = Math.max(-10, Math.min(10, releaseVx));
-    endNode.oldX = endNode.x - horizontalMomentum;
-    endNode.oldY = endNode.y; // Dikeyde zıplamayı tamamen engelle
+    // Kullanıcının çekiş mesafesine ve savurma hızına tam orantılı momentum aktarımı
+    const horizontalMomentum = Math.max(-16, Math.min(16, releaseVx * 0.9));
+    const snapRecoilY = Math.min(7, Math.max(0, dragDistanceY * 0.18)); // Çekiş miktarıyla orantılı tok çıt sesi tepkisi
+    const verticalMomentum = Math.max(-6, Math.min(6, releaseVy * 0.5)) - snapRecoilY;
 
-    // Tetikleme: Aşağı çekildiyse veya hızlı dokunulduysa
-    const isPulledEnough = dragDistanceY >= 8 || releaseVy > 4;
+    endNode.oldX = endNode.x - horizontalMomentum;
+    endNode.oldY = endNode.y - verticalMomentum;
+
+    // Tetikleme: Aşağı 10px çekildiyse veya hızlı dokunulduysa
+    const isPulledEnough = dragDistanceY >= 10 || releaseVy > 4.5;
     const isQuickTap = totalMoveDist < 6;
 
     if (isPulledEnough || isQuickTap) {
@@ -2466,8 +2467,8 @@ function setupHangingLampChain() {
   }
 
   function updatePhysics() {
-    const GRAVITY = 0.65;
-    const DAMPING = 0.94; // Ağır pirinç zincir sönümlemesi (zıplamaz, asilce durulur)
+    const GRAVITY = 0.52;
+    const DAMPING = 0.982; // Akıcı, doğal ve canlı sarkaç salınımı
 
     for (let i = 0; i < NUM_POINTS; i++) {
       const n = nodes[i];
@@ -2482,9 +2483,7 @@ function setupHangingLampChain() {
       }
 
       const vx = (n.x - n.oldX) * DAMPING;
-      // Dikey hızı sınırla: asla yukarı doğru fırlamasın
-      let vy = (n.y - n.oldY) * DAMPING + GRAVITY;
-      if (vy < -3.5) vy = -3.5;
+      const vy = (n.y - n.oldY) * DAMPING + GRAVITY;
 
       n.oldX = n.x;
       n.oldY = n.y;
@@ -2492,7 +2491,7 @@ function setupHangingLampChain() {
       n.y += vy;
     }
 
-    const iterations = 8;
+    const iterations = 6;
     for (let iter = 0; iter < iterations; iter++) {
       nodes[0].x = ANCHOR_X;
       nodes[0].y = ANCHOR_Y;

@@ -327,6 +327,17 @@ body {
   user-select: none;
 }
 
+button.plate {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  appearance: none;
+}
+
+button.plate:hover {
+  border-color: var(--accent);
+}
+
 [data-theme="light"] .plate {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(120, 80, 40, 0.18);

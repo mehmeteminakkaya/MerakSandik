@@ -686,6 +686,7 @@ const soundIconOn = document.querySelector("#soundIconOn");
 const soundIconOff = document.querySelector("#soundIconOff");
 const ambientSoundBtn = document.querySelector("#ambientSoundBtn");
 const ambientIcon = document.querySelector("#ambientIcon");
+const homeBtn = document.querySelector("#homeBtn");
 const lampPullChain = document.querySelector("#lampPullChain");
 
 const researchRange = document.querySelector("#researchRange");
@@ -2359,6 +2360,14 @@ document.querySelectorAll(".palette-btn").forEach((btn) => {
     showToast(names[pal] || "Renk paleti güncellendi");
   });
 });
+
+if (homeBtn) {
+  homeBtn.addEventListener("click", () => {
+    if (state.phase === "idle") return;
+    sfx.playRustle();
+    resetToIdle();
+  });
+}
 
 if (ambientSoundBtn) {
   ambientSoundBtn.addEventListener("click", () => {

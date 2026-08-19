@@ -162,6 +162,28 @@
             </div>
           </div>
 
+          <!-- Yoldaş Davranışı (Uyanık / Akıllı / Uyku) -->
+          <div class="toggle-field pet-behavior-row">
+            <div class="toggle-info">
+              <span class="toggle-title">Yoldaş Davranışı</span>
+              <span class="toggle-desc">Tıklayınca ve araştırmada uyanma modu</span>
+            </div>
+            <div class="pet-behavior-grid" id="petBehaviorGrid" role="group" aria-label="Yoldaş Davranış Seçimi">
+              <button type="button" class="pet-behavior-btn is-active" data-behavior="smart">
+                <span class="behavior-icon">🌟</span>
+                <span>Akıllı</span>
+              </button>
+              <button type="button" class="pet-behavior-btn" data-behavior="awake">
+                <span class="behavior-icon">👀</span>
+                <span>Hep Uyanık</span>
+              </button>
+              <button type="button" class="pet-behavior-btn" data-behavior="sleep">
+                <span class="behavior-icon">💤</span>
+                <span>Huzurlu Uyku</span>
+              </button>
+            </div>
+          </div>
+
           <label class="range-field">
             <div class="range-header">
               <span>Araştırma süresi</span>
@@ -240,6 +262,6 @@
   </div>
 
   <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
-  <script src="app.js?v=56"></script>
+  <script src="app.js?v=57"></script>
 </body>
 </html>

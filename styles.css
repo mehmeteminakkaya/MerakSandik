@@ -1768,6 +1768,55 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
   flex-shrink: 0;
 }
 
+/* Yoldaş Davranış Seçici */
+.pet-behavior-row {
+  border-bottom: 1px solid var(--surface-border);
+  margin-bottom: 2px;
+}
+
+.pet-behavior-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.pet-behavior-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 6px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+
+.pet-behavior-btn:hover {
+  background: var(--surface);
+  color: var(--text-main);
+  border-color: var(--surface-border-hover);
+}
+
+.pet-behavior-btn.is-active {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--text-main);
+  box-shadow: 0 0 0 1.5px var(--accent);
+  font-weight: 700;
+}
+
+.pet-behavior-btn .behavior-icon {
+  font-size: 14px;
+}
+
 .settings-meta-item {
   display: flex;
   align-items: center;
@@ -2998,6 +3047,103 @@ input[type="range"]::-moz-range-thumb {
   40% { transform: scale(1.06) rotate(2deg); }
   60% { transform: scale(1.04) rotate(-1deg); }
   80% { transform: scale(1.02) rotate(1deg); }
+}
+
+/* --------------------------------------------------------------------------
+   UYANIK & CANLI MASKOT ANİMASYONLARI
+   -------------------------------------------------------------------------- */
+.cozy-pet-box.is-awake {
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.42));
+}
+
+.cozy-pet-box.is-awake:hover {
+  transform: scale(1.09) translateY(-3px);
+}
+
+/* Doğal Göz Kırpma Döngüsü */
+.pet-eyes-awake {
+  transform-origin: 28px 30px;
+  animation: petEyeBlink 4.2s ease-in-out infinite;
+}
+
+@keyframes petEyeBlink {
+  0%, 88%, 94%, 100% {
+    transform: scaleY(1);
+  }
+  91% {
+    transform: scaleY(0.08);
+  }
+}
+
+/* Uyanıkken daha canlı ve neşeli kuyruk sallamaları */
+.cozy-pet-box.is-awake .cat-tail {
+  animation: catTailAwake 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes catTailAwake {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-10deg) translateY(1.5px); }
+  100% { transform: rotate(12deg) translateY(-1.5px); }
+}
+
+.cozy-pet-box.is-awake .dog-tail {
+  animation: dogTailAwake 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes dogTailAwake {
+  0% { transform: rotate(-10deg); }
+  100% { transform: rotate(20deg) translateY(-2px); }
+}
+
+.cozy-pet-box.is-awake .rabbit-tail {
+  animation: rabbitTailAwake 2.2s ease-in-out infinite;
+}
+
+@keyframes rabbitTailAwake {
+  0%, 70%, 100% { transform: scale(1); }
+  80% { transform: scale(1.2) translateY(-1.5px); }
+  90% { transform: scale(0.9); }
+}
+
+.cozy-pet-box.is-awake .fox-tail {
+  animation: foxTailAwake 3s ease-in-out infinite alternate;
+}
+
+@keyframes foxTailAwake {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(-8deg) scale(1.05) translateY(-1.5px); }
+  100% { transform: rotate(5deg) scale(1.02); }
+}
+
+/* Kulak seğirmeleri uyanıkken daha hareketli */
+.cozy-pet-box.is-awake .cat-ear-twitch {
+  animation: catEarTwitch 3.5s ease-in-out infinite;
+}
+
+.cozy-pet-box.is-awake .dog-ear-flop {
+  animation: dogEarFlop 3s ease-in-out infinite;
+}
+
+.cozy-pet-box.is-awake .rabbit-ear-twitch {
+  animation: rabbitEarTwitch 2.6s ease-in-out infinite;
+}
+
+.cozy-pet-box.is-awake .fox-ear-twitch {
+  animation: foxEarTwitch 3.2s ease-in-out infinite;
+}
+
+/* Çalışma Arkadaşı Gözlüğü (Ders Çalışırken takılan sevimli yuvarlak okuma gözlüğü) */
+.pet-glasses-frame {
+  stroke: var(--accent, #e0a94e);
+  stroke-width: 1.4;
+  fill: rgba(255, 255, 255, 0.25);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+.pet-glasses-bridge {
+  stroke: var(--accent, #e0a94e);
+  stroke-width: 1.3;
+  fill: none;
 }
 
 /* Light Theme Variables for Cozy Items */

@@ -312,6 +312,7 @@ const PET_CONFIG = {
     happyEmote: "🤍🐾",
     annoyedEmote: "😾💢",
     idleEmotes: ["z", "z", "Z"],
+    awakeEmotes: ["✨", "💡", "🐾"],
     toastAnnoyed: "😾 Hırrr! Sandık Kedisi biraz dinlenmek istiyor, ona nefes aldır 🐾",
     toastMessages: [
       "Miyaaav! 🐱✨ (Sandık Kedisi sevindi ve patisini uzattı)",
@@ -337,6 +338,7 @@ const PET_CONFIG = {
     happyEmote: "🦴🐾",
     annoyedEmote: "🐶💢",
     idleEmotes: ["z", "z", "Z"],
+    awakeEmotes: ["🐾", "🦴", "✨"],
     toastAnnoyed: "🐶 Hav! Sandık Köpeği uykusundan uyandı, biraz başını okşa ve dinlensin 🐾",
     toastMessages: [
       "Vuf vuf! 🐶✨ (Sandık Köpeği kuyruğunu neşeyle salladı)",
@@ -361,6 +363,7 @@ const PET_CONFIG = {
     happyEmote: "🥕✨",
     annoyedEmote: "🐰💢",
     idleEmotes: ["z", "z", "Z"],
+    awakeEmotes: ["🥕", "✨", "🌸"],
     toastAnnoyed: "🐰 Puf! Sandık Tavşanı ayağını yere vurdu, biraz sakinleşmesini bekle 🥕",
     toastMessages: [
       "Kıpır kıpır! 🐰🥕 (Sandık Tavşanı burnunu sevimli sevimli oynattı)",
@@ -385,6 +388,7 @@ const PET_CONFIG = {
     happyEmote: "🍂✨",
     annoyedEmote: "🦊💢",
     idleEmotes: ["z", "z", "Z"],
+    awakeEmotes: ["🍂", "✨", "💡"],
     toastAnnoyed: "🦊 Ciyak! Sandık Tilkisi kuyruğunu çekti, biraz sakinleşsin 🍂",
     toastMessages: [
       "Yip yip! 🦊✨ (Sandık Tilkisi kocaman kabarık kuyruğunu kıpırdattı)",
@@ -1106,6 +1110,9 @@ function loadSettings() {
     const currentPetCfg = PET_CONFIG[loaded.petType] || PET_CONFIG.cat;
     if (!currentPetCfg.colors.some((c) => c.id === loaded.petColor)) {
       loaded.petColor = currentPetCfg.defaultColor;
+    }
+    if (!["smart", "awake", "sleep"].includes(loaded.petBehavior)) {
+      loaded.petBehavior = "smart";
     }
 
     const hadLegacyFields = "provider" in loaded || "apiKeys" in loaded || "models" in loaded || "waxColor" in loaded;
@@ -1884,6 +1891,7 @@ function getWheelInitialOffset(pool) {
 
 function spin() {
   if (state.spinning) return;
+  wakeUpPet(8000);
   sfx.init();
   state.spinning = true;
 
@@ -2106,7 +2114,29 @@ function renderNightcap() {
   `;
 }
 
-function renderCatSvg(c, isNight) {
+let petAwakeUntil = 0;
+let petAwakeTimerId = null;
+
+function isPetAwake() {
+  const behavior = settings.petBehavior || "smart";
+  if (behavior === "awake") return true;
+  if (behavior === "sleep") return false;
+  return state.phase === "researching" || state.spinning || Date.now() < petAwakeUntil;
+}
+
+function wakeUpPet(durationMs = 15000) {
+  const behavior = settings.petBehavior || "smart";
+  if (behavior === "sleep") return;
+  petAwakeUntil = Date.now() + durationMs;
+  if (petAwakeTimerId) clearTimeout(petAwakeTimerId);
+  petAwakeTimerId = setTimeout(() => {
+    if (!isPetAwake()) {
+      render();
+    }
+  }, durationMs + 100);
+}
+
+function renderCatSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="cat-svg" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
@@ -2128,8 +2158,30 @@ function renderCatSvg(c, isNight) {
       <path d="M 32 19 L 31 22" stroke="${c.dark}" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
       <ellipse cx="20" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
       <ellipse cx="37" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
-      <path d="M 21 29.5 Q 24.5 32.5 27.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-      <path d="M 30 29.5 Q 33.5 32.5 36.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+
+      <!-- Gözler: Uyanık vs Uyuyan -->
+      ${isAwake ? `
+        <g class="pet-eyes-awake">
+          <ellipse cx="23.5" cy="29.5" rx="3.4" ry="4" fill="#2c1a12"/>
+          <circle cx="22.5" cy="28.3" r="1.3" fill="#ffffff"/>
+          <circle cx="24.8" cy="30.8" r="0.6" fill="#ffffff"/>
+          <ellipse cx="33.5" cy="29.5" rx="3.4" ry="4" fill="#2c1a12"/>
+          <circle cx="32.5" cy="28.3" r="1.3" fill="#ffffff"/>
+          <circle cx="34.8" cy="30.8" r="0.6" fill="#ffffff"/>
+        </g>
+      ` : `
+        <path d="M 21 29.5 Q 24.5 32.5 27.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+        <path d="M 30 29.5 Q 33.5 32.5 36.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+      `}
+
+      ${isResearching ? `
+        <g class="pet-glasses">
+          <circle class="pet-glasses-frame" cx="23.5" cy="29.5" r="4.8"/>
+          <circle class="pet-glasses-frame" cx="33.5" cy="29.5" r="4.8"/>
+          <path class="pet-glasses-bridge" d="M 28.3 29.5 Q 28.5 28.5 28.7 29.5"/>
+        </g>
+      ` : ""}
+
       <ellipse cx="28.5" cy="33.8" rx="2" ry="1.3" fill="#f2907a"/>
       <path d="M 26.5 35.2 Q 28.5 37 30.5 35.2" stroke="#2c1a12" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <line x1="12" y1="32" x2="20" y2="34" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
@@ -2144,7 +2196,7 @@ function renderCatSvg(c, isNight) {
   `;
 }
 
-function renderDogSvg(c, isNight) {
+function renderDogSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="dog-svg" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
@@ -2160,11 +2212,38 @@ function renderDogSvg(c, isNight) {
       ${isNight ? renderNightcap() : ""}
       <ellipse cx="19" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
       <ellipse cx="37" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
-      <path d="M 20 29.5 Q 23.5 32 26.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-      <path d="M 30 29.5 Q 33.5 32 36.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+
+      <!-- Gözler: Uyanık vs Uyuyan -->
+      ${isAwake ? `
+        <g class="pet-eyes-awake">
+          <ellipse cx="23" cy="29.5" rx="3.5" ry="4.2" fill="#221711"/>
+          <circle cx="22" cy="28.2" r="1.4" fill="#ffffff"/>
+          <circle cx="24.2" cy="31" r="0.7" fill="#ffffff"/>
+          <ellipse cx="33.5" cy="29.5" rx="3.5" ry="4.2" fill="#221711"/>
+          <circle cx="32.5" cy="28.2" r="1.4" fill="#ffffff"/>
+          <circle cx="34.7" cy="31" r="0.7" fill="#ffffff"/>
+        </g>
+      ` : `
+        <path d="M 20 29.5 Q 23.5 32 26.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+        <path d="M 30 29.5 Q 33.5 32 36.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+      `}
+
+      ${isResearching ? `
+        <g class="pet-glasses">
+          <circle class="pet-glasses-frame" cx="23" cy="29.5" r="4.8"/>
+          <circle class="pet-glasses-frame" cx="33.5" cy="29.5" r="4.8"/>
+          <path class="pet-glasses-bridge" d="M 27.8 29.5 Q 28.2 28.5 28.7 29.5"/>
+        </g>
+      ` : ""}
+
       <ellipse cx="28.5" cy="33.8" rx="2.4" ry="1.6" fill="#221711"/>
       <circle cx="27.8" cy="33.3" r="0.6" fill="#ffffff" opacity="0.8"/>
-      <path d="M 26.8 35.5 Q 28.5 37 30.2 35.5" stroke="#221711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      ${isAwake ? `
+        <path d="M 27.5 35.8 Q 28.5 39.5 29.5 35.8" fill="#f88e9e" stroke="#221711" stroke-width="0.8"/>
+      ` : `
+        <path d="M 26.8 35.5 Q 28.5 37 30.2 35.5" stroke="#221711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      `}
+
       <ellipse cx="23" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
       <ellipse cx="34" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
       <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
@@ -2173,7 +2252,7 @@ function renderDogSvg(c, isNight) {
   `;
 }
 
-function renderRabbitSvg(c, isNight) {
+function renderRabbitSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="rabbit-svg" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="48" cy="46" rx="38" ry="3.5" fill="rgba(0,0,0,0.18)"/>
@@ -2191,8 +2270,30 @@ function renderRabbitSvg(c, isNight) {
       ${isNight ? renderNightcap() : ""}
       <ellipse cx="19" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
       <ellipse cx="35" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
-      <path d="M 20 29.5 Q 23.5 32.5 26.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      <path d="M 29 29.5 Q 32.5 32.5 35.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+      <!-- Gözler: Uyanık vs Uyuyan -->
+      ${isAwake ? `
+        <g class="pet-eyes-awake">
+          <ellipse cx="22.5" cy="29.5" rx="3.6" ry="4.2" fill="#28171d"/>
+          <circle cx="21.5" cy="28.2" r="1.4" fill="#ffffff"/>
+          <circle cx="23.8" cy="31" r="0.7" fill="#ffffff"/>
+          <ellipse cx="32.5" cy="29.5" rx="3.6" ry="4.2" fill="#28171d"/>
+          <circle cx="31.5" cy="28.2" r="1.4" fill="#ffffff"/>
+          <circle cx="33.8" cy="31" r="0.7" fill="#ffffff"/>
+        </g>
+      ` : `
+        <path d="M 20 29.5 Q 23.5 32.5 26.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M 29 29.5 Q 32.5 32.5 35.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      `}
+
+      ${isResearching ? `
+        <g class="pet-glasses">
+          <circle class="pet-glasses-frame" cx="22.5" cy="29.5" r="4.8"/>
+          <circle class="pet-glasses-frame" cx="32.5" cy="29.5" r="4.8"/>
+          <path class="pet-glasses-bridge" d="M 27.3 29.5 Q 27.5 28.5 27.7 29.5"/>
+        </g>
+      ` : ""}
+
       <g class="rabbit-nose">
         <polygon points="26.5,33.5 29.5,33.5 28,35" fill="#f48ca2"/>
         <path d="M 28 35 L 28 36.5 M 28 36.5 Q 26.5 37.8 25 36.5 M 28 36.5 Q 29.5 37.8 31 36.5" stroke="#251a14" stroke-width="1.2" fill="none" stroke-linecap="round"/>
@@ -2207,7 +2308,7 @@ function renderRabbitSvg(c, isNight) {
   `;
 }
 
-function renderFoxSvg(c, isNight) {
+function renderFoxSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="fox-svg" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
@@ -2228,8 +2329,30 @@ function renderFoxSvg(c, isNight) {
       ${isNight ? renderNightcap() : ""}
       <ellipse cx="20" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
       <ellipse cx="36" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
-      <path d="M 21 28.5 Q 24.5 31.5 27.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      <path d="M 29.5 28.5 Q 32.5 31.5 35.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+      <!-- Gözler: Uyanık vs Uyuyan -->
+      ${isAwake ? `
+        <g class="pet-eyes-awake">
+          <ellipse cx="23.5" cy="28.5" rx="3.2" ry="3.8" fill="#1b120c"/>
+          <circle cx="22.5" cy="27.4" r="1.3" fill="#ffffff"/>
+          <circle cx="24.6" cy="29.8" r="0.6" fill="#ffffff"/>
+          <ellipse cx="32.5" cy="28.5" rx="3.2" ry="3.8" fill="#1b120c"/>
+          <circle cx="31.5" cy="27.4" r="1.3" fill="#ffffff"/>
+          <circle cx="33.6" cy="29.8" r="0.6" fill="#ffffff"/>
+        </g>
+      ` : `
+        <path d="M 21 28.5 Q 24.5 31.5 27.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M 29.5 28.5 Q 32.5 31.5 35.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      `}
+
+      ${isResearching ? `
+        <g class="pet-glasses">
+          <circle class="pet-glasses-frame" cx="23.5" cy="28.5" r="4.6"/>
+          <circle class="pet-glasses-frame" cx="32.5" cy="28.5" r="4.6"/>
+          <path class="pet-glasses-bridge" d="M 28.1 28.5 Q 28 27.5 27.9 28.5"/>
+        </g>
+      ` : ""}
+
       <ellipse cx="27.5" cy="33.5" rx="1.8" ry="1.3" fill="#1b120c"/>
       <ellipse cx="22" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
       <ellipse cx="30" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
@@ -2244,25 +2367,29 @@ function renderCozyDecorations() {
   const petCfg = PET_CONFIG[currentPetType] || PET_CONFIG.cat;
   const colorId = settings.petColor || petCfg.defaultColor;
   const colorCfg = petCfg.colors.find((c) => c.id === colorId) || petCfg.colors[0];
+  const awake = isPetAwake();
+  const isResearching = state.phase === "researching";
 
   let petSvg = "";
   if (currentPetType === "dog") {
-    petSvg = renderDogSvg(colorCfg, isNight);
+    petSvg = renderDogSvg(colorCfg, isNight, awake, isResearching);
   } else if (currentPetType === "rabbit") {
-    petSvg = renderRabbitSvg(colorCfg, isNight);
+    petSvg = renderRabbitSvg(colorCfg, isNight, awake, isResearching);
   } else if (currentPetType === "fox") {
-    petSvg = renderFoxSvg(colorCfg, isNight);
+    petSvg = renderFoxSvg(colorCfg, isNight, awake, isResearching);
   } else {
-    petSvg = renderCatSvg(colorCfg, isNight);
+    petSvg = renderCatSvg(colorCfg, isNight, awake, isResearching);
   }
+
+  const emotes = awake ? (petCfg.awakeEmotes || ["✨", "💡", "🐾"]) : petCfg.idleEmotes;
 
   return `
     <div class="cozy-decorations" aria-hidden="true">
-      <div class="cozy-item cozy-pet-box cozy-cat-box" id="cozyCatBtn" role="button" tabindex="0" title="${esc(petCfg.name)} — sevmek için tıkla! 🐾" aria-label="${esc(petCfg.name)}">
+      <div class="cozy-item cozy-pet-box cozy-cat-box ${awake ? "is-awake" : ""}" id="cozyCatBtn" role="button" tabindex="0" title="${esc(petCfg.name)} — ${awake ? "canlı & uyanık dostun!" : "uyuyor, sevmek ve uyandırmak için tıkla! 🐾"}" aria-label="${esc(petCfg.name)}">
         <span class="pet-emote cat-emote" aria-hidden="true">
-          <span class="z-1">${petCfg.idleEmotes[0]}</span>
-          <span class="z-2">${petCfg.idleEmotes[1]}</span>
-          <span class="z-3">${petCfg.idleEmotes[2]}</span>
+          <span class="z-1">${emotes[0]}</span>
+          <span class="z-2">${emotes[1]}</span>
+          <span class="z-3">${emotes[2]}</span>
         </span>
         ${petSvg}
       </div>
@@ -2488,6 +2615,7 @@ function bindStageEvents() {
   if (cozyCatBtn) {
     const handlePetClick = () => {
       sessionPetCount++;
+      wakeUpPet(15000);
 
       const now = Date.now();
       rapidPetStreak = (now - lastCatPetTime < RAPID_PET_WINDOW_MS) ? rapidPetStreak + 1 : 1;
@@ -2503,13 +2631,17 @@ function bindStageEvents() {
       if (emote) {
         emote.innerHTML = isAnnoyed ? `<span class="pet-heart cat-heart">${petCfg.annoyedEmote}</span>` : `<span class="pet-heart cat-heart">${petCfg.happyEmote}</span>`;
         setTimeout(() => {
-          emote.innerHTML = `<span class="z-1">${petCfg.idleEmotes[0]}</span><span class="z-2">${petCfg.idleEmotes[1]}</span><span class="z-3">${petCfg.idleEmotes[2]}</span>`;
+          const currentAwake = isPetAwake();
+          const currentEmotes = currentAwake ? (petCfg.awakeEmotes || ["✨", "💡", "🐾"]) : petCfg.idleEmotes;
+          emote.innerHTML = `<span class="z-1">${currentEmotes[0]}</span><span class="z-2">${currentEmotes[1]}</span><span class="z-3">${currentEmotes[2]}</span>`;
         }, 2500);
       }
       cozyCatBtn.classList.add("is-purring");
       setTimeout(() => {
         cozyCatBtn.classList.remove("is-purring");
       }, 700);
+
+      render();
 
       if (isAnnoyed) {
         rapidPetStreak = 0; // tepkiden sonra sıfırla, spam'i önle
@@ -2752,9 +2884,14 @@ function syncPetSettingsUI() {
   const currentPet = settings.petType || "cat";
   const cfg = PET_CONFIG[currentPet] || PET_CONFIG.cat;
   const currentColor = settings.petColor || cfg.defaultColor;
+  const currentBehavior = settings.petBehavior || "smart";
 
   document.querySelectorAll(".pet-type-btn").forEach((btn) => {
     btn.classList.toggle("is-active", btn.dataset.pet === currentPet);
+  });
+
+  document.querySelectorAll(".pet-behavior-btn").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.behavior === currentBehavior);
   });
 
   const colorGrid = document.querySelector("#petColorGrid");
@@ -2919,6 +3056,24 @@ document.querySelectorAll(".pet-type-btn").forEach((btn) => {
     render();
     const cfg = PET_CONFIG[nextPet];
     showToast(`${cfg.icon} Masa yoldaşın ${cfg.name} oldu!`);
+  });
+});
+
+document.querySelectorAll(".pet-behavior-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const nextBehavior = btn.dataset.behavior;
+    if (!["smart", "awake", "sleep"].includes(nextBehavior)) return;
+    settings.petBehavior = nextBehavior;
+    sfx.playTick();
+    saveSettings();
+    syncPetSettingsUI();
+    render();
+    const behaviorNames = {
+      smart: "🌟 Akıllı Uyanma modu seçildi (Tıklayınca & araştırmada uyanır)",
+      awake: "👀 Hep Uyanık modu seçildi (Masa yoldaşın sürekli canlı!)",
+      sleep: "💤 Huzurlu Uyku modu seçildi (Sakin sakin uyur)"
+    };
+    showToast(behaviorNames[nextBehavior]);
   });
 });
 

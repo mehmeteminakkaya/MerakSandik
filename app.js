@@ -313,7 +313,7 @@ const PET_CONFIG = {
     annoyedEmote: "😾💢",
     idleEmotes: ["z", "z", "Z"],
     awakeEmotes: ["✨", "💡", "🐾"],
-    toastAnnoyed: "😾 Hırrr! Sandık Kedisi biraz dinlenmek istiyor, ona nefes aldır 🐾",
+    toastAnnoyed: "😾 Mırrr! Sandık Kedisi biraz dinlenmek istiyor, ona nefes aldır 🐾",
     toastMessages: [
       "Miyaaav! 🐱✨ (Sandık Kedisi sevindi ve patisini uzattı)",
       "Mırrr... 🐱🐾 (Sandık Kedisi huzurla mırıldanıyor)",
@@ -415,7 +415,6 @@ class SoundEffects {
     this.meowAudio = null;
     this.meowSweetAudio = null;
     this.purrAudio = null;
-    this.growlAudio = null;
     this.rainAudio = null;
     this.fireAudio = null;
     this.oceanAudio = null;
@@ -444,8 +443,6 @@ class SoundEffects {
         this.meowSweetAudio.preload = "auto";
         this.purrAudio = new Audio("/purr.mp3");
         this.purrAudio.preload = "auto";
-        this.growlAudio = new Audio("/growl.mp3");
-        this.growlAudio.preload = "auto";
         this.rainAudio = new Audio("/rain.mp3");
         this.rainAudio.preload = "auto";
         this.rainAudio.loop = true;
@@ -575,14 +572,19 @@ class SoundEffects {
     } catch { /* ignore */ }
   }
 
-  playGrowl() {
+  // "Mrr" — hırıltı yerine kedinin kısa, alçak sesli bir protesto mırıltısı:
+  // meow.mp3'ün hızını/perdesini düşürüp klonlayarak çalıyor, ayrı bir ses
+  // dosyasına gerek kalmadan. cloneNode kullanılıyor ki normal meow'un
+  // playbackRate/volume durumu bundan etkilenmesin.
+  playMrr() {
     if (!settings.sound) return;
     this.init();
     try {
-      if (this.growlAudio) {
-        this.growlAudio.currentTime = 0;
-        this.growlAudio.volume = 0.85 * this.masterVolume();
-        this.growlAudio.play().catch(() => {});
+      if (this.meowAudio) {
+        const clone = this.meowAudio.cloneNode();
+        clone.playbackRate = 0.72;
+        clone.volume = 0.55 * this.masterVolume();
+        clone.play().catch(() => {});
         return;
       }
     } catch { /* ignore */ }
@@ -590,7 +592,7 @@ class SoundEffects {
 
   playCatInteraction(mood = "happy") {
     if (mood === "annoyed") {
-      this.playGrowl();
+      this.playMrr();
       return;
     }
     if (Math.random() < 0.65) {
@@ -610,29 +612,51 @@ class SoundEffects {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = "sawtooth";
-        osc.frequency.setValueAtTime(110, now);
-        osc.frequency.linearRampToValueAtTime(75, now + 0.35);
-        gain.gain.setValueAtTime(0.12, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.frequency.setValueAtTime(140, now);
+        osc.frequency.linearRampToValueAtTime(70, now + 0.4);
+        gain.gain.setValueAtTime(0.32, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start(now);
-        osc.stop(now + 0.35);
+        osc.stop(now + 0.4);
         return;
       }
-      [0, 0.13].forEach((offset, idx) => {
+      // "Hav hav" — her havlama bir gürültü patlaması (ısırık dokusu) +
+      // düşen üçgen ton katmanından oluşuyor, tek sinüsten çok daha belirgin.
+      [0, 0.16].forEach((offset, idx) => {
+        const bufferSize = Math.floor(this.ctx.sampleRate * 0.05);
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.3));
+        }
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+        const noiseFilter = this.ctx.createBiquadFilter();
+        noiseFilter.type = "bandpass";
+        noiseFilter.frequency.setValueAtTime(500, now + offset);
+        noiseFilter.Q.setValueAtTime(0.8, now + offset);
+        const noiseGain = this.ctx.createGain();
+        noiseGain.gain.setValueAtTime(0.35, now + offset);
+        noiseGain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.05);
+        noise.connect(noiseFilter);
+        noiseFilter.connect(noiseGain);
+        noiseGain.connect(this.masterGain);
+        noise.start(now + offset);
+
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = "triangle";
-        const startFreq = idx === 0 ? 360 : 420;
+        const startFreq = idx === 0 ? 340 : 400;
         osc.frequency.setValueAtTime(startFreq, now + offset);
-        osc.frequency.exponentialRampToValueAtTime(210, now + offset + 0.09);
-        gain.gain.setValueAtTime(0.22, now + offset);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.1);
+        osc.frequency.exponentialRampToValueAtTime(180, now + offset + 0.12);
+        gain.gain.setValueAtTime(0.38, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.14);
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start(now + offset);
-        osc.stop(now + offset + 0.1);
+        osc.stop(now + offset + 0.14);
       });
     } catch { /* sessiz kal */ }
   }
@@ -644,33 +668,44 @@ class SoundEffects {
     try {
       const now = this.ctx.currentTime;
       if (mood === "annoyed") {
-        [0, 0.14].forEach((offset) => {
-          const osc = this.ctx.createOscillator();
+        // Gerçek tavşanlar ürktüğünde tiz bir ses değil, arka ayaklarıyla
+        // yere vurur (thump) — kızgın modda o tok tepme sesi kullanılıyor.
+        [0, 0.18].forEach((offset) => {
+          const bufferSize = Math.floor(this.ctx.sampleRate * 0.08);
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.25));
+          }
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(220, now + offset);
           const gain = this.ctx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(90, now + offset);
-          osc.frequency.exponentialRampToValueAtTime(40, now + offset + 0.08);
-          gain.gain.setValueAtTime(0.25, now + offset);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.08);
-          osc.connect(gain);
+          gain.gain.setValueAtTime(0.55, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.09);
+          noise.connect(filter);
+          filter.connect(gain);
           gain.connect(this.masterGain);
-          osc.start(now + offset);
-          osc.stop(now + offset + 0.08);
+          noise.start(now + offset);
         });
         return;
       }
-      [0, 0.08].forEach((offset, idx) => {
+      // Memnun tavşan: yumuşak, tiz çift "cik cik" — eski sürümden daha
+      // düşük perdeli ve daha yüksek kazançlı, duyulabilirliği artırıyor.
+      [0, 0.09].forEach((offset, idx) => {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(idx === 0 ? 1150 : 1420, now + offset);
-        osc.frequency.exponentialRampToValueAtTime(idx === 0 ? 1380 : 1600, now + offset + 0.06);
-        gain.gain.setValueAtTime(0.12, now + offset);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.06);
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(idx === 0 ? 950 : 1150, now + offset);
+        osc.frequency.exponentialRampToValueAtTime(idx === 0 ? 1100 : 1300, now + offset + 0.07);
+        gain.gain.setValueAtTime(0.28, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.07);
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start(now + offset);
-        osc.stop(now + offset + 0.06);
+        osc.stop(now + offset + 0.07);
       });
     } catch { /* sessiz kal */ }
   }
@@ -685,29 +720,31 @@ class SoundEffects {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = "sawtooth";
-        osc.frequency.setValueAtTime(680, now);
-        osc.frequency.exponentialRampToValueAtTime(320, now + 0.15);
-        gain.gain.setValueAtTime(0.15, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.frequency.setValueAtTime(900, now);
+        osc.frequency.exponentialRampToValueAtTime(280, now + 0.22);
+        gain.gain.setValueAtTime(0.32, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start(now);
-        osc.stop(now + 0.15);
+        osc.stop(now + 0.22);
         return;
       }
-      [0, 0.07, 0.14].forEach((offset, idx) => {
+      // "Yip yip yip" — kısa, düşen üçlü tilki havlaması, eski sürümden
+      // belirgin şekilde daha yüksek kazançlı.
+      [0, 0.1, 0.2].forEach((offset, idx) => {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = "sine";
-        const freqs = [620, 840, 1080];
+        osc.type = "triangle";
+        const freqs = [900, 760, 1020];
         osc.frequency.setValueAtTime(freqs[idx], now + offset);
-        osc.frequency.exponentialRampToValueAtTime(freqs[idx] * 1.15, now + offset + 0.06);
-        gain.gain.setValueAtTime(0.15, now + offset);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.06);
+        osc.frequency.exponentialRampToValueAtTime(freqs[idx] * 0.7, now + offset + 0.08);
+        gain.gain.setValueAtTime(0.26, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.09);
         osc.connect(gain);
         gain.connect(this.masterGain);
         osc.start(now + offset);
-        osc.stop(now + offset + 0.06);
+        osc.stop(now + offset + 0.09);
       });
     } catch { /* sessiz kal */ }
   }
@@ -722,201 +759,6 @@ class SoundEffects {
       this.playFoxSound(mood);
     } else {
       this.playCatInteraction(mood);
-    }
-  }
-
-  playCoffee() {
-    if (!settings.sound) return;
-    this.init();
-    if (!this.ctx) return;
-    try {
-      const now = this.ctx.currentTime;
-      // High ceramic mug clink
-      const osc1 = this.ctx.createOscillator();
-      const gain1 = this.ctx.createGain();
-      osc1.type = "sine";
-      osc1.frequency.setValueAtTime(1760, now);
-      gain1.gain.setValueAtTime(0.18, now);
-      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
-      osc1.connect(gain1);
-      gain1.connect(this.masterGain);
-      osc1.start(now);
-      osc1.stop(now + 0.25);
-
-      // Warm low body note
-      const osc2 = this.ctx.createOscillator();
-      const gain2 = this.ctx.createGain();
-      osc2.type = "triangle";
-      osc2.frequency.setValueAtTime(440, now + 0.02);
-      gain2.gain.setValueAtTime(0.12, now + 0.02);
-      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
-      osc2.connect(gain2);
-      gain2.connect(this.masterGain);
-      osc2.start(now + 0.02);
-      osc2.stop(now + 0.3);
-    } catch { /* sessiz kal */ }
-  }
-
-  playRustle() {
-    if (!settings.sound) return;
-    this.init();
-    if (!this.ctx) return;
-    try {
-      const now = this.ctx.currentTime;
-      const bufferSize = Math.floor(this.ctx.sampleRate * 0.15);
-      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.4));
-      }
-      const noise = this.ctx.createBufferSource();
-      noise.buffer = buffer;
-      const filter = this.ctx.createBiquadFilter();
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1200, now);
-      filter.Q.setValueAtTime(1.5, now);
-      const gain = this.ctx.createGain();
-      gain.gain.setValueAtTime(0.06, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
-      noise.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.masterGain);
-      noise.start(now);
-    } catch { /* sessiz kal */ }
-  }
-
-  playWaxStamp() {
-    if (!settings.sound) return;
-    this.init();
-    if (!this.ctx) return;
-    try {
-      const now = this.ctx.currentTime;
-      const osc1 = this.ctx.createOscillator();
-      const gain1 = this.ctx.createGain();
-      osc1.type = "sine";
-      osc1.frequency.setValueAtTime(130, now);
-      osc1.frequency.exponentialRampToValueAtTime(45, now + 0.12);
-      gain1.gain.setValueAtTime(0.35, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-      osc1.connect(gain1);
-      gain1.connect(this.masterGain);
-      osc1.start(now);
-      osc1.stop(now + 0.15);
-    } catch { /* sessiz kal */ }
-  }
-
-  playChainClick() {
-    if (!settings.sound) return;
-    this.init();
-    if (!this.ctx) return;
-    try {
-      const now = this.ctx.currentTime;
-      const osc1 = this.ctx.createOscillator();
-      const gain1 = this.ctx.createGain();
-      osc1.type = "triangle";
-      osc1.frequency.setValueAtTime(1450, now);
-      osc1.frequency.exponentialRampToValueAtTime(680, now + 0.05);
-      gain1.gain.setValueAtTime(0.40, now);
-      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
-      osc1.connect(gain1);
-      gain1.connect(this.masterGain);
-      osc1.start(now);
-      osc1.stop(now + 0.08);
-
-      const osc2 = this.ctx.createOscillator();
-      const gain2 = this.ctx.createGain();
-      osc2.type = "sine";
-      osc2.frequency.setValueAtTime(2600, now + 0.03);
-      osc2.frequency.exponentialRampToValueAtTime(1100, now + 0.14);
-      gain2.gain.setValueAtTime(0.25, now + 0.03);
-      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-      osc2.connect(gain2);
-      gain2.connect(this.masterGain);
-      osc2.start(now + 0.03);
-      osc2.stop(now + 0.18);
-    } catch { /* sessiz kal */ }
-  }
-
-  setAmbience(type) {
-    this.currentAmbienceType = type;
-    this.stopAmbience();
-    if (!settings.sound || type === "none") return;
-    this.init();
-    const track = { rain: this.rainAudio, fire: this.fireAudio, ocean: this.oceanAudio }[type] || null;
-    if (!track) return;
-    try {
-      track.currentTime = 0;
-      track.volume = 0.01;
-      track.play().catch(() => {});
-      notes.forEach((freq, i) => {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        const start = this.ctx.currentTime + i * 0.12;
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, start);
-        gain.gain.setValueAtTime(0.35, start);
-        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.9);
-        osc.connect(gain);
-        gain.connect(this.masterGain);
-        osc.start(start);
-        osc.stop(start + 0.9);
-      });
-    } catch { /* sessiz kal */ }
-  }
-
-  playPurr() {
-    if (!settings.sound) return;
-    this.init();
-    try {
-      if (this.purrAudio) {
-        this.purrAudio.currentTime = 0;
-        this.purrAudio.volume = 0.9 * this.masterVolume();
-        this.purrAudio.play().catch(() => {});
-        return;
-      }
-    } catch { /* ignore */ }
-  }
-
-  playMeow() {
-    if (!settings.sound) return;
-    this.init();
-    try {
-      const useSweet = Math.random() < 0.5 && this.meowSweetAudio;
-      const track = useSweet ? this.meowSweetAudio : this.meowAudio;
-      // meow.mp3 is a hotter master than meow-sweet.mp3 (near-clipping vs.
-      // soft) — different base levels keep the two feeling similarly loud.
-      const base = useSweet ? 0.95 : 0.7;
-      if (track) {
-        track.currentTime = 0;
-        track.volume = base * this.masterVolume();
-        track.play().catch(() => {});
-        return;
-      }
-    } catch { /* ignore */ }
-  }
-
-  playGrowl() {
-    if (!settings.sound) return;
-    this.init();
-    try {
-      if (this.growlAudio) {
-        this.growlAudio.currentTime = 0;
-        this.growlAudio.volume = 0.85 * this.masterVolume();
-        this.growlAudio.play().catch(() => {});
-        return;
-      }
-    } catch { /* ignore */ }
-  }
-
-  playCatInteraction(mood = "happy") {
-    if (mood === "annoyed") {
-      this.playGrowl();
-      return;
-    }
-    if (Math.random() < 0.65) {
-      this.playMeow();
-    } else {
-      this.playPurr();
     }
   }
 

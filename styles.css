@@ -1590,18 +1590,45 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
 }
 
 /* --------------------------------------------------------------------------
-   Renk Paleti Seçici
+   Ayarlar Modalı Bölümleri & Hiyerarşi
    -------------------------------------------------------------------------- */
-.palette-toggle-row {
+.settings-section {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   gap: 12px;
-  padding-bottom: 16px;
+  padding-bottom: 18px;
   border-bottom: 1px solid var(--surface-border);
-  margin-bottom: 2px;
 }
 
+.settings-section:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.section-title {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: 0.02em;
+}
+
+.section-desc {
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* --------------------------------------------------------------------------
+   Renk Paleti Seçici
+   -------------------------------------------------------------------------- */
 .palette-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1615,7 +1642,7 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 11px 8px;
+  padding: 12px 8px;
   border-radius: var(--radius-md);
   border: 1px solid var(--surface-border);
   background: var(--bg);
@@ -1643,11 +1670,11 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
 }
 
 .palette-dot {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
 }
 
 .dot-coffee {
@@ -1663,17 +1690,30 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
 }
 
 /* --------------------------------------------------------------------------
-   Masa Yoldaşı & Renk Seçici (Ayarlar Modalı)
+   Masa Yoldaşı Stüdyosu (Özel Kart Tasarımı)
    -------------------------------------------------------------------------- */
-.pet-toggle-row,
-.pet-color-row {
+.pet-studio-box {
+  background: var(--bg);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 16px 14px;
+  gap: 16px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.pet-studio-subgroup {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--surface-border);
-  margin-bottom: 2px;
+  gap: 8px;
+}
+
+.subgroup-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-soft);
 }
 
 .pet-type-grid {
@@ -1692,7 +1732,7 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
   padding: 10px 4px;
   border-radius: var(--radius-md);
   border: 1px solid var(--surface-border);
-  background: var(--bg);
+  background: var(--surface);
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: 11.5px;
@@ -1703,7 +1743,7 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
 }
 
 .pet-type-btn:hover {
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--text-main);
   border-color: var(--surface-border-hover);
   transform: translateY(-1px);
@@ -1711,49 +1751,52 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
 
 .pet-type-btn.is-active {
   border-color: var(--accent);
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--text-main);
   box-shadow: 0 0 0 2px var(--accent), 0 4px 12px var(--accent-glow);
 }
 
 .pet-type-icon {
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
 .pet-color-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 7px;
   width: 100%;
 }
 
 .pet-color-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 6px 12px;
-  border-radius: 999px;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: var(--radius-full);
   border: 1px solid var(--surface-border);
-  background: var(--bg);
+  background: var(--surface);
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: 11.5px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.18s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .pet-color-btn:hover {
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--text-main);
   border-color: var(--surface-border-hover);
 }
 
 .pet-color-btn.is-active {
   border-color: var(--accent);
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--text-main);
   box-shadow: 0 0 0 1.5px var(--accent);
   font-weight: 700;
@@ -1768,16 +1811,11 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
   flex-shrink: 0;
 }
 
-/* Yoldaş Davranış Seçici */
-.pet-behavior-row {
-  border-bottom: 1px solid var(--surface-border);
-  margin-bottom: 2px;
-}
-
+/* Yoldaş Davranış Segmenti */
 .pet-behavior-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  gap: 6px;
   width: 100%;
 }
 
@@ -1789,7 +1827,7 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
   padding: 8px 6px;
   border-radius: var(--radius-md);
   border: 1px solid var(--surface-border);
-  background: var(--bg);
+  background: var(--surface);
   color: var(--text-muted);
   font-family: var(--font-sans);
   font-size: 11.5px;
@@ -1800,14 +1838,14 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
 }
 
 .pet-behavior-btn:hover {
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--text-main);
   border-color: var(--surface-border-hover);
 }
 
 .pet-behavior-btn.is-active {
   border-color: var(--accent);
-  background: var(--surface);
+  background: var(--surface-raised);
   color: var(--text-main);
   box-shadow: 0 0 0 1.5px var(--accent);
   font-weight: 700;
@@ -1815,6 +1853,11 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
 
 .pet-behavior-btn .behavior-icon {
   font-size: 14px;
+}
+
+/* Ses Bölümü */
+.sound-section {
+  gap: 16px;
 }
 
 .settings-meta-item {

@@ -105,10 +105,10 @@
 
       <div class="modal-body">
         <div class="settings-card">
-          <!-- Renk Paleti Seçici (tema değişimi lamba ipinden yapılıyor) -->
-          <div class="toggle-field palette-toggle-row">
-            <div class="toggle-info">
-              <span class="toggle-title">Renk Paleti</span>
+          <!-- BÖLÜM 1: Renk Paleti -->
+          <div class="settings-section">
+            <div class="section-header">
+              <span class="section-title">🎨 Renk Paleti</span>
             </div>
             <div class="palette-grid" role="group" aria-label="Renk Paleti Seçimi">
               <button type="button" class="palette-btn is-active" data-palette="coffee">
@@ -126,98 +126,106 @@
             </div>
           </div>
 
-          <!-- Masa Yoldaşı (Hayvan Maskotu Seçici) -->
-          <div class="toggle-field pet-toggle-row">
-            <div class="toggle-info">
-              <span class="toggle-title">Masa Yoldaşı</span>
-              <span class="toggle-desc">Çalışma masanda sana eşlik eden sevimli dost</span>
+          <!-- BÖLÜM 2: Masa Yoldaşı Stüdyosu -->
+          <div class="settings-section pet-studio-box">
+            <div class="section-header">
+              <div class="section-title-group">
+                <span class="section-title">🐾 Masa Yoldaşı Stüdyosu</span>
+                <span class="section-desc">Çalışma masanda sana eşlik eden sevimli dost</span>
+              </div>
             </div>
-            <div class="pet-type-grid" id="petTypeGrid" role="group" aria-label="Masa Yoldaşı Seçimi">
-              <button type="button" class="pet-type-btn is-active" data-pet="cat">
-                <span class="pet-type-icon">🐱</span>
-                <span>Kedi</span>
-              </button>
-              <button type="button" class="pet-type-btn" data-pet="dog">
-                <span class="pet-type-icon">🐶</span>
-                <span>Köpek</span>
-              </button>
-              <button type="button" class="pet-type-btn" data-pet="rabbit">
-                <span class="pet-type-icon">🐰</span>
-                <span>Tavşan</span>
-              </button>
-              <button type="button" class="pet-type-btn" data-pet="fox">
-                <span class="pet-type-icon">🦊</span>
-                <span>Tilki</span>
-              </button>
+
+            <!-- 1. Hayvan Türü -->
+            <div class="pet-studio-subgroup">
+              <span class="subgroup-label">Hayvan Türü</span>
+              <div class="pet-type-grid" id="petTypeGrid" role="group" aria-label="Masa Yoldaşı Seçimi">
+                <button type="button" class="pet-type-btn is-active" data-pet="cat">
+                  <span class="pet-type-icon">🐱</span>
+                  <span>Kedi</span>
+                </button>
+                <button type="button" class="pet-type-btn" data-pet="dog">
+                  <span class="pet-type-icon">🐶</span>
+                  <span>Köpek</span>
+                </button>
+                <button type="button" class="pet-type-btn" data-pet="rabbit">
+                  <span class="pet-type-icon">🐰</span>
+                  <span>Tavşan</span>
+                </button>
+                <button type="button" class="pet-type-btn" data-pet="fox">
+                  <span class="pet-type-icon">🦊</span>
+                  <span>Tilki</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 2. Kürk / Tüy Rengi -->
+            <div class="pet-studio-subgroup">
+              <span class="subgroup-label">Kürk / Tüy Rengi</span>
+              <div class="pet-color-grid" id="petColorGrid" role="group" aria-label="Tüy Rengi Seçimi">
+                <!-- JS tarafından dinamik doldurulur -->
+              </div>
+            </div>
+
+            <!-- 3. Yoldaş Davranışı -->
+            <div class="pet-studio-subgroup">
+              <span class="subgroup-label">Yoldaş Davranışı</span>
+              <div class="pet-behavior-grid" id="petBehaviorGrid" role="group" aria-label="Yoldaş Davranış Seçimi">
+                <button type="button" class="pet-behavior-btn is-active" data-behavior="smart">
+                  <span class="behavior-icon">🌟</span>
+                  <span>Akıllı</span>
+                </button>
+                <button type="button" class="pet-behavior-btn" data-behavior="awake">
+                  <span class="behavior-icon">👀</span>
+                  <span>Hep Uyanık</span>
+                </button>
+                <button type="button" class="pet-behavior-btn" data-behavior="sleep">
+                  <span class="behavior-icon">💤</span>
+                  <span>Huzurlu Uyku</span>
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Yoldaş Kürk / Tüy Rengi Seçici -->
-          <div class="toggle-field pet-color-row">
-            <div class="toggle-info">
-              <span class="toggle-title">Kürk / Tüy Rengi</span>
-            </div>
-            <div class="pet-color-grid" id="petColorGrid" role="group" aria-label="Tüy Rengi Seçimi">
-              <!-- JS tarafından dinamik doldurulur -->
-            </div>
+          <!-- BÖLÜM 3: Araştırma Süresi -->
+          <div class="settings-section">
+            <label class="range-field">
+              <div class="range-header">
+                <span>⏱️ Araştırma süresi</span>
+                <strong id="researchLabel" class="pill-badge">15 dk</strong>
+              </div>
+              <input id="researchRange" type="range" min="1" max="45" step="1" value="15">
+              <div class="range-ticks">
+                <span>5 dk</span>
+                <span>15 dk</span>
+                <span>30 dk</span>
+                <span>45 dk</span>
+              </div>
+            </label>
           </div>
 
-          <!-- Yoldaş Davranışı (Uyanık / Akıllı / Uyku) -->
-          <div class="toggle-field pet-behavior-row">
-            <div class="toggle-info">
-              <span class="toggle-title">Yoldaş Davranışı</span>
-              <span class="toggle-desc">Tıklayınca ve araştırmada uyanma modu</span>
-            </div>
-            <div class="pet-behavior-grid" id="petBehaviorGrid" role="group" aria-label="Yoldaş Davranış Seçimi">
-              <button type="button" class="pet-behavior-btn is-active" data-behavior="smart">
-                <span class="behavior-icon">🌟</span>
-                <span>Akıllı</span>
-              </button>
-              <button type="button" class="pet-behavior-btn" data-behavior="awake">
-                <span class="behavior-icon">👀</span>
-                <span>Hep Uyanık</span>
-              </button>
-              <button type="button" class="pet-behavior-btn" data-behavior="sleep">
-                <span class="behavior-icon">💤</span>
-                <span>Huzurlu Uyku</span>
-              </button>
-            </div>
+          <!-- BÖLÜM 4: Sesler & Ambiyans -->
+          <div class="settings-section sound-section">
+            <label class="toggle-field">
+              <div class="toggle-info">
+                <span class="toggle-title">🔊 Masa saati ve sesler</span>
+                <span class="toggle-desc">Çekmece tıkırtısı ve süre bitiş zili</span>
+              </div>
+              <input id="soundToggle" type="checkbox" checked>
+            </label>
+
+            <label class="range-field">
+              <div class="range-header">
+                <span>Ses seviyesi</span>
+                <strong id="soundVolumeLabel" class="pill-badge">%70</strong>
+              </div>
+              <input id="soundVolumeRange" type="range" min="0" max="100" step="5" value="70">
+              <div class="range-ticks">
+                <span>Kısık</span>
+                <span>Orta</span>
+                <span>Yüksek</span>
+              </div>
+            </label>
           </div>
-
-          <label class="range-field">
-            <div class="range-header">
-              <span>Araştırma süresi</span>
-              <strong id="researchLabel" class="pill-badge">15 dk</strong>
-            </div>
-            <input id="researchRange" type="range" min="1" max="45" step="1" value="15">
-            <div class="range-ticks">
-              <span>5 dk</span>
-              <span>15 dk</span>
-              <span>30 dk</span>
-              <span>45 dk</span>
-            </div>
-          </label>
-
-          <label class="toggle-field">
-            <div class="toggle-info">
-              <span class="toggle-title">Masa saati ve sesler</span>
-              <span class="toggle-desc">Çekmece tıkırtısı ve süre bitiş zili</span>
-            </div>
-            <input id="soundToggle" type="checkbox" checked>
-          </label>
-
-          <label class="range-field">
-            <div class="range-header">
-              <span>Ses seviyesi</span>
-              <strong id="soundVolumeLabel" class="pill-badge">%70</strong>
-            </div>
-            <input id="soundVolumeRange" type="range" min="0" max="100" step="5" value="70">
-            <div class="range-ticks">
-              <span>Kısık</span>
-              <span>Orta</span>
-              <span>Yüksek</span>
-            </div>
-          </label>
         </div>
 
       </div>
@@ -262,6 +270,6 @@
   </div>
 
   <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
-  <script src="app.js?v=58"></script>
+  <script src="app.js?v=59"></script>
 </body>
 </html>

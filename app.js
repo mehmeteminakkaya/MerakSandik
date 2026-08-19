@@ -2458,31 +2458,41 @@ function renderFoxSvg(c, isNight, isAwake = false, isResearching = false) {
       <!-- Zemin Gölgesi -->
       <ellipse cx="48" cy="46" rx="42" ry="4" fill="rgba(0,0,0,0.28)"/>
 
+      <!-- Muhteşem Pofuduk Tilki Kuyruğu (Arka / Sağ tarafta kıvrılan kabarık kuyruk) -->
+      <g class="fox-tail">
+        <!-- Kuyruk Ana Gövdesi (Kabarık Form) -->
+        <path d="M 68 38 C 76 43 89 44 93 33 C 96 22 93 11 83 9 C 74 7 66 14 68 24 C 70 30 63 34 68 38 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
+        
+        <!-- Kuyruk Ucu Beyazlığı (Klasik Beyaz Uç - Doğal Tüy Geçişli) -->
+        <path d="M 83 9 C 93 11 96 22 93 33 C 89 31 87 26 89 22 C 86 21 84 17 87 14 C 83 13 82 10 83 9 Z" fill="${c.belly}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+        
+        <!-- Kuyruk İçi Tüy Detay Çizgisi -->
+        <path d="M 76 17 C 82 19 86 26 84 34" stroke="${o}" stroke-width="1.2" stroke-linecap="round" fill="none" opacity="0.45"/>
+      </g>
+
       <!-- Kıvrılmış Tilki Gövdesi (Net Konturlu) -->
-      <path d="M 22 43 C 17 33 20 19 38 15 C 56 11 76 14 85 25 C 91 34 89 44 82 45 C 68 46 34 46 22 43 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
+      <path d="M 22 43 C 17 33 20 19 38 15 C 56 11 74 14 82 25 C 87 34 85 44 78 45 C 64 46 34 46 22 43 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
 
       <!-- Kalça Çizgisi -->
-      <path d="M 68 21 C 78 27 80 38 77 44" stroke="${o}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.6"/>
+      <path d="M 65 21 C 74 27 76 38 73 44" stroke="${o}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.6"/>
 
       <!-- Göbek -->
-      <ellipse class="fox-belly" cx="52" cy="35" rx="15" ry="9" fill="${c.belly}" stroke="${o}" stroke-width="1.2" opacity="0.95"/>
-
-      <!-- Kocaman Kabarık Kuyruk (Beyaz Uçlu, Net Hatlı) -->
-      <g class="fox-tail">
-        <path d="M 76 38 C 93 34 97 15 82 13 C 69 11 49 17 35 27 C 29 32 33 39 43 41 C 57 44 70 42 76 38 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M 43 25 C 35 29 33 37 41 40 C 47 41 53 37 51 31 C 49 26 45 25 43 25 Z" fill="${c.belly}" stroke="${o}" stroke-width="1.4" stroke-linejoin="round"/>
-      </g>
+      <ellipse class="fox-belly" cx="50" cy="35" rx="14.5" ry="9" fill="${c.belly}" stroke="${o}" stroke-width="1.2" opacity="0.95"/>
 
       <!-- Kafa & Yanak Beyazlıkları (Maske) -->
       <circle cx="28" cy="28.5" r="13" fill="${c.primary}" stroke="${o}" stroke-width="1.8"/>
+      <!-- Sol Yanak Tüyü -->
       <polygon points="15,31 10,33 15,36" fill="${c.primary}" stroke="${o}" stroke-width="1.4" stroke-linejoin="round"/>
-      <path d="M 16 29 Q 28 38 36 29 Q 28 34 16 29 Z" fill="${c.belly}" stroke="${o}" stroke-width="1"/>
+      <!-- Sağ Yanak Tüyü -->
+      <polygon points="41,31 46,33 41,36" fill="${c.primary}" stroke="${o}" stroke-width="1.4" stroke-linejoin="round"/>
+      <!-- Yanak ve Çene Beyazlığı -->
+      <path d="M 16 29 Q 28 38 40 29 Q 28 35 16 29 Z" fill="${c.belly}" stroke="${o}" stroke-width="1"/>
 
-      <!-- Sivri Kulaklar -->
-      <polygon points="15,19 16,4 25,15" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+      <!-- Sivri Tilki Kulakları -->
+      <polygon points="15,19 16,3 25,15" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
       <polygon points="17,17 18,7 23,14" fill="${c.innerEar || '#fdd9c4'}" stroke="${o}" stroke-width="0.8"/>
       <g class="fox-ear-twitch">
-        <polygon points="27,14 34,3 39,16" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+        <polygon points="27,14 34,2 39,16" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
         <polygon points="29,13 34,6 37,15" fill="${c.innerEar || '#fdd9c4'}" stroke="${o}" stroke-width="0.8"/>
       </g>
 
@@ -2515,7 +2525,7 @@ function renderFoxSvg(c, isNight, isAwake = false, isResearching = false) {
         </g>
       ` : ""}
 
-      <!-- Sivri Burun & Siyah Çorap Patiler -->
+      <!-- Sivri Siyah Burun & Siyah Çorap Patiler -->
       <polygon points="26.5,32 29.5,32 28,34" fill="#1b120c" stroke="${o}" stroke-width="0.8"/>
       <ellipse cx="22" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}" stroke="${o}" stroke-width="1.6"/>
       <ellipse cx="30" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}" stroke="${o}" stroke-width="1.6"/>

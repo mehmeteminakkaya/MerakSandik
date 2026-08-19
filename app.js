@@ -283,10 +283,6 @@ const CURIOSITY_QUOTES = [
   { text: "Bilmediğini bilmek, bilginin başlangıcıdır.", author: "Konfüçyüs" },
   { text: "Bin millik yolculuk tek bir adımla başlar.", author: "Lao Tzu" },
   { text: "Başkalarını bilen bilgilidir; kendini bilen aydınlanmıştır.", author: "Lao Tzu" },
-  { text: "Hakikati, nereden gelirse gelsin kabul etmekten utanmamalıyız.", author: "Kindî" },
-  { text: "Cehalet korkuya, korku nefrete, nefret ise şiddete yol açar.", author: "İbn Rüşd" },
-  { text: "Geçmiş, geleceğe suyun suya benzemesinden daha çok benzer.", author: "İbn Haldun" },
-  { text: "İlim ilim bilmektir, ilim kendin bilmektir; sen kendini bilmezsin, ya nice okumaktır.", author: "Yunus Emre" },
   { text: "Dün dünde kaldı cancağızım, bugün yeni şeyler söylemek lazım.", author: "Mevlânâ" },
   { text: "Okunacak en büyük kitap insandır.", author: "Hacı Bektaş Veli" },
   { text: "Hayatta en hakiki mürşit ilimdir, fendir.", author: "Mustafa Kemal Atatürk" }
@@ -298,6 +294,108 @@ let lastCatPetTime = 0;
 let rapidPetStreak = 0;
 const RAPID_PET_WINDOW_MS = 1000; // bu aralıkta üst üste 3+ tıklama kediyi huysuzlandırır
 const RAPID_PET_ANNOY_THRESHOLD = 3;
+
+// ---------- Masa Yoldaşları (Pet Companions) Yapılandırması ----------
+const PET_CONFIG = {
+  cat: {
+    name: "Sandık Kedisi",
+    shortName: "Kedi",
+    icon: "🐱",
+    defaultColor: "orange",
+    colors: [
+      { id: "orange", name: "Sarman / Tekir", primary: "#e08a4c", dark: "#a8521a", belly: "#fff5ea", blush: "#f89f9f", innerEar: "#f9c0a8" },
+      { id: "tuxedo", name: "Smokin / Gece", primary: "#2d2f38", dark: "#18191f", belly: "#f4f4f8", blush: "#f5a4a4", innerEar: "#e8ebf0" },
+      { id: "white", name: "Pamuk Beyazı", primary: "#f7f4ec", dark: "#c4baa8", belly: "#ffffff", blush: "#f8a8b8", innerEar: "#fbe4e8" },
+      { id: "grey", name: "Duman / Kül", primary: "#7d8591", dark: "#4a515c", belly: "#e6e9ee", blush: "#f89f9f", innerEar: "#cfd5dc" },
+      { id: "calico", name: "Alacalı / Kaliko", primary: "#d97e3f", dark: "#362a22", belly: "#fff8f0", blush: "#f89f9f", innerEar: "#f7d0b5" }
+    ],
+    happyEmote: "🤍🐾",
+    annoyedEmote: "😾💢",
+    idleEmotes: ["z", "z", "Z"],
+    toastAnnoyed: "😾 Hırrr! Sandık Kedisi biraz dinlenmek istiyor, ona nefes aldır 🐾",
+    toastMessages: [
+      "Miyaaav! 🐱✨ (Sandık Kedisi sevindi ve patisini uzattı)",
+      "Mırrr... 🐱🐾 (Sandık Kedisi huzurla mırıldanıyor)",
+      "Miyav~ 🐾 (Sandık Kedisi seninle öğrenmeyi çok seviyor!)",
+      "Mırrr... 🐱💤 (Kedi başını patilerine daha çok gömdü)"
+    ],
+    milestone3: "🐱 Miyaav~ Mırrr... Sandık Kedisi başını eline yasladı! 🐾 (Dostluk +1)",
+    milestone5: "🏆 Gizli Başarım: Sandık Kedisinin Sırdaşı! 🐱🐾 Kedi sana tamamen bağlandı."
+  },
+  dog: {
+    name: "Sandık Köpeği",
+    shortName: "Köpek",
+    icon: "🐶",
+    defaultColor: "caramel",
+    colors: [
+      { id: "caramel", name: "Karamel / Golden", primary: "#d49547", dark: "#965e1b", belly: "#fff3e3", blush: "#f8a598", innerEar: "#fcecd2" },
+      { id: "chocolate", name: "Çikolata Kahve", primary: "#694225", dark: "#3e2411", belly: "#ecd9c6", blush: "#d48888", innerEar: "#dfcbb5" },
+      { id: "cream", name: "Krem / Açık Bal", primary: "#ede2ce", dark: "#b5a289", belly: "#ffffff", blush: "#f8a8a8", innerEar: "#faefe0" },
+      { id: "black", name: "Gece / Karabaş", primary: "#2c2d33", dark: "#16171b", belly: "#d8d9e0", blush: "#e58a8a", innerEar: "#a6a8b2" },
+      { id: "corgi", name: "Corgi / Alaca", primary: "#cb7c32", dark: "#2e2b28", belly: "#ffffff", blush: "#f8a598", innerEar: "#fbe4cb" }
+    ],
+    happyEmote: "🦴🐾",
+    annoyedEmote: "🐶💢",
+    idleEmotes: ["z", "z", "Z"],
+    toastAnnoyed: "🐶 Hav! Sandık Köpeği uykusundan uyandı, biraz başını okşa ve dinlensin 🐾",
+    toastMessages: [
+      "Vuf vuf! 🐶✨ (Sandık Köpeği kuyruğunu neşeyle salladı)",
+      "Mırk... 🐶🐾 (Köpek burnunu sevinçle eline dokundurdu)",
+      "Hav hav! 🐾 (Sandık Köpeği seninle yeni kavramlar keşfetmeye bayılıyor!)",
+      "Hıff... 🐶💤 (Köpek derin bir nefes alıp başını patisine koydu)"
+    ],
+    milestone3: "🐶 Vuf! Kuyruk sallandı... Sandık Köpeği en sadık çalışma arkadaşın oldu! 🐾",
+    milestone5: "🏆 Gizli Başarım: Sadık Dost! 🐶🦴 Sandık Köpeği artık senden hiç ayrılmıyor."
+  },
+  rabbit: {
+    name: "Sandık Tavşanı",
+    shortName: "Tavşan",
+    icon: "🐰",
+    defaultColor: "white",
+    colors: [
+      { id: "white", name: "Pamuk Beyazı", primary: "#fcf9f2", dark: "#d4cbba", belly: "#ffffff", blush: "#f9a8b8", innerEar: "#fde8ec" },
+      { id: "cinnamon", name: "Tarçın Sarısı", primary: "#c98246", dark: "#854919", belly: "#fff4e6", blush: "#f9a8b8", innerEar: "#f9ddc3" },
+      { id: "ash", name: "Kül Grisi", primary: "#9495a0", dark: "#5e606a", belly: "#ececf2", blush: "#f9a8b8", innerEar: "#d2d3dc" },
+      { id: "spotted", name: "Benekli / Bal", primary: "#e8cfb0", dark: "#724e30", belly: "#fffbf6", blush: "#f9a8b8", innerEar: "#f3e1cb" }
+    ],
+    happyEmote: "🥕✨",
+    annoyedEmote: "🐰💢",
+    idleEmotes: ["z", "z", "Z"],
+    toastAnnoyed: "🐰 Puf! Sandık Tavşanı ayağını yere vurdu, biraz sakinleşmesini bekle 🥕",
+    toastMessages: [
+      "Kıpır kıpır! 🐰🥕 (Sandık Tavşanı burnunu sevimli sevimli oynattı)",
+      "Pıt pıt... 🐰✨ (Tavşan uzun kulaklarını neşeyle salladı)",
+      "Fısıl~ 🥕 (Sandık Tavşanı sessiz kütüphanede sana huzur veriyor!)",
+      "Mışıl mışıl... 🐰💤 (Tavşan yumuşacık bir pamuk yumağı gibi kıvrıldı)"
+    ],
+    milestone3: "🐰 Pıt pıt... Sandık Tavşanı kulaklarını sana doğru çevirdi! 🥕 (Huzur +1)",
+    milestone5: "🏆 Gizli Başarım: Tavşan Fısıldayan! 🐰🥕 Sandık Tavşanı en sevdiği havucu seninle paylaştı."
+  },
+  fox: {
+    name: "Sandık Tilkisi",
+    shortName: "Tilki",
+    icon: "🦊",
+    defaultColor: "red",
+    colors: [
+      { id: "red", name: "Kızıl Orman", primary: "#d85a1e", dark: "#8b2f04", belly: "#fff5eb", blush: "#f89a8e", innerEar: "#fdd9c4" },
+      { id: "arctic", name: "Kutup Beyazı", primary: "#eef3f7", dark: "#b0bfcc", belly: "#ffffff", blush: "#f8a8b8", innerEar: "#e2eaf0" },
+      { id: "silver", name: "Gümüş / Gece", primary: "#444b55", dark: "#22262d", belly: "#d7dee5", blush: "#f59898", innerEar: "#8d98a6" },
+      { id: "golden", name: "Altın Kum", primary: "#e29a32", dark: "#935c10", belly: "#fff8ec", blush: "#f89a8e", innerEar: "#fbe4bf" }
+    ],
+    happyEmote: "🍂✨",
+    annoyedEmote: "🦊💢",
+    idleEmotes: ["z", "z", "Z"],
+    toastAnnoyed: "🦊 Ciyak! Sandık Tilkisi kuyruğunu çekti, biraz sakinleşsin 🍂",
+    toastMessages: [
+      "Yip yip! 🦊✨ (Sandık Tilkisi kocaman kabarık kuyruğunu kıpırdattı)",
+      "Cıvıl cıvıl... 🦊🍂 (Tilki zekice gözlerini kırpıştırdı)",
+      "Yip~ 🍂 (Sandık Tilkisi gizemli kavramları araştırmayı çok seviyor!)",
+      "Kıvrım kıvrım... 🦊💤 (Tilki kuyruğunu burnuna sarıp tatlı bir uykuya daldı)"
+    ],
+    milestone3: "🦊 Yip! Sandık Tilkisi kuyruğunun ucunu sana uzattı! 🍂 (Merak +1)",
+    milestone5: "🏆 Gizli Başarım: Ormanın Bilgesi! 🦊💎 Sandık Tilkisi sana tüm sırlarını açtı."
+  }
+};
 
 // Ambiyans kayıtları farklı seviyelerde masterlanmış (yağmur belirgin şekilde
 // yağmur/deniz'den daha yüksek); tip başına hedef seviye bunu dengeler.
@@ -426,6 +524,326 @@ class SoundEffects {
     if (!this.ctx) return;
     try {
       const notes = [523.25, 659.25, 783.99, 1046.50]; // C - E - G - C
+      notes.forEach((freq, i) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const start = this.ctx.currentTime + i * 0.12;
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, start);
+        gain.gain.setValueAtTime(0.35, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.9);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(start);
+        osc.stop(start + 0.9);
+      });
+    } catch { /* sessiz kal */ }
+  }
+
+  playPurr() {
+    if (!settings.sound) return;
+    this.init();
+    try {
+      if (this.purrAudio) {
+        this.purrAudio.currentTime = 0;
+        this.purrAudio.volume = 0.9 * this.masterVolume();
+        this.purrAudio.play().catch(() => {});
+        return;
+      }
+    } catch { /* ignore */ }
+  }
+
+  playMeow() {
+    if (!settings.sound) return;
+    this.init();
+    try {
+      const useSweet = Math.random() < 0.5 && this.meowSweetAudio;
+      const track = useSweet ? this.meowSweetAudio : this.meowAudio;
+      // meow.mp3 is a hotter master than meow-sweet.mp3 (near-clipping vs.
+      // soft) — different base levels keep the two feeling similarly loud.
+      const base = useSweet ? 0.95 : 0.7;
+      if (track) {
+        track.currentTime = 0;
+        track.volume = base * this.masterVolume();
+        track.play().catch(() => {});
+        return;
+      }
+    } catch { /* ignore */ }
+  }
+
+  playGrowl() {
+    if (!settings.sound) return;
+    this.init();
+    try {
+      if (this.growlAudio) {
+        this.growlAudio.currentTime = 0;
+        this.growlAudio.volume = 0.85 * this.masterVolume();
+        this.growlAudio.play().catch(() => {});
+        return;
+      }
+    } catch { /* ignore */ }
+  }
+
+  playCatInteraction(mood = "happy") {
+    if (mood === "annoyed") {
+      this.playGrowl();
+      return;
+    }
+    if (Math.random() < 0.65) {
+      this.playMeow();
+    } else {
+      this.playPurr();
+    }
+  }
+
+  playDogSound(mood = "happy") {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      if (mood === "annoyed") {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(110, now);
+        osc.frequency.linearRampToValueAtTime(75, now + 0.35);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now);
+        osc.stop(now + 0.35);
+        return;
+      }
+      [0, 0.13].forEach((offset, idx) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "triangle";
+        const startFreq = idx === 0 ? 360 : 420;
+        osc.frequency.setValueAtTime(startFreq, now + offset);
+        osc.frequency.exponentialRampToValueAtTime(210, now + offset + 0.09);
+        gain.gain.setValueAtTime(0.22, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.1);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now + offset);
+        osc.stop(now + offset + 0.1);
+      });
+    } catch { /* sessiz kal */ }
+  }
+
+  playRabbitSound(mood = "happy") {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      if (mood === "annoyed") {
+        [0, 0.14].forEach((offset) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(90, now + offset);
+          osc.frequency.exponentialRampToValueAtTime(40, now + offset + 0.08);
+          gain.gain.setValueAtTime(0.25, now + offset);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.08);
+          osc.connect(gain);
+          gain.connect(this.masterGain);
+          osc.start(now + offset);
+          osc.stop(now + offset + 0.08);
+        });
+        return;
+      }
+      [0, 0.08].forEach((offset, idx) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(idx === 0 ? 1150 : 1420, now + offset);
+        osc.frequency.exponentialRampToValueAtTime(idx === 0 ? 1380 : 1600, now + offset + 0.06);
+        gain.gain.setValueAtTime(0.12, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.06);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now + offset);
+        osc.stop(now + offset + 0.06);
+      });
+    } catch { /* sessiz kal */ }
+  }
+
+  playFoxSound(mood = "happy") {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      if (mood === "annoyed") {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(680, now);
+        osc.frequency.exponentialRampToValueAtTime(320, now + 0.15);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now);
+        osc.stop(now + 0.15);
+        return;
+      }
+      [0, 0.07, 0.14].forEach((offset, idx) => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        const freqs = [620, 840, 1080];
+        osc.frequency.setValueAtTime(freqs[idx], now + offset);
+        osc.frequency.exponentialRampToValueAtTime(freqs[idx] * 1.15, now + offset + 0.06);
+        gain.gain.setValueAtTime(0.15, now + offset);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.06);
+        osc.connect(gain);
+        gain.connect(this.masterGain);
+        osc.start(now + offset);
+        osc.stop(now + offset + 0.06);
+      });
+    } catch { /* sessiz kal */ }
+  }
+
+  playPetInteraction(mood = "happy") {
+    const petType = settings.petType || "cat";
+    if (petType === "dog") {
+      this.playDogSound(mood);
+    } else if (petType === "rabbit") {
+      this.playRabbitSound(mood);
+    } else if (petType === "fox") {
+      this.playFoxSound(mood);
+    } else {
+      this.playCatInteraction(mood);
+    }
+  }
+
+  playCoffee() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      // High ceramic mug clink
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(1760, now);
+      gain1.gain.setValueAtTime(0.18, now);
+      gain1.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+      osc1.connect(gain1);
+      gain1.connect(this.masterGain);
+      osc1.start(now);
+      osc1.stop(now + 0.25);
+
+      // Warm low body note
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      osc2.type = "triangle";
+      osc2.frequency.setValueAtTime(440, now + 0.02);
+      gain2.gain.setValueAtTime(0.12, now + 0.02);
+      gain2.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+      osc2.connect(gain2);
+      gain2.connect(this.masterGain);
+      osc2.start(now + 0.02);
+      osc2.stop(now + 0.3);
+    } catch { /* sessiz kal */ }
+  }
+
+  playRustle() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const bufferSize = Math.floor(this.ctx.sampleRate * 0.15);
+      const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.4));
+      }
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1200, now);
+      filter.Q.setValueAtTime(1.5, now);
+      const gain = this.ctx.createGain();
+      gain.gain.setValueAtTime(0.06, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.masterGain);
+      noise.start(now);
+    } catch { /* sessiz kal */ }
+  }
+
+  playWaxStamp() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(130, now);
+      osc1.frequency.exponentialRampToValueAtTime(45, now + 0.12);
+      gain1.gain.setValueAtTime(0.35, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      osc1.connect(gain1);
+      gain1.connect(this.masterGain);
+      osc1.start(now);
+      osc1.stop(now + 0.15);
+    } catch { /* sessiz kal */ }
+  }
+
+  playChainClick() {
+    if (!settings.sound) return;
+    this.init();
+    if (!this.ctx) return;
+    try {
+      const now = this.ctx.currentTime;
+      const osc1 = this.ctx.createOscillator();
+      const gain1 = this.ctx.createGain();
+      osc1.type = "triangle";
+      osc1.frequency.setValueAtTime(1450, now);
+      osc1.frequency.exponentialRampToValueAtTime(680, now + 0.05);
+      gain1.gain.setValueAtTime(0.40, now);
+      gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+      osc1.connect(gain1);
+      gain1.connect(this.masterGain);
+      osc1.start(now);
+      osc1.stop(now + 0.08);
+
+      const osc2 = this.ctx.createOscillator();
+      const gain2 = this.ctx.createGain();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(2600, now + 0.03);
+      osc2.frequency.exponentialRampToValueAtTime(1100, now + 0.14);
+      gain2.gain.setValueAtTime(0.25, now + 0.03);
+      gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+      osc2.connect(gain2);
+      gain2.connect(this.masterGain);
+      osc2.start(now + 0.03);
+      osc2.stop(now + 0.18);
+    } catch { /* sessiz kal */ }
+  }
+
+  setAmbience(type) {
+    this.currentAmbienceType = type;
+    this.stopAmbience();
+    if (!settings.sound || type === "none") return;
+    this.init();
+    const track = { rain: this.rainAudio, fire: this.fireAudio, ocean: this.oceanAudio }[type] || null;
+    if (!track) return;
+    try {
+      track.currentTime = 0;
+      track.volume = 0.01;
+      track.play().catch(() => {});
       notes.forEach((freq, i) => {
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
@@ -654,6 +1072,57 @@ class SoundEffects {
 
 const sfx = new SoundEffects();
 
+// ---------- Helpers ----------
+
+// Şablon dizgilerine giren her kullanıcı/AI metni bundan geçmeli.
+const ESCAPE_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, (ch) => ESCAPE_MAP[ch]);
+}
+
+function loadSettings() {
+  const fallback = {
+    researchMinutes: 15,
+    sound: true,
+    soundVolume: 0.7,
+    theme: "dark",
+    palette: "coffee",
+    category: "general",
+    ambience: "none",
+    lampFocus: false,
+    petType: "cat",
+    petColor: "orange"
+  };
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return fallback;
+    const parsed = JSON.parse(raw);
+    const loaded = { ...fallback, ...parsed };
+
+    if (!PET_CONFIG[loaded.petType]) {
+      loaded.petType = "cat";
+    }
+    const currentPetCfg = PET_CONFIG[loaded.petType] || PET_CONFIG.cat;
+    if (!currentPetCfg.colors.some((c) => c.id === loaded.petColor)) {
+      loaded.petColor = currentPetCfg.defaultColor;
+    }
+
+    const hadLegacyFields = "provider" in loaded || "apiKeys" in loaded || "models" in loaded || "waxColor" in loaded;
+    delete loaded.provider;
+    delete loaded.apiKeys;
+    delete loaded.models;
+    delete loaded.waxColor;
+    if (hadLegacyFields) {
+      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(loaded)); } catch { /* ignore */ }
+    }
+
+    return loaded;
+  } catch {
+    return fallback;
+  }
+}
+
 // ---------- State ----------
 let settings = loadSettings();
 let state = {
@@ -670,7 +1139,7 @@ let state = {
 let dismissedReview = null;
 let historySearchQuery = "";
 let historyActiveCategory = "all";
-let tabDragMoved = false; // sekme şeridi sürüklendi mi (yanlışlıkla seçimi engeller)
+let tabDragMoved = false; 
 
 // ---------- DOM Cache ----------
 const stage = document.querySelector("#stage");
@@ -701,47 +1170,6 @@ const historyFilterRow = document.querySelector("#historyFilterRow");
 const historySearchInput = document.querySelector("#historySearchInput");
 const exportHistoryBtn = document.querySelector("#exportHistoryBtn");
 const clearHistoryBtn = document.querySelector("#clearHistoryBtn");
-
-// ---------- Helpers ----------
-
-// Şablon dizgilerine giren her kullanıcı/AI metni bundan geçmeli.
-const ESCAPE_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
-
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, (ch) => ESCAPE_MAP[ch]);
-}
-
-function loadSettings() {
-  const fallback = {
-    researchMinutes: 15,
-    sound: true,
-    soundVolume: 0.7,
-    theme: "dark",
-    palette: "coffee",
-    category: "general",
-    ambience: "none",
-    lampFocus: false
-  };
-  try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
-    if (!raw) return fallback;
-    const parsed = JSON.parse(raw);
-    const loaded = { ...fallback, ...parsed };
-
-    const hadLegacyFields = "provider" in loaded || "apiKeys" in loaded || "models" in loaded || "waxColor" in loaded;
-    delete loaded.provider;
-    delete loaded.apiKeys;
-    delete loaded.models;
-    delete loaded.waxColor;
-    if (hadLegacyFields) {
-      try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(loaded)); } catch { /* ignore */ }
-    }
-
-    return loaded;
-  } catch {
-    return fallback;
-  }
-}
 
 function saveSettings() {
   try {
@@ -1667,90 +2095,177 @@ function renderRecall() {
   `;
 }
 
+function renderNightcap() {
+  return `
+    <g class="cat-nightcap pet-nightcap">
+      <path d="M 18 19 C 14 11 22 2 34 5 C 41 8 40 18 36 21 Z" fill="#c44747" stroke="#7a1c1c" stroke-width="0.8"/>
+      <path d="M 33 5 Q 46 2 48 9" stroke="#c44747" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <circle cx="48" cy="9.5" r="2.8" fill="#fff5ea"/>
+      <path d="M 17 19 Q 27 16 37 20" stroke="#fff5ea" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+    </g>
+  `;
+}
+
+function renderCatSvg(c, isNight) {
+  return `
+    <svg viewBox="0 0 96 50" class="cat-svg" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
+      <path class="cat-tail" d="M 78 40 C 90 38 94 24 86 17 C 80 12 73 17 76 26" stroke="${c.primary}" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+      <path class="cat-tail" d="M 85 17 C 83 14 77 16 77 22" stroke="${c.belly}" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
+      <path class="cat-body-torso" d="M 22 44 C 18 36 20 22 36 16 C 54 10 76 14 84 26 C 90 34 88 44 82 45 C 68 46 34 46 22 44 Z" fill="${c.primary}"/>
+      <path d="M 50 14 Q 48 21 46 25" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
+      <path d="M 60 15 Q 58 22 56 27" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
+      <path d="M 70 18 Q 68 25 65 29" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
+      <ellipse class="cat-belly" cx="54" cy="36" rx="17" ry="9.5" fill="${c.belly}" opacity="0.85"/>
+      <circle class="cat-head" cx="28" cy="30" r="14" fill="${c.primary}"/>
+      <polygon points="16,22 18,8 26,18" fill="${c.primary}"/>
+      <polygon points="18,20 19,11 24,17" fill="${c.innerEar || '#f9c0a8'}"/>
+      <polygon class="cat-ear-twitch" points="29,17 35,7 41,19" fill="${c.primary}"/>
+      <polygon class="cat-ear-twitch" points="31,16 35,10 39,18" fill="${c.innerEar || '#f9c0a8'}"/>
+      ${isNight ? renderNightcap() : ""}
+      <path d="M 28 18 L 28 22" stroke="${c.dark}" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
+      <path d="M 24 19 L 25 22" stroke="${c.dark}" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
+      <path d="M 32 19 L 31 22" stroke="${c.dark}" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
+      <ellipse cx="20" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
+      <ellipse cx="37" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
+      <path d="M 21 29.5 Q 24.5 32.5 27.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+      <path d="M 30 29.5 Q 33.5 32.5 36.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+      <ellipse cx="28.5" cy="33.8" rx="2" ry="1.3" fill="#f2907a"/>
+      <path d="M 26.5 35.2 Q 28.5 37 30.5 35.2" stroke="#2c1a12" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <line x1="12" y1="32" x2="20" y2="34" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+      <line x1="12" y1="35" x2="20" y2="35.5" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+      <line x1="37" y1="34" x2="45" y2="32" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+      <line x1="37" y1="35.5" x2="45" y2="35" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+      <ellipse cx="24" cy="43.5" rx="6" ry="3.5" fill="${c.primary}"/>
+      <ellipse cx="34" cy="43.5" rx="6" ry="3.5" fill="${c.primary}"/>
+      <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <ellipse cx="33" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
+    </svg>
+  `;
+}
+
+function renderDogSvg(c, isNight) {
+  return `
+    <svg viewBox="0 0 96 50" class="dog-svg" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
+      <path class="dog-tail" d="M 76 40 C 86 36 93 28 89 20 C 86 16 80 19 82 27" stroke="${c.primary}" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path class="dog-tail" d="M 88 20 C 87 18 82 19 82 24" stroke="${c.belly}" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.9"/>
+      <path d="M 24 44 C 18 36 22 22 38 17 C 56 12 76 15 84 27 C 89 35 87 44 80 45 C 66 46 36 46 24 44 Z" fill="${c.primary}"/>
+      <ellipse cx="68" cy="24" rx="10" ry="6.5" fill="${c.dark}" opacity="0.35"/>
+      <ellipse class="dog-belly" cx="54" cy="35" rx="16" ry="9.5" fill="${c.belly}" opacity="0.85"/>
+      <circle cx="28" cy="30" r="14.5" fill="${c.primary}"/>
+      <path d="M 28 16 Q 28 26 23 30 Q 28 29 33 30 Z" fill="${c.belly}" opacity="0.8"/>
+      <path d="M 17 21 C 12 21 11 31 16 34 C 19 36 21 28 21 23 Z" fill="${c.dark}"/>
+      <path class="dog-ear-flop" d="M 36 20 C 43 20 44 30 39 34 C 36 36 34 27 34 22 Z" fill="${c.dark}"/>
+      ${isNight ? renderNightcap() : ""}
+      <ellipse cx="19" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
+      <ellipse cx="37" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
+      <path d="M 20 29.5 Q 23.5 32 26.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+      <path d="M 30 29.5 Q 33.5 32 36.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+      <ellipse cx="28.5" cy="33.8" rx="2.4" ry="1.6" fill="#221711"/>
+      <circle cx="27.8" cy="33.3" r="0.6" fill="#ffffff" opacity="0.8"/>
+      <path d="M 26.8 35.5 Q 28.5 37 30.2 35.5" stroke="#221711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+      <ellipse cx="23" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
+      <ellipse cx="34" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
+      <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <ellipse cx="34" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
+    </svg>
+  `;
+}
+
+function renderRabbitSvg(c, isNight) {
+  return `
+    <svg viewBox="0 0 96 50" class="rabbit-svg" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="48" cy="46" rx="38" ry="3.5" fill="rgba(0,0,0,0.18)"/>
+      <ellipse class="rabbit-tail" cx="80" cy="36" rx="6.5" ry="6" fill="${c.belly}"/>
+      <path d="M 22 43 C 16 35 20 22 36 17 C 54 11 74 16 82 28 C 87 36 85 44 78 45 C 64 46 34 46 22 43 Z" fill="${c.primary}"/>
+      <ellipse cx="64" cy="23" rx="8" ry="5.5" fill="${c.dark}" opacity="0.3"/>
+      <ellipse class="rabbit-belly" cx="52" cy="36" rx="16" ry="9" fill="${c.belly}" opacity="0.85"/>
+      <circle cx="27" cy="31" r="13.5" fill="${c.primary}"/>
+      <path d="M 28 20 C 34 8 52 7 60 14 C 54 17 40 18 32 24 Z" fill="${c.primary}"/>
+      <path d="M 33 19 C 39 10 50 10 56 15 C 50 17 40 17 35 21 Z" fill="${c.innerEar || '#fde8ec'}"/>
+      <g class="rabbit-ear-twitch">
+        <path d="M 25 18 C 30 5 48 4 57 11 C 51 15 37 16 29 22 Z" fill="${c.primary}"/>
+        <path d="M 30 17 C 35 7 46 7 53 12 C 47 15 37 15 32 19 Z" fill="${c.innerEar || '#fde8ec'}"/>
+      </g>
+      ${isNight ? renderNightcap() : ""}
+      <ellipse cx="19" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
+      <ellipse cx="35" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
+      <path d="M 20 29.5 Q 23.5 32.5 26.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M 29 29.5 Q 32.5 32.5 35.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <g class="rabbit-nose">
+        <polygon points="26.5,33.5 29.5,33.5 28,35" fill="#f48ca2"/>
+        <path d="M 28 35 L 28 36.5 M 28 36.5 Q 26.5 37.8 25 36.5 M 28 36.5 Q 29.5 37.8 31 36.5" stroke="#251a14" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      </g>
+      <line x1="12" y1="33" x2="20" y2="34.5" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+      <line x1="12" y1="36" x2="20" y2="36" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+      <line x1="35" y1="34.5" x2="43" y2="33" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+      <line x1="35" y1="36" x2="43" y2="36" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+      <ellipse cx="23" cy="43.5" rx="5.5" ry="3" fill="${c.belly}"/>
+      <ellipse cx="32" cy="43.5" rx="5.5" ry="3" fill="${c.belly}"/>
+    </svg>
+  `;
+}
+
+function renderFoxSvg(c, isNight) {
+  return `
+    <svg viewBox="0 0 96 50" class="fox-svg" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
+      <path d="M 22 43 C 17 34 20 20 38 16 C 56 12 76 15 84 26 C 90 35 88 44 82 45 C 68 46 34 46 22 43 Z" fill="${c.primary}"/>
+      <ellipse class="fox-belly" cx="52" cy="35" rx="15" ry="9" fill="${c.belly}" opacity="0.8"/>
+      <g class="fox-tail">
+        <path d="M 76 38 C 92 34 96 16 82 14 C 70 12 50 18 36 28 C 30 33 34 40 44 42 C 58 45 70 42 76 38 Z" fill="${c.primary}"/>
+        <path d="M 44 26 C 36 30 34 38 42 41 C 48 42 54 38 52 32 C 50 27 46 26 44 26 Z" fill="${c.belly}"/>
+      </g>
+      <circle cx="28" cy="29" r="13" fill="${c.primary}"/>
+      <path d="M 18 30 Q 27 38 34 30 Q 28 35 18 30 Z" fill="${c.belly}"/>
+      <polygon points="15,20 16,6 25,16" fill="${c.dark}"/>
+      <polygon points="17,18 18,9 23,15" fill="${c.innerEar || '#fdd9c4'}"/>
+      <g class="fox-ear-twitch">
+        <polygon points="27,15 34,5 39,17" fill="${c.dark}"/>
+        <polygon points="29,14 34,8 37,16" fill="${c.innerEar || '#fdd9c4'}"/>
+      </g>
+      ${isNight ? renderNightcap() : ""}
+      <ellipse cx="20" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
+      <ellipse cx="36" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
+      <path d="M 21 28.5 Q 24.5 31.5 27.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M 29.5 28.5 Q 32.5 31.5 35.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <ellipse cx="27.5" cy="33.5" rx="1.8" ry="1.3" fill="#1b120c"/>
+      <ellipse cx="22" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
+      <ellipse cx="30" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
+    </svg>
+  `;
+}
+
 function renderCozyDecorations() {
   const hour = new Date().getHours();
   const isNight = hour >= 22 || hour < 6;
+  const currentPetType = settings.petType || "cat";
+  const petCfg = PET_CONFIG[currentPetType] || PET_CONFIG.cat;
+  const colorId = settings.petColor || petCfg.defaultColor;
+  const colorCfg = petCfg.colors.find((c) => c.id === colorId) || petCfg.colors[0];
+
+  let petSvg = "";
+  if (currentPetType === "dog") {
+    petSvg = renderDogSvg(colorCfg, isNight);
+  } else if (currentPetType === "rabbit") {
+    petSvg = renderRabbitSvg(colorCfg, isNight);
+  } else if (currentPetType === "fox") {
+    petSvg = renderFoxSvg(colorCfg, isNight);
+  } else {
+    petSvg = renderCatSvg(colorCfg, isNight);
+  }
 
   return `
     <div class="cozy-decorations" aria-hidden="true">
-
-      <!-- Sandık Kedisi: Sağ üst köşeye kıvrılmış, huzurla uyuyan & nefes alan sevimli kedi -->
-      <div class="cozy-item cozy-cat-box" id="cozyCatBtn" role="button" tabindex="0" title="Sandık Kedisi — sevmek için tıkla! 🐾">
-        <span class="cat-emote" aria-hidden="true">
-          <span class="z-1">z</span>
-          <span class="z-2">z</span>
-          <span class="z-3">Z</span>
+      <div class="cozy-item cozy-pet-box cozy-cat-box" id="cozyCatBtn" role="button" tabindex="0" title="${esc(petCfg.name)} — sevmek için tıkla! 🐾" aria-label="${esc(petCfg.name)}">
+        <span class="pet-emote cat-emote" aria-hidden="true">
+          <span class="z-1">${petCfg.idleEmotes[0]}</span>
+          <span class="z-2">${petCfg.idleEmotes[1]}</span>
+          <span class="z-3">${petCfg.idleEmotes[2]}</span>
         </span>
-        <svg viewBox="0 0 96 50" class="cat-svg" xmlns="http://www.w3.org/2000/svg">
-          <!-- Gölge / kart kenarı teması -->
-          <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
-
-          <!-- Kuyruk (arkada kıvrılmış) -->
-          <path class="cat-tail" d="M 78 40 C 90 38 94 24 86 17 C 80 12 73 17 76 26" stroke="var(--cat-color,#e08a4c)" stroke-width="6.5" stroke-linecap="round" fill="none"/>
-          <path class="cat-tail" d="M 85 17 C 83 14 77 16 77 22" stroke="#fff5ea" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
-
-          <!-- Ana Gövde (kıvrılmış yatan gövde) -->
-          <path class="cat-body-torso" d="M 22 44 C 18 36 20 22 36 16 C 54 10 76 14 84 26 C 90 34 88 44 82 45 C 68 46 34 46 22 44 Z" fill="var(--cat-color,#e08a4c)"/>
-
-          <!-- Sırt çizgileri (tekir deseni) -->
-          <path d="M 50 14 Q 48 21 46 25" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
-          <path d="M 60 15 Q 58 22 56 27" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
-          <path d="M 70 18 Q 68 25 65 29" stroke="#a8521a" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
-
-          <!-- Göbek (nefes alıp verirken yumuşakça şişip inen göbek) -->
-          <ellipse class="cat-belly" cx="54" cy="36" rx="17" ry="9.5" fill="#fff5ea" opacity="0.8"/>
-
-          <!-- Kafa (patilerin üzerine yatmış dinleniyor) -->
-          <circle class="cat-head" cx="28" cy="30" r="14" fill="var(--cat-color,#e08a4c)"/>
-
-          <!-- Kulaklar -->
-          <polygon points="16,22 18,8 26,18" fill="var(--cat-color,#e08a4c)"/>
-          <polygon points="18,20 19,11 24,17" fill="#f9c0a8"/>
-
-          <polygon class="cat-ear-twitch" points="29,17 35,7 41,19" fill="var(--cat-color,#e08a4c)"/>
-          <polygon class="cat-ear-twitch" points="31,16 35,10 39,18" fill="#f9c0a8"/>
-
-          <!-- Gece Uykusu Bonesi (Saat 22:00 sonrası sevimli gece şapkası) -->
-          ${isNight ? `
-            <g class="cat-nightcap">
-              <path d="M 18 19 C 14 11 22 2 34 5 C 41 8 40 18 36 21 Z" fill="#c44747" stroke="#7a1c1c" stroke-width="0.8"/>
-              <path d="M 33 5 Q 46 2 48 9" stroke="#c44747" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-              <circle cx="48" cy="9.5" r="2.8" fill="#fff5ea"/>
-              <path d="M 17 19 Q 27 16 37 20" stroke="#fff5ea" stroke-width="2.6" stroke-linecap="round" fill="none"/>
-            </g>
-          ` : ""}
-
-          <!-- Alın çizgileri -->
-          <path d="M 28 18 L 28 22" stroke="#a8521a" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
-          <path d="M 24 19 L 25 22" stroke="#a8521a" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
-          <path d="M 32 19 L 31 22" stroke="#a8521a" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
-
-          <!-- Yanak allıkları -->
-          <ellipse cx="20" cy="33.5" rx="3.2" ry="2" fill="#f89f9f" opacity="0.55"/>
-          <ellipse cx="37" cy="33.5" rx="3.2" ry="2" fill="#f89f9f" opacity="0.55"/>
-
-          <!-- Kapalı uyuyan gözler (huzurlu yaylar) -->
-          <path d="M 21 29.5 Q 24.5 32.5 27.5 29.5" stroke="#3e1a0c" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-          <path d="M 30 29.5 Q 33.5 32.5 36.5 29.5" stroke="#3e1a0c" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-
-          <!-- Pembe burun & ağız -->
-          <ellipse cx="28.5" cy="33.8" rx="2" ry="1.3" fill="#f2907a"/>
-          <path d="M 26.5 35.2 Q 28.5 37 30.5 35.2" stroke="#3e1a0c" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-
-          <!-- Bıyıklar -->
-          <line x1="12" y1="32" x2="20" y2="34" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-          <line x1="12" y1="35" x2="20" y2="35.5" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-          <line x1="37" y1="34" x2="45" y2="32" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-          <line x1="37" y1="35.5" x2="45" y2="35" stroke="#3e1a0c" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-
-          <!-- Patiler (kart kenarına uzanmış çenenin altında) -->
-          <ellipse cx="24" cy="43.5" rx="6" ry="3.5" fill="var(--cat-color,#e08a4c)"/>
-          <ellipse cx="34" cy="43.5" rx="6" ry="3.5" fill="var(--cat-color,#e08a4c)"/>
-          <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="#fff5ea"/>
-          <ellipse cx="33" cy="44.2" rx="2.5" ry="1.5" fill="#fff5ea"/>
-        </svg>
+        ${petSvg}
       </div>
-
     </div>
   `;
 }
@@ -1971,7 +2486,7 @@ function renderDone() {
 function bindStageEvents() {
   const cozyCatBtn = document.querySelector("#cozyCatBtn");
   if (cozyCatBtn) {
-    const handleCatPet = () => {
+    const handlePetClick = () => {
       sessionPetCount++;
 
       const now = Date.now();
@@ -1979,13 +2494,16 @@ function bindStageEvents() {
       lastCatPetTime = now;
       const isAnnoyed = rapidPetStreak >= RAPID_PET_ANNOY_THRESHOLD;
 
-      sfx.playCatInteraction(isAnnoyed ? "annoyed" : "happy");
+      sfx.playPetInteraction(isAnnoyed ? "annoyed" : "happy");
 
-      const emote = cozyCatBtn.querySelector(".cat-emote");
+      const petType = settings.petType || "cat";
+      const petCfg = PET_CONFIG[petType] || PET_CONFIG.cat;
+
+      const emote = cozyCatBtn.querySelector(".pet-emote") || cozyCatBtn.querySelector(".cat-emote");
       if (emote) {
-        emote.innerHTML = isAnnoyed ? `<span class="cat-heart">😾💢</span>` : `<span class="cat-heart">🤍🐾</span>`;
+        emote.innerHTML = isAnnoyed ? `<span class="pet-heart cat-heart">${petCfg.annoyedEmote}</span>` : `<span class="pet-heart cat-heart">${petCfg.happyEmote}</span>`;
         setTimeout(() => {
-          emote.innerHTML = `<span class="z-1">z</span><span class="z-2">z</span><span class="z-3">Z</span>`;
+          emote.innerHTML = `<span class="z-1">${petCfg.idleEmotes[0]}</span><span class="z-2">${petCfg.idleEmotes[1]}</span><span class="z-3">${petCfg.idleEmotes[2]}</span>`;
         }, 2500);
       }
       cozyCatBtn.classList.add("is-purring");
@@ -1994,27 +2512,21 @@ function bindStageEvents() {
       }, 700);
 
       if (isAnnoyed) {
-        rapidPetStreak = 0; // hırladıktan sonra sıfırla, art arda hırlama spam'ini önle
-        showToast("😾 Hırrr! Sandık Kedisi rahatsız oldu, ona biraz nefes aldır 🐾");
+        rapidPetStreak = 0; // tepkiden sonra sıfırla, spam'i önle
+        showToast(petCfg.toastAnnoyed);
       } else if (sessionPetCount === 3) {
-        showToast("🐱 Miyaav~ Mırrr... Sandık Kedisi başını eline yasladı! 🐾 (Dostluk +1)");
+        showToast(petCfg.milestone3);
       } else if (sessionPetCount === 5) {
-        showToast("🏆 Gizli Başarım: Sandık Kedisinin Sırdaşı! 🐱🐾 Kedi sana tamamen bağlandı.");
+        showToast(petCfg.milestone5);
       } else {
-        const catMsgs = [
-          "Miyaaav! 🐱✨ (Sandık Kedisi sevindi ve patisini uzattı)",
-          "Mırrr... 🐱🐾 (Sandık Kedisi huzurla mırıldanıyor)",
-          "Miyav~ 🐾 (Sandık Kedisi seninle çalışmayı çok seviyor!)",
-          "Mırrr... 🐱💤 (Kedi başını patilerine daha çok gömdü)"
-        ];
-        showToast(catMsgs[Math.floor(Math.random() * catMsgs.length)]);
+        showToast(petCfg.toastMessages[Math.floor(Math.random() * petCfg.toastMessages.length)]);
       }
     };
-    cozyCatBtn.addEventListener("click", handleCatPet);
+    cozyCatBtn.addEventListener("click", handlePetClick);
     cozyCatBtn.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        handleCatPet();
+        handlePetClick();
       }
     });
   }
@@ -2236,6 +2748,39 @@ function triggerConfetti() {
 }
 
 // ---------- Settings Modal Events ----------
+function syncPetSettingsUI() {
+  const currentPet = settings.petType || "cat";
+  const cfg = PET_CONFIG[currentPet] || PET_CONFIG.cat;
+  const currentColor = settings.petColor || cfg.defaultColor;
+
+  document.querySelectorAll(".pet-type-btn").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.pet === currentPet);
+  });
+
+  const colorGrid = document.querySelector("#petColorGrid");
+  if (colorGrid) {
+    colorGrid.innerHTML = cfg.colors.map((col) => `
+      <button type="button" class="pet-color-btn ${col.id === currentColor ? "is-active" : ""}" data-color="${esc(col.id)}">
+        <span class="pet-color-swatch" style="background: ${col.primary}; border-color: ${col.dark};"></span>
+        <span>${esc(col.name)}</span>
+      </button>
+    `).join("");
+
+    colorGrid.querySelectorAll(".pet-color-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const colorId = btn.dataset.color;
+        settings.petColor = colorId;
+        saveSettings();
+        sfx.playTick();
+        syncPetSettingsUI();
+        render();
+        const found = cfg.colors.find((c) => c.id === colorId);
+        showToast(`${cfg.icon} ${cfg.name}: ${found ? found.name : colorId} seçildi`);
+      });
+    });
+  }
+}
+
 function syncSettingsUI() {
   researchRange.value = settings.researchMinutes;
   researchLabel.textContent = `${settings.researchMinutes} dk`;
@@ -2250,6 +2795,7 @@ function syncSettingsUI() {
   applyTheme(settings.theme);
   applyPalette(settings.palette);
   applyLampFocus(settings.lampFocus);
+  syncPetSettingsUI();
 }
 
 function openModal(modal) {
@@ -2358,6 +2904,21 @@ document.querySelectorAll(".palette-btn").forEach((btn) => {
       matcha: "🍵 Matcha & Yulaf paleti uygulandı"
     };
     showToast(names[pal] || "Renk paleti güncellendi");
+  });
+});
+
+document.querySelectorAll(".pet-type-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const nextPet = btn.dataset.pet;
+    if (!PET_CONFIG[nextPet]) return;
+    settings.petType = nextPet;
+    settings.petColor = PET_CONFIG[nextPet].defaultColor;
+    sfx.playTick();
+    saveSettings();
+    syncPetSettingsUI();
+    render();
+    const cfg = PET_CONFIG[nextPet];
+    showToast(`${cfg.icon} Masa yoldaşın ${cfg.name} oldu!`);
   });
 });
 

@@ -1662,6 +1662,112 @@ body:has(.modal-overlay:not(.is-hidden)) .lamp-pull-chain-wrap {
   background: linear-gradient(135deg, #7ca856, #2d3e24);
 }
 
+/* --------------------------------------------------------------------------
+   Masa Yoldaşı & Renk Seçici (Ayarlar Modalı)
+   -------------------------------------------------------------------------- */
+.pet-toggle-row,
+.pet-color-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--surface-border);
+  margin-bottom: 2px;
+}
+
+.pet-type-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+.pet-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--surface-border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+
+.pet-type-btn:hover {
+  background: var(--surface);
+  color: var(--text-main);
+  border-color: var(--surface-border-hover);
+  transform: translateY(-1px);
+}
+
+.pet-type-btn.is-active {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--text-main);
+  box-shadow: 0 0 0 2px var(--accent), 0 4px 12px var(--accent-glow);
+}
+
+.pet-type-icon {
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.pet-color-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.pet-color-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--surface-border);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.pet-color-btn:hover {
+  background: var(--surface);
+  color: var(--text-main);
+  border-color: var(--surface-border-hover);
+}
+
+.pet-color-btn.is-active {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--text-main);
+  box-shadow: 0 0 0 1.5px var(--accent);
+  font-weight: 700;
+}
+
+.pet-color-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  flex-shrink: 0;
+}
+
 .settings-meta-item {
   display: flex;
   align-items: center;
@@ -2324,7 +2430,8 @@ input[type="range"]::-moz-range-thumb {
     max-width: 180px;
   }
 
-  .cozy-cat-box {
+  .cozy-cat-box,
+  .cozy-pet-box {
     top: -28px;
     right: 8px;
     width: 74px;
@@ -2647,7 +2754,8 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* Uyuyan & Huzurlu Sandık Kedisi (Sağ üst kenarda sabit yatar) */
-.cozy-cat-box {
+.cozy-cat-box,
+.cozy-pet-box {
   top: -36px;
   right: 16px;
   width: 96px;
@@ -2657,19 +2765,25 @@ input[type="range"]::-moz-range-thumb {
   filter: drop-shadow(0 5px 14px rgba(0, 0, 0, 0.35));
 }
 
-.cozy-cat-box:hover {
+.cozy-cat-box:hover,
+.cozy-pet-box:hover {
   transform: scale(1.06) translateY(-2px);
 }
 
-.cozy-cat-box:active {
+.cozy-cat-box:active,
+.cozy-pet-box:active {
   transform: scale(0.96);
 }
 
-.cozy-cat-box.is-purring {
+.cozy-cat-box.is-purring,
+.cozy-pet-box.is-purring {
   animation: catPurrShake 0.65s ease-in-out;
 }
 
-.cat-svg {
+.cat-svg,
+.dog-svg,
+.rabbit-svg,
+.fox-svg {
   width: 100%;
   height: 100%;
   display: block;
@@ -2677,7 +2791,10 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* SADECE KARIN/GÖBEK BÖLGESİ NEFES ALIR */
-.cat-belly {
+.cat-belly,
+.dog-belly,
+.rabbit-belly,
+.fox-belly {
   transform-origin: 54px 36px;
   animation: catBellyPulse 3.8s ease-in-out infinite;
 }
@@ -2703,20 +2820,102 @@ input[type="range"]::-moz-range-thumb {
   }
 }
 
-/* Uyurken yavaşça salınan kuyruk */
+/* Uyurken yavaşça salınan kedi kuyruğu */
 .cat-tail {
   transform-origin: 78px 40px;
   animation: catTailSleep 5s ease-in-out infinite alternate;
 }
 
-/* Uyku esnasında hafif kulak seğirmesi */
+@keyframes catTailSleep {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-5deg) translateY(1px); }
+  100% { transform: rotate(7deg) translateY(-1px); }
+}
+
+/* Uyurken sevimli kuyruk kıpırdaması (Köpek) */
+.dog-tail {
+  transform-origin: 78px 41px;
+  animation: dogTailSleep 4.2s ease-in-out infinite alternate;
+}
+
+@keyframes dogTailSleep {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(8deg) translateY(-1px); }
+  45% { transform: rotate(-4deg); }
+  65% { transform: rotate(6deg); }
+}
+
+/* Uyurken kabarık tilki kuyruğu sarmalı */
+.fox-tail {
+  transform-origin: 72px 34px;
+  animation: foxTailSleep 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes foxTailSleep {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(-4deg) scale(1.03) translateY(-0.5px); }
+}
+
+/* Uyurken ponpon tavşan kuyruğu pıtırtısı */
+.rabbit-tail {
+  transform-origin: 78px 38px;
+  animation: rabbitTailSleep 4.8s ease-in-out infinite;
+}
+
+@keyframes rabbitTailSleep {
+  0%, 85%, 100% { transform: scale(1); }
+  90% { transform: scale(1.12) translateY(-1px); }
+  95% { transform: scale(0.95); }
+}
+
+/* Kulak seğirmeleri */
 .cat-ear-twitch {
   transform-origin: 35px 17px;
   animation: catEarTwitch 7s ease-in-out infinite;
 }
 
+.dog-ear-flop {
+  transform-origin: 34px 22px;
+  animation: dogEarFlop 6.2s ease-in-out infinite;
+}
+
+@keyframes dogEarFlop {
+  0%, 90%, 100% { transform: rotate(0deg); }
+  93% { transform: rotate(6deg) translateY(0.5px); }
+  96% { transform: rotate(-3deg); }
+}
+
+.rabbit-ear-twitch {
+  transform-origin: 40px 22px;
+  animation: rabbitEarTwitch 5.8s ease-in-out infinite;
+}
+
+@keyframes rabbitEarTwitch {
+  0%, 88%, 100% { transform: rotate(0deg); }
+  91% { transform: rotate(-5deg) translateY(-1px); }
+  94% { transform: rotate(4deg); }
+  97% { transform: rotate(-2deg); }
+}
+
+.fox-ear-twitch {
+  transform-origin: 35px 14px;
+  animation: catEarTwitch 6.5s ease-in-out infinite;
+}
+
+.rabbit-nose {
+  transform-origin: 18px 34px;
+  animation: rabbitNoseTwitch 2.6s ease-in-out infinite;
+}
+
+@keyframes rabbitNoseTwitch {
+  0%, 80%, 100% { transform: scale(1); }
+  85% { transform: scale(1.15) translateY(-0.5px); }
+  92% { transform: scale(0.95); }
+}
+
 /* Yüzen Zzz Uykulu Emoticon */
-.cat-emote {
+.cat-emote,
+.pet-emote {
   position: absolute;
   top: -14px;
   left: 8px;
@@ -2731,20 +2930,24 @@ input[type="range"]::-moz-range-thumb {
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
-.cat-emote .z-1 {
+.cat-emote .z-1,
+.pet-emote .z-1 {
   font-size: 11px;
   animation: zFloat1 3.8s ease-in-out infinite;
 }
-.cat-emote .z-2 {
+.cat-emote .z-2,
+.pet-emote .z-2 {
   font-size: 13px;
   animation: zFloat2 3.8s ease-in-out infinite 0.7s;
 }
-.cat-emote .z-3 {
+.cat-emote .z-3,
+.pet-emote .z-3 {
   font-size: 15px;
   animation: zFloat3 3.8s ease-in-out infinite 1.4s;
 }
 
-.cat-heart {
+.cat-heart,
+.pet-heart {
   font-size: 16px;
   animation: heartPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }

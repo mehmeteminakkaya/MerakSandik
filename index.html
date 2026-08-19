@@ -126,6 +126,42 @@
             </div>
           </div>
 
+          <!-- Masa Yoldaşı (Hayvan Maskotu Seçici) -->
+          <div class="toggle-field pet-toggle-row">
+            <div class="toggle-info">
+              <span class="toggle-title">Masa Yoldaşı</span>
+              <span class="toggle-desc">Çalışma masanda sana eşlik eden sevimli dost</span>
+            </div>
+            <div class="pet-type-grid" id="petTypeGrid" role="group" aria-label="Masa Yoldaşı Seçimi">
+              <button type="button" class="pet-type-btn is-active" data-pet="cat">
+                <span class="pet-type-icon">🐱</span>
+                <span>Kedi</span>
+              </button>
+              <button type="button" class="pet-type-btn" data-pet="dog">
+                <span class="pet-type-icon">🐶</span>
+                <span>Köpek</span>
+              </button>
+              <button type="button" class="pet-type-btn" data-pet="rabbit">
+                <span class="pet-type-icon">🐰</span>
+                <span>Tavşan</span>
+              </button>
+              <button type="button" class="pet-type-btn" data-pet="fox">
+                <span class="pet-type-icon">🦊</span>
+                <span>Tilki</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Yoldaş Kürk / Tüy Rengi Seçici -->
+          <div class="toggle-field pet-color-row">
+            <div class="toggle-info">
+              <span class="toggle-title">Kürk / Tüy Rengi</span>
+            </div>
+            <div class="pet-color-grid" id="petColorGrid" role="group" aria-label="Tüy Rengi Seçimi">
+              <!-- JS tarafından dinamik doldurulur -->
+            </div>
+          </div>
+
           <label class="range-field">
             <div class="range-header">
               <span>Araştırma süresi</span>
@@ -204,6 +240,6 @@
   </div>
 
   <canvas id="confettiCanvas" class="confetti-canvas"></canvas>
-  <script src="app.js?v=51"></script>
+  <script src="app.js?v=56"></script>
 </body>
 </html>

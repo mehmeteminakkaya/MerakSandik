@@ -1,4 +1,4 @@
-const CACHE_NAME = "meraksandik-v64";
+const CACHE_NAME = "meraksandik-v65";
 const PRECACHE_URLS = [
   "/",
   "/index.html",
@@ -12,7 +12,11 @@ const PRECACHE_URLS = [
   "/library-bg-light.jpg",
   "/meow.mp3",
   "/meow-sweet.mp3",
-  "/purr.mp3"
+  "/purr.mp3",
+  "/dog-bark.mp3",
+  "/fox-bark.mp3",
+  "/rabbit-sound.mp3",
+  "/donkey-bray.mp3"
 ];
 // fireplace.mp3/rain.mp3/ocean.mp3 (~13MB combined) are NOT precached — the
 // fetch handler below caches them opportunistically the first time ambience

@@ -2124,14 +2124,53 @@ function isPetAwake() {
   return state.phase === "researching" || state.spinning || Date.now() < petAwakeUntil;
 }
 
+function updateCozyPetDOM() {
+  const cozyPetBtn = document.querySelector("#cozyCatBtn");
+  if (!cozyPetBtn) return;
+  const hour = new Date().getHours();
+  const isNight = hour >= 22 || hour < 6;
+  const currentPetType = settings.petType || "cat";
+  const petCfg = PET_CONFIG[currentPetType] || PET_CONFIG.cat;
+  const colorId = settings.petColor || petCfg.defaultColor;
+  const colorCfg = petCfg.colors.find((c) => c.id === colorId) || petCfg.colors[0];
+  const awake = isPetAwake();
+  const isResearching = state.phase === "researching";
+
+  let petSvg = "";
+  if (currentPetType === "dog") {
+    petSvg = renderDogSvg(colorCfg, isNight, awake, isResearching);
+  } else if (currentPetType === "rabbit") {
+    petSvg = renderRabbitSvg(colorCfg, isNight, awake, isResearching);
+  } else if (currentPetType === "fox") {
+    petSvg = renderFoxSvg(colorCfg, isNight, awake, isResearching);
+  } else {
+    petSvg = renderCatSvg(colorCfg, isNight, awake, isResearching);
+  }
+
+  const emotes = awake ? (petCfg.awakeEmotes || ["✨", "💡", "🐾"]) : petCfg.idleEmotes;
+
+  cozyPetBtn.classList.toggle("is-awake", awake);
+  cozyPetBtn.title = `${petCfg.name} — ${awake ? "canlı & uyanık dostun!" : "uyuyor, sevmek ve uyandırmak için tıkla! 🐾"}`;
+  
+  cozyPetBtn.innerHTML = `
+    <span class="pet-emote cat-emote" aria-hidden="true">
+      <span class="z-1">${emotes[0]}</span>
+      <span class="z-2">${emotes[1]}</span>
+      <span class="z-3">${emotes[2]}</span>
+    </span>
+    ${petSvg}
+  `;
+}
+
 function wakeUpPet(durationMs = 15000) {
   const behavior = settings.petBehavior || "smart";
   if (behavior === "sleep") return;
   petAwakeUntil = Date.now() + durationMs;
+  updateCozyPetDOM();
   if (petAwakeTimerId) clearTimeout(petAwakeTimerId);
   petAwakeTimerId = setTimeout(() => {
     if (!isPetAwake()) {
-      render();
+      updateCozyPetDOM();
     }
   }, durationMs + 100);
 }
@@ -2641,7 +2680,7 @@ function bindStageEvents() {
         cozyCatBtn.classList.remove("is-purring");
       }, 700);
 
-      render();
+      updateCozyPetDOM();
 
       if (isAnnoyed) {
         rapidPetStreak = 0; // tepkiden sonra sıfırla, spam'i önle
@@ -2910,7 +2949,7 @@ function syncPetSettingsUI() {
         saveSettings();
         sfx.playTick();
         syncPetSettingsUI();
-        render();
+        updateCozyPetDOM();
         const found = cfg.colors.find((c) => c.id === colorId);
         showToast(`${cfg.icon} ${cfg.name}: ${found ? found.name : colorId} seçildi`);
       });
@@ -3053,7 +3092,7 @@ document.querySelectorAll(".pet-type-btn").forEach((btn) => {
     sfx.playTick();
     saveSettings();
     syncPetSettingsUI();
-    render();
+    updateCozyPetDOM();
     const cfg = PET_CONFIG[nextPet];
     showToast(`${cfg.icon} Masa yoldaşın ${cfg.name} oldu!`);
   });
@@ -3067,7 +3106,7 @@ document.querySelectorAll(".pet-behavior-btn").forEach((btn) => {
     sfx.playTick();
     saveSettings();
     syncPetSettingsUI();
-    render();
+    updateCozyPetDOM();
     const behaviorNames = {
       smart: "🌟 Akıllı Uyanma modu seçildi (Tıklayınca & araştırmada uyanır)",
       awake: "👀 Hep Uyanık modu seçildi (Masa yoldaşın sürekli canlı!)",

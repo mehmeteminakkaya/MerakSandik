@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Masa Yoldaşları Görsel Test Masası</title>
+  <style>
+    :root {
+      --bg: #14171a;
+      --card-bg: #1e2329;
+      --card-border: #2e3640;
+      --text: #f0f3f6;
+      --text-muted: #8b949e;
+      --accent: #d97736;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 30px;
+    }
+    h1, h2, h3 { margin: 0 0 10px 0; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .pet-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+    .mock-desk-header {
+      width: 100%;
+      height: 44px;
+      background: #252d35;
+      border-radius: 8px;
+      position: relative;
+      margin-top: 25px;
+      border: 1px solid #36414d;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .pet-wrapper {
+      position: absolute;
+      top: -38px;
+      right: 14px;
+      width: 104px;
+      height: 54px;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
+    }
+    .pet-svg, svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.08);
+    }
+    .state-title {
+      font-size: 12px;
+      color: #e0a94e;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐾 Masa Yoldaşları Görsel Muayene Masası</h1>
+  <p style="color: var(--text-muted); margin-bottom: 30px;">Tüm hayvanların (Kedi, Köpek, Tavşan, Tilki) kafa, kulak, göz, burun, pati ve kuyruk anatomilerini test edin.</p>
+
+  <div id="testOutput"></div>
+
+  <script src="app.js"></script>
+  <script>
+    const output = document.querySelector("#testOutput");
+    
+    for (const [petKey, cfg] of Object.entries(PET_CONFIG)) {
+      const section = document.createElement("div");
+      section.innerHTML = `<h2>\${cfg.icon} \${cfg.name}</h2>`;
+      const grid = document.createElement("div");
+      grid.className = "grid";
+
+      for (const color of cfg.colors) {
+        let sleepSvg = "";
+        let awakeSvg = "";
+        let researchSvg = "";
+
+        if (petKey === "dog") {
+          sleepSvg = renderDogSvg(color, false, false, false);
+          awakeSvg = renderDogSvg(color, false, true, false);
+          researchSvg = renderDogSvg(color, false, true, true);
+        } else if (petKey === "rabbit") {
+          sleepSvg = renderRabbitSvg(color, false, false, false);
+          awakeSvg = renderRabbitSvg(color, false, true, false);
+          researchSvg = renderRabbitSvg(color, false, true, true);
+        } else if (petKey === "fox") {
+          sleepSvg = renderFoxSvg(color, false, false, false);
+          awakeSvg = renderFoxSvg(color, false, true, false);
+          researchSvg = renderFoxSvg(color, false, true, true);
+        } else {
+          sleepSvg = renderCatSvg(color, false, false, false);
+          awakeSvg = renderCatSvg(color, false, true, false);
+          researchSvg = renderCatSvg(color, false, true, true);
+        }
+
+        grid.innerHTML += `
+          <div class="pet-card">
+            <div style="display:flex; justify-content:space-between; width:100%;">
+              <span class="badge">\${color.name}</span>
+              <span class="state-title">💤 Uyku</span>
+            </div>
+            <div class="mock-desk-header">
+              <span>Kart Başlığı</span>
+              <div class="pet-wrapper">\${sleepSvg}</div>
+            </div>
+          </div>
+
+          <div class="pet-card">
+            <div style="display:flex; justify-content:space-between; width:100%;">
+              <span class="badge">\${color.name}</span>
+              <span class="state-title">👀 Uyanık</span>
+            </div>
+            <div class="mock-desk-header">
+              <span>Kart Başlığı</span>
+              <div class="pet-wrapper">\${awakeSvg}</div>
+            </div>
+          </div>
+
+          <div class="pet-card">
+            <div style="display:flex; justify-content:space-between; width:100%;">
+              <span class="badge">\${color.name}</span>
+              <span class="state-title">👓 Gözlüklü</span>
+            </div>
+            <div class="mock-desk-header">
+              <span>Kart Başlığı</span>
+              <div class="pet-wrapper">\${researchSvg}</div>
+            </div>
+          </div>
+        `;
+      }
+      section.appendChild(grid);
+      output.appendChild(section);
+    }
+  </script>
+</body>
+</html>

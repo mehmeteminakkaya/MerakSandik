@@ -2524,10 +2524,10 @@ input[type="range"]::-moz-range-thumb {
 
   .cozy-cat-box,
   .cozy-pet-box {
-    top: -28px;
-    right: 8px;
-    width: 74px;
-    height: 40px;
+    top: -32px;
+    right: 10px;
+    width: 86px;
+    height: 45px;
   }
   .topbar-actions {
     gap: 6px;
@@ -2848,13 +2848,13 @@ input[type="range"]::-moz-range-thumb {
 /* Uyuyan & Huzurlu Sandık Kedisi (Sağ üst kenarda sabit yatar) */
 .cozy-cat-box,
 .cozy-pet-box {
-  top: -36px;
-  right: 16px;
-  width: 96px;
-  height: 50px;
+  top: -38px;
+  right: 14px;
+  width: 104px;
+  height: 54px;
   cursor: pointer;
   user-select: none;
-  filter: drop-shadow(0 5px 14px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.45));
 }
 
 .cozy-cat-box:hover,

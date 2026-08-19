@@ -303,11 +303,11 @@ const PET_CONFIG = {
     icon: "🐱",
     defaultColor: "orange",
     colors: [
-      { id: "orange", name: "Sarman / Tekir", primary: "#e08a4c", dark: "#a8521a", belly: "#fff5ea", blush: "#f89f9f", innerEar: "#f9c0a8" },
-      { id: "tuxedo", name: "Smokin / Gece", primary: "#2d2f38", dark: "#18191f", belly: "#f4f4f8", blush: "#f5a4a4", innerEar: "#e8ebf0" },
-      { id: "white", name: "Pamuk Beyazı", primary: "#f7f4ec", dark: "#c4baa8", belly: "#ffffff", blush: "#f8a8b8", innerEar: "#fbe4e8" },
-      { id: "grey", name: "Duman / Kül", primary: "#7d8591", dark: "#4a515c", belly: "#e6e9ee", blush: "#f89f9f", innerEar: "#cfd5dc" },
-      { id: "calico", name: "Alacalı / Kaliko", primary: "#d97e3f", dark: "#362a22", belly: "#fff8f0", blush: "#f89f9f", innerEar: "#f7d0b5" }
+      { id: "orange", name: "Sarman / Tekir", primary: "#e68d4a", dark: "#9c4a16", outline: "#502409", belly: "#fff5ea", blush: "#f89f9f", innerEar: "#f9c0a8" },
+      { id: "tuxedo", name: "Smokin / Gece", primary: "#383a45", dark: "#1c1e24", outline: "#0c0d10", belly: "#f4f4f8", blush: "#f5a4a4", innerEar: "#e8ebf0" },
+      { id: "white", name: "Pamuk Beyazı", primary: "#fbf8f2", dark: "#998b79", outline: "#594f42", belly: "#ffffff", blush: "#f8a8b8", innerEar: "#fbe4e8" },
+      { id: "grey", name: "Duman / Kül", primary: "#828b99", dark: "#444b57", outline: "#21262e", belly: "#e8ebf0", blush: "#f89f9f", innerEar: "#cfd5dc" },
+      { id: "calico", name: "Alacalı / Kaliko", primary: "#dd8040", dark: "#3d2d23", outline: "#1f150e", belly: "#fff8f0", blush: "#f89f9f", innerEar: "#f7d0b5" }
     ],
     happyEmote: "🤍🐾",
     annoyedEmote: "😾💢",
@@ -329,11 +329,11 @@ const PET_CONFIG = {
     icon: "🐶",
     defaultColor: "caramel",
     colors: [
-      { id: "caramel", name: "Karamel / Golden", primary: "#d49547", dark: "#965e1b", belly: "#fff3e3", blush: "#f8a598", innerEar: "#fcecd2" },
-      { id: "chocolate", name: "Çikolata Kahve", primary: "#694225", dark: "#3e2411", belly: "#ecd9c6", blush: "#d48888", innerEar: "#dfcbb5" },
-      { id: "cream", name: "Krem / Açık Bal", primary: "#ede2ce", dark: "#b5a289", belly: "#ffffff", blush: "#f8a8a8", innerEar: "#faefe0" },
-      { id: "black", name: "Gece / Karabaş", primary: "#2c2d33", dark: "#16171b", belly: "#d8d9e0", blush: "#e58a8a", innerEar: "#a6a8b2" },
-      { id: "corgi", name: "Corgi / Alaca", primary: "#cb7c32", dark: "#2e2b28", belly: "#ffffff", blush: "#f8a598", innerEar: "#fbe4cb" }
+      { id: "caramel", name: "Karamel / Golden", primary: "#dc9743", dark: "#8c4d0e", outline: "#492603", belly: "#fff3e3", blush: "#f8a598", innerEar: "#fcecd2" },
+      { id: "chocolate", name: "Çikolata Kahve", primary: "#724727", dark: "#3a1f0d", outline: "#1b0b03", belly: "#ecd9c6", blush: "#d48888", innerEar: "#dfcbb5" },
+      { id: "cream", name: "Krem / Açık Bal", primary: "#f0e5d1", dark: "#9e8b72", outline: "#544634", belly: "#ffffff", blush: "#f8a8a8", innerEar: "#faefe0" },
+      { id: "black", name: "Gece / Karabaş", primary: "#33353c", dark: "#1a1b1f", outline: "#0b0c0e", belly: "#d8d9e0", blush: "#e58a8a", innerEar: "#a6a8b2" },
+      { id: "corgi", name: "Corgi / Alaca", primary: "#d07f33", dark: "#3b322a", outline: "#1d1712", belly: "#ffffff", blush: "#f8a598", innerEar: "#fbe4cb" }
     ],
     happyEmote: "🦴🐾",
     annoyedEmote: "🐶💢",
@@ -355,10 +355,10 @@ const PET_CONFIG = {
     icon: "🐰",
     defaultColor: "white",
     colors: [
-      { id: "white", name: "Pamuk Beyazı", primary: "#fcf9f2", dark: "#d4cbba", belly: "#ffffff", blush: "#f9a8b8", innerEar: "#fde8ec" },
-      { id: "cinnamon", name: "Tarçın Sarısı", primary: "#c98246", dark: "#854919", belly: "#fff4e6", blush: "#f9a8b8", innerEar: "#f9ddc3" },
-      { id: "ash", name: "Kül Grisi", primary: "#9495a0", dark: "#5e606a", belly: "#ececf2", blush: "#f9a8b8", innerEar: "#d2d3dc" },
-      { id: "spotted", name: "Benekli / Bal", primary: "#e8cfb0", dark: "#724e30", belly: "#fffbf6", blush: "#f9a8b8", innerEar: "#f3e1cb" }
+      { id: "white", name: "Pamuk Beyazı", primary: "#faf8f2", dark: "#968975", outline: "#524738", belly: "#ffffff", blush: "#f9a8b8", innerEar: "#fde8ec" },
+      { id: "cinnamon", name: "Tarçın Sarısı", primary: "#ce8547", dark: "#783e0e", outline: "#421f03", belly: "#fff4e6", blush: "#f9a8b8", innerEar: "#f9ddc3" },
+      { id: "ash", name: "Kül Grisi", primary: "#9799a6", dark: "#4d505c", outline: "#25272e", belly: "#ececf2", blush: "#f9a8b8", innerEar: "#d2d3dc" },
+      { id: "spotted", name: "Benekli / Bal", primary: "#e6c9a3", dark: "#6e4726", outline: "#38200d", belly: "#fffbf6", blush: "#f9a8b8", innerEar: "#f3e1cb" }
     ],
     happyEmote: "🥕✨",
     annoyedEmote: "🐰💢",
@@ -380,10 +380,10 @@ const PET_CONFIG = {
     icon: "🦊",
     defaultColor: "red",
     colors: [
-      { id: "red", name: "Kızıl Orman", primary: "#d85a1e", dark: "#8b2f04", belly: "#fff5eb", blush: "#f89a8e", innerEar: "#fdd9c4" },
-      { id: "arctic", name: "Kutup Beyazı", primary: "#eef3f7", dark: "#b0bfcc", belly: "#ffffff", blush: "#f8a8b8", innerEar: "#e2eaf0" },
-      { id: "silver", name: "Gümüş / Gece", primary: "#444b55", dark: "#22262d", belly: "#d7dee5", blush: "#f59898", innerEar: "#8d98a6" },
-      { id: "golden", name: "Altın Kum", primary: "#e29a32", dark: "#935c10", belly: "#fff8ec", blush: "#f89a8e", innerEar: "#fbe4bf" }
+      { id: "red", name: "Kızıl Orman", primary: "#df5a1a", dark: "#852a03", outline: "#451200", belly: "#fff5eb", blush: "#f89a8e", innerEar: "#fdd9c4" },
+      { id: "arctic", name: "Kutup Beyazı", primary: "#f0f4f8", dark: "#7c8e9e", outline: "#445361", belly: "#ffffff", blush: "#f8a8b8", innerEar: "#e2eaf0" },
+      { id: "silver", name: "Gümüş / Gece", primary: "#4e5765", dark: "#21262e", outline: "#101317", belly: "#d7dee5", blush: "#f59898", innerEar: "#8d98a6" },
+      { id: "golden", name: "Altın Kum", primary: "#e89e2c", dark: "#875206", outline: "#472801", belly: "#fff8ec", blush: "#f89a8e", innerEar: "#fbe4bf" }
     ],
     happyEmote: "🍂✨",
     annoyedEmote: "🦊💢",
@@ -2176,336 +2176,349 @@ function wakeUpPet(durationMs = 15000) {
 }
 
 function renderCatSvg(c, isNight, isAwake = false, isResearching = false) {
+  const o = c.outline || c.dark;
   return `
     <svg viewBox="0 0 96 50" class="cat-svg" xmlns="http://www.w3.org/2000/svg">
       <!-- Zemin Gölgesi -->
-      <ellipse cx="48" cy="46" rx="41" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+      <ellipse cx="48" cy="46" rx="42" ry="4" fill="rgba(0,0,0,0.28)"/>
 
-      <!-- Kuyruk (arkada kıvrılmış zarif kedi kuyruğu) -->
-      <path class="cat-tail" d="M 78 40 C 91 38 95 23 86 16 C 79 11 73 17 76 26" stroke="${c.primary}" stroke-width="6.8" stroke-linecap="round" fill="none"/>
-      <path class="cat-tail" d="M 85 16 C 83 13 77 15 77 21" stroke="${c.belly}" stroke-width="5.2" stroke-linecap="round" fill="none" opacity="0.9"/>
+      <!-- Kuyruk (Gövdenin arkasında, net hatlı) -->
+      <path class="cat-tail" d="M 77 40 C 91 38 95 23 86 15 C 78 10 72 16 75 25" stroke="${o}" stroke-width="7.8" stroke-linecap="round" fill="none"/>
+      <path class="cat-tail" d="M 77 40 C 91 38 95 23 86 15 C 78 10 72 16 75 25" stroke="${c.primary}" stroke-width="5.8" stroke-linecap="round" fill="none"/>
+      <path class="cat-tail" d="M 85 15 C 83 12 77 14 77 20" stroke="${c.belly}" stroke-width="4.2" stroke-linecap="round" fill="none"/>
 
-      <!-- Gövde -->
-      <path class="cat-body-torso" d="M 22 44 C 18 36 20 22 36 16 C 54 10 76 14 84 26 C 90 34 88 44 82 45 C 68 46 34 46 22 44 Z" fill="${c.primary}"/>
+      <!-- Gövde Silueti (Belirgin Kontur Çizgili) -->
+      <path class="cat-body-torso" d="M 22 44 C 17 35 20 21 36 16 C 54 10 76 13 85 26 C 91 34 89 44 82 45 C 68 46 34 46 22 44 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
 
-      <!-- Sırt Çizgileri / Desenler -->
-      <path d="M 50 14 Q 48 21 46 25" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
-      <path d="M 60 15 Q 58 22 56 27" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
-      <path d="M 70 18 Q 68 25 65 29" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
+      <!-- Sırt & Kalça Kıvrım Çizgisi (Derinlik / Hat) -->
+      <path d="M 68 22 C 78 28 80 39 77 44" stroke="${o}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.6"/>
+      <path d="M 50 14 Q 48 21 46 25" stroke="${o}" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+      <path d="M 60 15 Q 58 22 56 27" stroke="${o}" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+      <path d="M 70 18 Q 68 25 65 29" stroke="${o}" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
 
       <!-- Göbek (Nefes alan yumuşak karın) -->
-      <ellipse class="cat-belly" cx="54" cy="36" rx="17" ry="9.5" fill="${c.belly}" opacity="0.88"/>
+      <ellipse class="cat-belly" cx="54" cy="36" rx="16.5" ry="9.5" fill="${c.belly}" stroke="${o}" stroke-width="1.2" opacity="0.95"/>
 
-      <!-- Kafa -->
-      <circle class="cat-head" cx="28" cy="30" r="14" fill="${c.primary}"/>
+      <!-- Kafa (Belirgin Hatlı Daire) -->
+      <circle class="cat-head" cx="28" cy="29" r="13.5" fill="${c.primary}" stroke="${o}" stroke-width="1.8"/>
 
-      <!-- Sevimli Kırmızı Tasma & Altın Çan -->
-      <path d="M 20 37 Q 28 41 36 37" stroke="#c44747" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-      <circle cx="28" cy="40" r="1.8" fill="#e0a94e" stroke="#9e7330" stroke-width="0.5"/>
+      <!-- Yanak Tüyleri (Fluffy Pofuduk Yanaklar) -->
+      <polygon points="16,31 11,33 16,36" fill="${c.primary}" stroke="${o}" stroke-width="1.4" stroke-linejoin="round"/>
 
-      <!-- Kulaklar -->
-      <polygon points="16,22 17,7 26,17" fill="${c.primary}"/>
-      <polygon points="18,19 18,10 24,16" fill="${c.innerEar || '#f9c0a8'}"/>
+      <!-- Sevimli Kırmızı Tasma & Altın Çan (Gövde ile Kafayı ayıran net çizgi) -->
+      <path d="M 19 36 Q 28 41 37 36" stroke="#c44747" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <circle cx="28" cy="39.5" r="2" fill="#e0a94e" stroke="${o}" stroke-width="0.8"/>
 
-      <polygon class="cat-ear-twitch" points="29,16 36,6 42,18" fill="${c.primary}"/>
-      <polygon class="cat-ear-twitch" points="31,15 36,9 40,17" fill="${c.innerEar || '#f9c0a8'}"/>
+      <!-- Kulaklar (Belirgin Kontur Çizgili) -->
+      <polygon points="16,21 17,6 26,16" fill="${c.primary}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+      <polygon points="18,19 18,9 24,15" fill="${c.innerEar || '#f9c0a8'}" stroke="${c.dark}" stroke-width="0.8"/>
+
+      <polygon class="cat-ear-twitch" points="29,15 36,5 42,17" fill="${c.primary}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+      <polygon class="cat-ear-twitch" points="31,14 36,8 40,16" fill="${c.innerEar || '#f9c0a8'}" stroke="${c.dark}" stroke-width="0.8"/>
 
       ${isNight ? renderNightcap() : ""}
 
       <!-- Alın Çizgileri -->
-      <path d="M 28 18 L 28 22" stroke="${c.dark}" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
-      <path d="M 24 19 L 25 22" stroke="${c.dark}" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
-      <path d="M 32 19 L 31 22" stroke="${c.dark}" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
+      <path d="M 28 17 L 28 21" stroke="${o}" stroke-width="1.6" stroke-linecap="round" opacity="0.5"/>
+      <path d="M 24 18 L 25 21" stroke="${o}" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>
+      <path d="M 32 18 L 31 21" stroke="${o}" stroke-width="1.3" stroke-linecap="round" opacity="0.5"/>
 
       <!-- Yanak Allıkları -->
-      <ellipse cx="20" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
-      <ellipse cx="37" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
+      <ellipse cx="20" cy="32.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
+      <ellipse cx="36" cy="32.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
 
       <!-- Gözler: Uyanık vs Uyuyan -->
       ${isAwake ? `
         <g class="pet-eyes-awake">
-          <ellipse cx="23.5" cy="29.5" rx="3.4" ry="4" fill="#2c1a12"/>
-          <circle cx="22.5" cy="28.3" r="1.3" fill="#ffffff"/>
-          <circle cx="24.8" cy="30.8" r="0.6" fill="#ffffff"/>
-          <ellipse cx="33.5" cy="29.5" rx="3.4" ry="4" fill="#2c1a12"/>
-          <circle cx="32.5" cy="28.3" r="1.3" fill="#ffffff"/>
-          <circle cx="34.8" cy="30.8" r="0.6" fill="#ffffff"/>
+          <ellipse cx="23.5" cy="28.5" rx="3.4" ry="4" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="22.5" cy="27.3" r="1.3" fill="#ffffff"/>
+          <circle cx="24.8" cy="29.8" r="0.6" fill="#ffffff"/>
+          <ellipse cx="32.5" cy="28.5" rx="3.4" ry="4" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="31.5" cy="27.3" r="1.3" fill="#ffffff"/>
+          <circle cx="33.8" cy="29.8" r="0.6" fill="#ffffff"/>
         </g>
       ` : `
-        <path d="M 21 29.5 Q 24.5 32.5 27.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-        <path d="M 30 29.5 Q 33.5 32.5 36.5 29.5" stroke="#2c1a12" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+        <path d="M 21 28.5 Q 24.5 31.5 27.5 28.5" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M 29.5 28.5 Q 32.5 31.5 35.5 28.5" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
       `}
 
       ${isResearching ? `
         <g class="pet-glasses">
-          <circle class="pet-glasses-frame" cx="23.5" cy="29.5" r="4.8"/>
-          <circle class="pet-glasses-frame" cx="33.5" cy="29.5" r="4.8"/>
-          <path class="pet-glasses-bridge" d="M 28.3 29.5 Q 28.5 28.5 28.7 29.5"/>
+          <circle class="pet-glasses-frame" cx="23.5" cy="28.5" r="4.8"/>
+          <circle class="pet-glasses-frame" cx="32.5" cy="28.5" r="4.8"/>
+          <path class="pet-glasses-bridge" d="M 28 28.5 Q 28 27.5 28 28.5"/>
         </g>
       ` : ""}
 
       <!-- Pembe Burun & Ağız -->
-      <ellipse cx="28.5" cy="33.8" rx="2" ry="1.3" fill="#f2907a"/>
-      <path d="M 26.5 35.2 Q 28.5 37 30.5 35.2" stroke="#2c1a12" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <polygon points="26.8,32.5 29.2,32.5 28,34" fill="#f2907a" stroke="${o}" stroke-width="0.7"/>
+      <path d="M 26.2 34.5 Q 28 36.2 29.8 34.5" stroke="${o}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
 
       <!-- Bıyıklar -->
-      <line x1="12" y1="32" x2="20" y2="34" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-      <line x1="12" y1="35" x2="20" y2="35.5" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-      <line x1="37" y1="34" x2="45" y2="32" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-      <line x1="37" y1="35.5" x2="45" y2="35" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
+      <line x1="11" y1="31" x2="19" y2="33" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.65"/>
+      <line x1="11" y1="34" x2="19" y2="34.5" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.65"/>
+      <line x1="36" y1="33" x2="44" y2="31" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.65"/>
+      <line x1="36" y1="34.5" x2="44" y2="34" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.65"/>
 
-      <!-- Ön Patiler ve Sevimli Patiler -->
-      <ellipse cx="23" cy="43.5" rx="6" ry="3.5" fill="${c.primary}"/>
-      <ellipse cx="34" cy="43.5" rx="6" ry="3.5" fill="${c.primary}"/>
-      <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
-      <ellipse cx="34" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
-      <!-- Pati Pati Noktaları -->
-      <circle cx="21" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
-      <circle cx="23" cy="41.8" r="0.7" fill="#f9c0a8" opacity="0.8"/>
-      <circle cx="25" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
-      <circle cx="32" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
-      <circle cx="34" cy="41.8" r="0.7" fill="#f9c0a8" opacity="0.8"/>
-      <circle cx="36" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
+      <!-- Ön Patiler (Masaya dayalı, net hatlı) -->
+      <ellipse cx="23" cy="43.5" rx="6" ry="3.5" fill="${c.primary}" stroke="${o}" stroke-width="1.6"/>
+      <ellipse cx="34" cy="43.5" rx="6" ry="3.5" fill="${c.primary}" stroke="${o}" stroke-width="1.6"/>
+      <ellipse cx="23" cy="44" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <ellipse cx="34" cy="44" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <circle cx="21" cy="42.5" r="0.8" fill="#f9c0a8" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="23" cy="41.8" r="0.8" fill="#f9c0a8" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="25" cy="42.5" r="0.8" fill="#f9c0a8" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="32" cy="42.5" r="0.8" fill="#f9c0a8" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="34" cy="41.8" r="0.8" fill="#f9c0a8" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="36" cy="42.5" r="0.8" fill="#f9c0a8" stroke="${o}" stroke-width="0.4"/>
     </svg>
   `;
 }
 
 function renderDogSvg(c, isNight, isAwake = false, isResearching = false) {
+  const o = c.outline || c.dark;
   return `
     <svg viewBox="0 0 96 50" class="dog-svg" xmlns="http://www.w3.org/2000/svg">
       <!-- Zemin Gölgesi -->
-      <ellipse cx="48" cy="46" rx="41" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+      <ellipse cx="48" cy="46" rx="42" ry="4" fill="rgba(0,0,0,0.28)"/>
 
-      <!-- Sevimli Kuyruk -->
-      <path class="dog-tail" d="M 76 40 C 87 36 94 27 89 19 C 86 15 80 18 82 26" stroke="${c.primary}" stroke-width="7.2" stroke-linecap="round" fill="none"/>
-      <path class="dog-tail" d="M 88 19 C 87 17 82 18 82 23" stroke="${c.belly}" stroke-width="5.2" stroke-linecap="round" fill="none" opacity="0.95"/>
+      <!-- Kuyruk (Neşeyle kalkan köpek kuyruğu) -->
+      <path class="dog-tail" d="M 75 40 C 87 36 94 26 89 18 C 85 14 79 17 81 25" stroke="${o}" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path class="dog-tail" d="M 75 40 C 87 36 94 26 89 18 C 85 14 79 17 81 25" stroke="${c.primary}" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path class="dog-tail" d="M 87 18 C 86 16 81 17 81 22" stroke="${c.belly}" stroke-width="4.5" stroke-linecap="round" fill="none"/>
 
-      <!-- Gövde -->
-      <path d="M 24 44 C 18 36 22 22 38 17 C 56 12 76 15 84 27 C 89 35 87 44 80 45 C 66 46 36 46 24 44 Z" fill="${c.primary}"/>
+      <!-- Gövde Silueti (Belirgin Kontur Çizgili) -->
+      <path d="M 23 44 C 17 35 22 21 38 17 C 56 12 76 14 85 27 C 90 35 88 44 81 45 C 67 46 35 46 23 44 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
 
-      <!-- Sırt Lekesi -->
-      <ellipse cx="68" cy="24" rx="10.5" ry="7" fill="${c.dark}" opacity="0.35"/>
+      <!-- Sırt Lekesi & Kalça Çizgisi -->
+      <ellipse cx="68" cy="24" rx="10.5" ry="7" fill="${c.dark}" opacity="0.4"/>
+      <path d="M 68 22 C 78 28 80 39 77 44" stroke="${o}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.6"/>
 
       <!-- Göbek -->
-      <ellipse class="dog-belly" cx="54" cy="35" rx="16" ry="9.5" fill="${c.belly}" opacity="0.88"/>
+      <ellipse class="dog-belly" cx="54" cy="35" rx="15.5" ry="9.5" fill="${c.belly}" stroke="${o}" stroke-width="1.2" opacity="0.95"/>
 
       <!-- Kafa -->
-      <circle cx="28" cy="30" r="14.5" fill="${c.primary}"/>
+      <circle cx="28" cy="29" r="14" fill="${c.primary}" stroke="${o}" stroke-width="1.8"/>
 
-      <!-- Mavi Köpek Tasması & Madalyon -->
-      <path d="M 20 37 Q 28 41 36 37" stroke="#3b7cc4" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-      <circle cx="28" cy="40" r="1.8" fill="#e0a94e" stroke="#9e7330" stroke-width="0.5"/>
+      <!-- Mavi Köpek Tasması & Altın Madalyon -->
+      <path d="M 19 36 Q 28 41 37 36" stroke="#3b7cc4" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <circle cx="28" cy="39.5" r="2" fill="#e0a94e" stroke="${o}" stroke-width="0.8"/>
 
       <!-- Alın Deseni -->
-      <path d="M 28 16 Q 28 26 23 30 Q 28 29 33 30 Z" fill="${c.belly}" opacity="0.8"/>
+      <path d="M 28 15 Q 28 25 23 29 Q 28 28 33 29 Z" fill="${c.belly}" stroke="${o}" stroke-width="1" opacity="0.9"/>
 
       <!-- Sol Kulak (Sarkan) -->
-      <path d="M 17 21 C 12 21 11 31 16 34 C 19 36 21 28 21 23 Z" fill="${c.dark}"/>
+      <path d="M 17 20 C 11 20 10 30 15 34 C 18 36 21 28 21 22 Z" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
 
       <!-- Sağ Kulak (Sarkan & Seğiren) -->
-      <path class="dog-ear-flop" d="M 36 20 C 43 20 44 30 39 34 C 36 36 34 27 34 22 Z" fill="${c.dark}"/>
+      <path class="dog-ear-flop" d="M 36 19 C 43 19 44 29 39 34 C 36 36 34 26 34 21 Z" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
 
       ${isNight ? renderNightcap() : ""}
 
       <!-- Allıklar -->
-      <ellipse cx="19" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
-      <ellipse cx="37" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
+      <ellipse cx="19" cy="33" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
+      <ellipse cx="37" cy="33" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
 
       <!-- Gözler: Uyanık vs Uyuyan -->
       ${isAwake ? `
         <g class="pet-eyes-awake">
-          <ellipse cx="23" cy="29.5" rx="3.6" ry="4.3" fill="#221711"/>
-          <circle cx="22" cy="28.2" r="1.4" fill="#ffffff"/>
-          <circle cx="24.3" cy="31" r="0.7" fill="#ffffff"/>
-          <ellipse cx="33.5" cy="29.5" rx="3.6" ry="4.3" fill="#221711"/>
-          <circle cx="32.5" cy="28.2" r="1.4" fill="#ffffff"/>
-          <circle cx="34.8" cy="31" r="0.7" fill="#ffffff"/>
+          <ellipse cx="23" cy="28.5" rx="3.6" ry="4.3" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="22" cy="27.2" r="1.4" fill="#ffffff"/>
+          <circle cx="24.3" cy="30" r="0.7" fill="#ffffff"/>
+          <ellipse cx="33.5" cy="28.5" rx="3.6" ry="4.3" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="32.5" cy="27.2" r="1.4" fill="#ffffff"/>
+          <circle cx="34.8" cy="30" r="0.7" fill="#ffffff"/>
         </g>
       ` : `
-        <path d="M 20 29.5 Q 23.5 32 26.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
-        <path d="M 30 29.5 Q 33.5 32 36.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+        <path d="M 20 28.5 Q 23.5 31.5 26.5 28.5" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M 29.5 28.5 Q 33 31.5 36 28.5" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
       `}
 
       ${isResearching ? `
         <g class="pet-glasses">
-          <circle class="pet-glasses-frame" cx="23" cy="29.5" r="4.8"/>
-          <circle class="pet-glasses-frame" cx="33.5" cy="29.5" r="4.8"/>
-          <path class="pet-glasses-bridge" d="M 27.8 29.5 Q 28.2 28.5 28.7 29.5"/>
+          <circle class="pet-glasses-frame" cx="23" cy="28.5" r="4.8"/>
+          <circle class="pet-glasses-frame" cx="33.5" cy="28.5" r="4.8"/>
+          <path class="pet-glasses-bridge" d="M 27.8 28.5 Q 28.2 27.5 28.7 28.5"/>
         </g>
       ` : ""}
 
       <!-- Burun ve Ağız / Dil -->
-      <ellipse cx="28.5" cy="33.8" rx="2.5" ry="1.7" fill="#221711"/>
-      <circle cx="27.8" cy="33.3" r="0.7" fill="#ffffff" opacity="0.85"/>
+      <ellipse cx="28.5" cy="33" rx="2.6" ry="1.8" fill="#1b120c" stroke="${o}" stroke-width="0.6"/>
+      <circle cx="27.8" cy="32.5" r="0.7" fill="#ffffff" opacity="0.9"/>
       ${isAwake ? `
-        <path d="M 26.8 35.5 Q 28.5 37.2 30.2 35.5" stroke="#221711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-        <path d="M 27.2 36.2 C 27.2 39 29.8 39 29.8 36.2 Z" fill="#f88e9e" stroke="#221711" stroke-width="0.6"/>
+        <path d="M 26.5 34.8 Q 28.5 36.5 30.5 34.8" stroke="${o}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M 27.2 35.5 C 27.2 38.5 29.8 38.5 29.8 35.5 Z" fill="#f88e9e" stroke="${o}" stroke-width="0.8"/>
       ` : `
-        <path d="M 26.8 35.5 Q 28.5 37 30.2 35.5" stroke="#221711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <path d="M 26.5 34.8 Q 28.5 36.5 30.5 34.8" stroke="${o}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
       `}
 
       <!-- Patiler -->
-      <ellipse cx="23" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
-      <ellipse cx="34" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
-      <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
-      <ellipse cx="34" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
-      <!-- Pati Pati Noktaları -->
-      <circle cx="21" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
-      <circle cx="23" cy="41.8" r="0.7" fill="#d48888" opacity="0.8"/>
-      <circle cx="25" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
-      <circle cx="32" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
-      <circle cx="34" cy="41.8" r="0.7" fill="#d48888" opacity="0.8"/>
-      <circle cx="36" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
+      <ellipse cx="23" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}" stroke="${o}" stroke-width="1.6"/>
+      <ellipse cx="34" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}" stroke="${o}" stroke-width="1.6"/>
+      <ellipse cx="23" cy="44" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <ellipse cx="34" cy="44" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <circle cx="21" cy="42.5" r="0.8" fill="#d48888" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="23" cy="41.8" r="0.8" fill="#d48888" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="25" cy="42.5" r="0.8" fill="#d48888" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="32" cy="42.5" r="0.8" fill="#d48888" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="34" cy="41.8" r="0.8" fill="#d48888" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="36" cy="42.5" r="0.8" fill="#d48888" stroke="${o}" stroke-width="0.4"/>
     </svg>
   `;
 }
 
 function renderRabbitSvg(c, isNight, isAwake = false, isResearching = false) {
+  const o = c.outline || c.dark;
   return `
     <svg viewBox="0 0 96 50" class="rabbit-svg" xmlns="http://www.w3.org/2000/svg">
       <!-- Zemin Gölgesi -->
-      <ellipse cx="48" cy="46" rx="39" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+      <ellipse cx="48" cy="46" rx="40" ry="4" fill="rgba(0,0,0,0.28)"/>
 
       <!-- Ponpon Kuyruk -->
-      <ellipse class="rabbit-tail" cx="80" cy="36" rx="6.8" ry="6.2" fill="${c.belly}" stroke="${c.dark}" stroke-width="0.5"/>
+      <ellipse class="rabbit-tail" cx="80" cy="35" rx="7.2" ry="6.5" fill="${c.belly}" stroke="${o}" stroke-width="1.6"/>
 
       <!-- Gövde -->
-      <path d="M 22 43 C 16 35 20 22 36 17 C 54 11 74 16 82 28 C 87 36 85 44 78 45 C 64 46 34 46 22 43 Z" fill="${c.primary}"/>
+      <path d="M 22 43 C 16 34 20 21 36 16 C 54 10 74 15 83 27 C 88 35 86 44 79 45 C 65 46 34 46 22 43 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
 
-      <!-- Sırt Benek/Gölge -->
-      <ellipse cx="64" cy="23" rx="8.5" ry="5.8" fill="${c.dark}" opacity="0.3"/>
+      <!-- Kalça Çizgisi -->
+      <path d="M 67 22 C 77 27 79 38 76 44" stroke="${o}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.6"/>
 
       <!-- Göbek -->
-      <ellipse class="rabbit-belly" cx="52" cy="36" rx="16" ry="9" fill="${c.belly}" opacity="0.88"/>
+      <ellipse class="rabbit-belly" cx="52" cy="36" rx="15.5" ry="9" fill="${c.belly}" stroke="${o}" stroke-width="1.2" opacity="0.95"/>
 
       <!-- Kafa -->
-      <circle cx="27" cy="31" r="13.5" fill="${c.primary}"/>
+      <circle cx="27" cy="30" r="13.5" fill="${c.primary}" stroke="${o}" stroke-width="1.8"/>
 
       <!-- Arka Kulak -->
-      <path d="M 28 20 C 34 7 52 6 60 13 C 54 16 40 18 32 24 Z" fill="${c.primary}"/>
-      <path d="M 33 19 C 39 9 50 9 56 14 C 50 16 40 17 35 21 Z" fill="${c.innerEar || '#fde8ec'}"/>
+      <path d="M 28 19 C 34 6 52 5 60 12 C 54 15 40 17 32 23 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M 33 18 C 39 8 50 8 56 13 C 50 15 40 16 35 20 Z" fill="${c.innerEar || '#fde8ec'}" stroke="${c.dark}" stroke-width="0.8"/>
 
       <!-- Ön Kulak (Seğiren) -->
       <g class="rabbit-ear-twitch">
-        <path d="M 25 18 C 30 4 48 3 57 10 C 51 14 37 16 29 22 Z" fill="${c.primary}"/>
-        <path d="M 30 17 C 35 6 46 6 53 11 C 47 14 37 15 32 19 Z" fill="${c.innerEar || '#fde8ec'}"/>
+        <path d="M 25 17 C 30 3 48 2 57 9 C 51 13 37 15 29 21 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M 30 16 C 35 5 46 5 53 10 C 47 13 37 14 32 18 Z" fill="${c.innerEar || '#fde8ec'}" stroke="${c.dark}" stroke-width="0.8"/>
       </g>
 
       ${isNight ? renderNightcap() : ""}
 
       <!-- Allıklar -->
-      <ellipse cx="19" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
-      <ellipse cx="35" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
+      <ellipse cx="19" cy="33.5" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
+      <ellipse cx="35" cy="33.5" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
 
       <!-- Gözler: Uyanık vs Uyuyan -->
       ${isAwake ? `
         <g class="pet-eyes-awake">
-          <ellipse cx="22.5" cy="29.5" rx="3.6" ry="4.3" fill="#28171d"/>
-          <circle cx="21.5" cy="28.2" r="1.4" fill="#ffffff"/>
-          <circle cx="23.8" cy="31" r="0.7" fill="#ffffff"/>
-          <ellipse cx="32.5" cy="29.5" rx="3.6" ry="4.3" fill="#28171d"/>
-          <circle cx="31.5" cy="28.2" r="1.4" fill="#ffffff"/>
-          <circle cx="33.8" cy="31" r="0.7" fill="#ffffff"/>
+          <ellipse cx="22.5" cy="28.5" rx="3.6" ry="4.3" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="21.5" cy="27.2" r="1.4" fill="#ffffff"/>
+          <circle cx="23.8" cy="30" r="0.7" fill="#ffffff"/>
+          <ellipse cx="32.5" cy="28.5" rx="3.6" ry="4.3" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="31.5" cy="27.2" r="1.4" fill="#ffffff"/>
+          <circle cx="33.8" cy="30" r="0.7" fill="#ffffff"/>
         </g>
       ` : `
-        <path d="M 20 29.5 Q 23.5 32.5 26.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <path d="M 29 29.5 Q 32.5 32.5 35.5 29.5" stroke="#251a14" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M 20 28.5 Q 23.5 31.5 26.5 28.5" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M 29 28.5 Q 32.5 31.5 35.5 28.5" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
       `}
 
       ${isResearching ? `
         <g class="pet-glasses">
-          <circle class="pet-glasses-frame" cx="22.5" cy="29.5" r="4.8"/>
-          <circle class="pet-glasses-frame" cx="32.5" cy="29.5" r="4.8"/>
-          <path class="pet-glasses-bridge" d="M 27.3 29.5 Q 27.5 28.5 27.7 29.5"/>
+          <circle class="pet-glasses-frame" cx="22.5" cy="28.5" r="4.8"/>
+          <circle class="pet-glasses-frame" cx="32.5" cy="28.5" r="4.8"/>
+          <path class="pet-glasses-bridge" d="M 27.3 28.5 Q 27.5 27.5 27.7 28.5"/>
         </g>
       ` : ""}
 
       <!-- Tavşan Burnu & Bıyıklar -->
       <g class="rabbit-nose">
-        <polygon points="26.5,33.5 29.5,33.5 28,35" fill="#f48ca2"/>
-        <path d="M 28 35 L 28 36.5 M 28 36.5 Q 26.5 37.8 25 36.5 M 28 36.5 Q 29.5 37.8 31 36.5" stroke="#251a14" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+        <polygon points="26.5,32.5 29.5,32.5 28,34" fill="#f48ca2" stroke="${o}" stroke-width="0.8"/>
+        <path d="M 28 34 L 28 35.5 M 28 35.5 Q 26.5 36.8 25 35.5 M 28 35.5 Q 29.5 36.8 31 35.5" stroke="${o}" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       </g>
-      <line x1="12" y1="33" x2="20" y2="34.5" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
-      <line x1="12" y1="36" x2="20" y2="36" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
-      <line x1="35" y1="34.5" x2="43" y2="33" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
-      <line x1="35" y1="36" x2="43" y2="36" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
+      <line x1="11" y1="32" x2="19" y2="33.5" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
+      <line x1="11" y1="35" x2="19" y2="35" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
+      <line x1="35" y1="33.5" x2="43" y2="32" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
+      <line x1="35" y1="35" x2="43" y2="35" stroke="${o}" stroke-width="1.1" stroke-linecap="round" opacity="0.6"/>
 
       <!-- Ön Patiler -->
-      <ellipse cx="23" cy="43.5" rx="5.5" ry="3.2" fill="${c.belly}"/>
-      <ellipse cx="32" cy="43.5" rx="5.5" ry="3.2" fill="${c.belly}"/>
-      <circle cx="21" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
-      <circle cx="23" cy="42.3" r="0.6" fill="#f48ca2" opacity="0.7"/>
-      <circle cx="25" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
-      <circle cx="30" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
-      <circle cx="32" cy="42.3" r="0.6" fill="#f48ca2" opacity="0.7"/>
-      <circle cx="34" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
+      <ellipse cx="23" cy="43.5" rx="5.5" ry="3.2" fill="${c.belly}" stroke="${o}" stroke-width="1.5"/>
+      <ellipse cx="32" cy="43.5" rx="5.5" ry="3.2" fill="${c.belly}" stroke="${o}" stroke-width="1.5"/>
+      <circle cx="21" cy="43" r="0.7" fill="#f48ca2" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="23" cy="42.3" r="0.7" fill="#f48ca2" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="25" cy="43" r="0.7" fill="#f48ca2" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="30" cy="43" r="0.7" fill="#f48ca2" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="32" cy="42.3" r="0.7" fill="#f48ca2" stroke="${o}" stroke-width="0.4"/>
+      <circle cx="34" cy="43" r="0.7" fill="#f48ca2" stroke="${o}" stroke-width="0.4"/>
     </svg>
   `;
 }
 
 function renderFoxSvg(c, isNight, isAwake = false, isResearching = false) {
+  const o = c.outline || c.dark;
   return `
     <svg viewBox="0 0 96 50" class="fox-svg" xmlns="http://www.w3.org/2000/svg">
       <!-- Zemin Gölgesi -->
-      <ellipse cx="48" cy="46" rx="41" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+      <ellipse cx="48" cy="46" rx="42" ry="4" fill="rgba(0,0,0,0.28)"/>
 
-      <!-- Kıvrılmış Tilki Gövdesi -->
-      <path d="M 22 43 C 17 34 20 20 38 16 C 56 12 76 15 84 26 C 90 35 88 44 82 45 C 68 46 34 46 22 43 Z" fill="${c.primary}"/>
+      <!-- Kıvrılmış Tilki Gövdesi (Net Konturlu) -->
+      <path d="M 22 43 C 17 33 20 19 38 15 C 56 11 76 14 85 25 C 91 34 89 44 82 45 C 68 46 34 46 22 43 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
+
+      <!-- Kalça Çizgisi -->
+      <path d="M 68 21 C 78 27 80 38 77 44" stroke="${o}" stroke-width="1.6" stroke-linecap="round" fill="none" opacity="0.6"/>
 
       <!-- Göbek -->
-      <ellipse class="fox-belly" cx="52" cy="35" rx="15" ry="9" fill="${c.belly}" opacity="0.82"/>
+      <ellipse class="fox-belly" cx="52" cy="35" rx="15" ry="9" fill="${c.belly}" stroke="${o}" stroke-width="1.2" opacity="0.95"/>
 
-      <!-- Kocaman Kabarık Kuyruk (Beyaz Uçlu) -->
+      <!-- Kocaman Kabarık Kuyruk (Beyaz Uçlu, Net Hatlı) -->
       <g class="fox-tail">
-        <path d="M 76 38 C 92 34 96 16 82 14 C 70 12 50 18 36 28 C 30 33 34 40 44 42 C 58 45 70 42 76 38 Z" fill="${c.primary}"/>
-        <path d="M 44 26 C 36 30 34 38 42 41 C 48 42 54 38 52 32 C 50 27 46 26 44 26 Z" fill="${c.belly}"/>
+        <path d="M 76 38 C 93 34 97 15 82 13 C 69 11 49 17 35 27 C 29 32 33 39 43 41 C 57 44 70 42 76 38 Z" fill="${c.primary}" stroke="${o}" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M 43 25 C 35 29 33 37 41 40 C 47 41 53 37 51 31 C 49 26 45 25 43 25 Z" fill="${c.belly}" stroke="${o}" stroke-width="1.4" stroke-linejoin="round"/>
       </g>
 
-      <!-- Kafa & Yanak Beyazlıkları -->
-      <circle cx="28" cy="29" r="13" fill="${c.primary}"/>
-      <path d="M 17 30 Q 28 39 35 30 Q 28 35 17 30 Z" fill="${c.belly}"/>
+      <!-- Kafa & Yanak Beyazlıkları (Maske) -->
+      <circle cx="28" cy="28.5" r="13" fill="${c.primary}" stroke="${o}" stroke-width="1.8"/>
+      <polygon points="15,31 10,33 15,36" fill="${c.primary}" stroke="${o}" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M 16 29 Q 28 38 36 29 Q 28 34 16 29 Z" fill="${c.belly}" stroke="${o}" stroke-width="1"/>
 
       <!-- Sivri Kulaklar -->
-      <polygon points="15,20 16,5 25,16" fill="${c.dark}"/>
-      <polygon points="17,18 18,8 23,15" fill="${c.innerEar || '#fdd9c4'}"/>
+      <polygon points="15,19 16,4 25,15" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+      <polygon points="17,17 18,7 23,14" fill="${c.innerEar || '#fdd9c4'}" stroke="${o}" stroke-width="0.8"/>
       <g class="fox-ear-twitch">
-        <polygon points="27,15 34,4 39,17" fill="${c.dark}"/>
-        <polygon points="29,14 34,7 37,16" fill="${c.innerEar || '#fdd9c4'}"/>
+        <polygon points="27,14 34,3 39,16" fill="${c.dark}" stroke="${o}" stroke-width="1.6" stroke-linejoin="round"/>
+        <polygon points="29,13 34,6 37,15" fill="${c.innerEar || '#fdd9c4'}" stroke="${o}" stroke-width="0.8"/>
       </g>
 
       ${isNight ? renderNightcap() : ""}
 
       <!-- Allıklar -->
-      <ellipse cx="20" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
-      <ellipse cx="36" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
+      <ellipse cx="20" cy="32" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
+      <ellipse cx="36" cy="32" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
 
       <!-- Gözler: Uyanık vs Uyuyan -->
       ${isAwake ? `
         <g class="pet-eyes-awake">
-          <ellipse cx="23.5" cy="28.5" rx="3.3" ry="3.9" fill="#1b120c"/>
-          <circle cx="22.5" cy="27.4" r="1.3" fill="#ffffff"/>
-          <circle cx="24.6" cy="29.8" r="0.6" fill="#ffffff"/>
-          <ellipse cx="32.5" cy="28.5" rx="3.3" ry="3.9" fill="#1b120c"/>
-          <circle cx="31.5" cy="27.4" r="1.3" fill="#ffffff"/>
-          <circle cx="33.6" cy="29.8" r="0.6" fill="#ffffff"/>
+          <ellipse cx="23.5" cy="28" rx="3.3" ry="3.9" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="22.5" cy="26.9" r="1.3" fill="#ffffff"/>
+          <circle cx="24.6" cy="29.3" r="0.6" fill="#ffffff"/>
+          <ellipse cx="32.5" cy="28" rx="3.3" ry="3.9" fill="#1b120c" stroke="${o}" stroke-width="0.5"/>
+          <circle cx="31.5" cy="26.9" r="1.3" fill="#ffffff"/>
+          <circle cx="33.6" cy="29.3" r="0.6" fill="#ffffff"/>
         </g>
       ` : `
-        <path d="M 21 28.5 Q 24.5 31.5 27.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-        <path d="M 29.5 28.5 Q 32.5 31.5 35.5 28.5" stroke="#20150e" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+        <path d="M 21 28 Q 24.5 31 27.5 28" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+        <path d="M 29.5 28 Q 32.5 31 35.5 28" stroke="${o}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
       `}
 
       ${isResearching ? `
         <g class="pet-glasses">
-          <circle class="pet-glasses-frame" cx="23.5" cy="28.5" r="4.6"/>
-          <circle class="pet-glasses-frame" cx="32.5" cy="28.5" r="4.6"/>
-          <path class="pet-glasses-bridge" d="M 28.1 28.5 Q 28 27.5 27.9 28.5"/>
+          <circle class="pet-glasses-frame" cx="23.5" cy="28" r="4.6"/>
+          <circle class="pet-glasses-frame" cx="32.5" cy="28" r="4.6"/>
+          <path class="pet-glasses-bridge" d="M 28.1 28 Q 28 27 27.9 28"/>
         </g>
       ` : ""}
 
-      <!-- Sivri Burun & Patiler -->
-      <ellipse cx="27.5" cy="33.5" rx="1.9" ry="1.4" fill="#1b120c"/>
-      <ellipse cx="22" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
-      <ellipse cx="30" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
+      <!-- Sivri Burun & Siyah Çorap Patiler -->
+      <polygon points="26.5,32 29.5,32 28,34" fill="#1b120c" stroke="${o}" stroke-width="0.8"/>
+      <ellipse cx="22" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}" stroke="${o}" stroke-width="1.6"/>
+      <ellipse cx="30" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}" stroke="${o}" stroke-width="1.6"/>
     </svg>
   `;
 }

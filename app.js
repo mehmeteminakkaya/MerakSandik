@@ -2178,23 +2178,46 @@ function wakeUpPet(durationMs = 15000) {
 function renderCatSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="cat-svg" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
-      <path class="cat-tail" d="M 78 40 C 90 38 94 24 86 17 C 80 12 73 17 76 26" stroke="${c.primary}" stroke-width="6.5" stroke-linecap="round" fill="none"/>
-      <path class="cat-tail" d="M 85 17 C 83 14 77 16 77 22" stroke="${c.belly}" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.85"/>
+      <!-- Zemin Gölgesi -->
+      <ellipse cx="48" cy="46" rx="41" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Kuyruk (arkada kıvrılmış zarif kedi kuyruğu) -->
+      <path class="cat-tail" d="M 78 40 C 91 38 95 23 86 16 C 79 11 73 17 76 26" stroke="${c.primary}" stroke-width="6.8" stroke-linecap="round" fill="none"/>
+      <path class="cat-tail" d="M 85 16 C 83 13 77 15 77 21" stroke="${c.belly}" stroke-width="5.2" stroke-linecap="round" fill="none" opacity="0.9"/>
+
+      <!-- Gövde -->
       <path class="cat-body-torso" d="M 22 44 C 18 36 20 22 36 16 C 54 10 76 14 84 26 C 90 34 88 44 82 45 C 68 46 34 46 22 44 Z" fill="${c.primary}"/>
+
+      <!-- Sırt Çizgileri / Desenler -->
       <path d="M 50 14 Q 48 21 46 25" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
       <path d="M 60 15 Q 58 22 56 27" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
       <path d="M 70 18 Q 68 25 65 29" stroke="${c.dark}" stroke-width="2.2" stroke-linecap="round" opacity="0.45"/>
-      <ellipse class="cat-belly" cx="54" cy="36" rx="17" ry="9.5" fill="${c.belly}" opacity="0.85"/>
+
+      <!-- Göbek (Nefes alan yumuşak karın) -->
+      <ellipse class="cat-belly" cx="54" cy="36" rx="17" ry="9.5" fill="${c.belly}" opacity="0.88"/>
+
+      <!-- Kafa -->
       <circle class="cat-head" cx="28" cy="30" r="14" fill="${c.primary}"/>
-      <polygon points="16,22 18,8 26,18" fill="${c.primary}"/>
-      <polygon points="18,20 19,11 24,17" fill="${c.innerEar || '#f9c0a8'}"/>
-      <polygon class="cat-ear-twitch" points="29,17 35,7 41,19" fill="${c.primary}"/>
-      <polygon class="cat-ear-twitch" points="31,16 35,10 39,18" fill="${c.innerEar || '#f9c0a8'}"/>
+
+      <!-- Sevimli Kırmızı Tasma & Altın Çan -->
+      <path d="M 20 37 Q 28 41 36 37" stroke="#c44747" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <circle cx="28" cy="40" r="1.8" fill="#e0a94e" stroke="#9e7330" stroke-width="0.5"/>
+
+      <!-- Kulaklar -->
+      <polygon points="16,22 17,7 26,17" fill="${c.primary}"/>
+      <polygon points="18,19 18,10 24,16" fill="${c.innerEar || '#f9c0a8'}"/>
+
+      <polygon class="cat-ear-twitch" points="29,16 36,6 42,18" fill="${c.primary}"/>
+      <polygon class="cat-ear-twitch" points="31,15 36,9 40,17" fill="${c.innerEar || '#f9c0a8'}"/>
+
       ${isNight ? renderNightcap() : ""}
+
+      <!-- Alın Çizgileri -->
       <path d="M 28 18 L 28 22" stroke="${c.dark}" stroke-width="1.6" stroke-linecap="round" opacity="0.45"/>
       <path d="M 24 19 L 25 22" stroke="${c.dark}" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
       <path d="M 32 19 L 31 22" stroke="${c.dark}" stroke-width="1.3" stroke-linecap="round" opacity="0.45"/>
+
+      <!-- Yanak Allıkları -->
       <ellipse cx="20" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
       <ellipse cx="37" cy="33.5" rx="3.2" ry="2" fill="${c.blush}" opacity="0.55"/>
 
@@ -2221,16 +2244,28 @@ function renderCatSvg(c, isNight, isAwake = false, isResearching = false) {
         </g>
       ` : ""}
 
+      <!-- Pembe Burun & Ağız -->
       <ellipse cx="28.5" cy="33.8" rx="2" ry="1.3" fill="#f2907a"/>
       <path d="M 26.5 35.2 Q 28.5 37 30.5 35.2" stroke="#2c1a12" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+
+      <!-- Bıyıklar -->
       <line x1="12" y1="32" x2="20" y2="34" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
       <line x1="12" y1="35" x2="20" y2="35.5" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
       <line x1="37" y1="34" x2="45" y2="32" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
       <line x1="37" y1="35.5" x2="45" y2="35" stroke="#2c1a12" stroke-width="0.9" stroke-linecap="round" opacity="0.5"/>
-      <ellipse cx="24" cy="43.5" rx="6" ry="3.5" fill="${c.primary}"/>
+
+      <!-- Ön Patiler ve Sevimli Patiler -->
+      <ellipse cx="23" cy="43.5" rx="6" ry="3.5" fill="${c.primary}"/>
       <ellipse cx="34" cy="43.5" rx="6" ry="3.5" fill="${c.primary}"/>
       <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
-      <ellipse cx="33" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <ellipse cx="34" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <!-- Pati Pati Noktaları -->
+      <circle cx="21" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
+      <circle cx="23" cy="41.8" r="0.7" fill="#f9c0a8" opacity="0.8"/>
+      <circle cx="25" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
+      <circle cx="32" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
+      <circle cx="34" cy="41.8" r="0.7" fill="#f9c0a8" opacity="0.8"/>
+      <circle cx="36" cy="42.5" r="0.7" fill="#f9c0a8" opacity="0.8"/>
     </svg>
   `;
 }
@@ -2238,29 +2273,53 @@ function renderCatSvg(c, isNight, isAwake = false, isResearching = false) {
 function renderDogSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="dog-svg" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
-      <path class="dog-tail" d="M 76 40 C 86 36 93 28 89 20 C 86 16 80 19 82 27" stroke="${c.primary}" stroke-width="7" stroke-linecap="round" fill="none"/>
-      <path class="dog-tail" d="M 88 20 C 87 18 82 19 82 24" stroke="${c.belly}" stroke-width="5" stroke-linecap="round" fill="none" opacity="0.9"/>
+      <!-- Zemin Gölgesi -->
+      <ellipse cx="48" cy="46" rx="41" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Sevimli Kuyruk -->
+      <path class="dog-tail" d="M 76 40 C 87 36 94 27 89 19 C 86 15 80 18 82 26" stroke="${c.primary}" stroke-width="7.2" stroke-linecap="round" fill="none"/>
+      <path class="dog-tail" d="M 88 19 C 87 17 82 18 82 23" stroke="${c.belly}" stroke-width="5.2" stroke-linecap="round" fill="none" opacity="0.95"/>
+
+      <!-- Gövde -->
       <path d="M 24 44 C 18 36 22 22 38 17 C 56 12 76 15 84 27 C 89 35 87 44 80 45 C 66 46 36 46 24 44 Z" fill="${c.primary}"/>
-      <ellipse cx="68" cy="24" rx="10" ry="6.5" fill="${c.dark}" opacity="0.35"/>
-      <ellipse class="dog-belly" cx="54" cy="35" rx="16" ry="9.5" fill="${c.belly}" opacity="0.85"/>
+
+      <!-- Sırt Lekesi -->
+      <ellipse cx="68" cy="24" rx="10.5" ry="7" fill="${c.dark}" opacity="0.35"/>
+
+      <!-- Göbek -->
+      <ellipse class="dog-belly" cx="54" cy="35" rx="16" ry="9.5" fill="${c.belly}" opacity="0.88"/>
+
+      <!-- Kafa -->
       <circle cx="28" cy="30" r="14.5" fill="${c.primary}"/>
+
+      <!-- Mavi Köpek Tasması & Madalyon -->
+      <path d="M 20 37 Q 28 41 36 37" stroke="#3b7cc4" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <circle cx="28" cy="40" r="1.8" fill="#e0a94e" stroke="#9e7330" stroke-width="0.5"/>
+
+      <!-- Alın Deseni -->
       <path d="M 28 16 Q 28 26 23 30 Q 28 29 33 30 Z" fill="${c.belly}" opacity="0.8"/>
+
+      <!-- Sol Kulak (Sarkan) -->
       <path d="M 17 21 C 12 21 11 31 16 34 C 19 36 21 28 21 23 Z" fill="${c.dark}"/>
+
+      <!-- Sağ Kulak (Sarkan & Seğiren) -->
       <path class="dog-ear-flop" d="M 36 20 C 43 20 44 30 39 34 C 36 36 34 27 34 22 Z" fill="${c.dark}"/>
+
       ${isNight ? renderNightcap() : ""}
+
+      <!-- Allıklar -->
       <ellipse cx="19" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
       <ellipse cx="37" cy="34" rx="3.2" ry="2" fill="${c.blush}" opacity="0.6"/>
 
       <!-- Gözler: Uyanık vs Uyuyan -->
       ${isAwake ? `
         <g class="pet-eyes-awake">
-          <ellipse cx="23" cy="29.5" rx="3.5" ry="4.2" fill="#221711"/>
+          <ellipse cx="23" cy="29.5" rx="3.6" ry="4.3" fill="#221711"/>
           <circle cx="22" cy="28.2" r="1.4" fill="#ffffff"/>
-          <circle cx="24.2" cy="31" r="0.7" fill="#ffffff"/>
-          <ellipse cx="33.5" cy="29.5" rx="3.5" ry="4.2" fill="#221711"/>
+          <circle cx="24.3" cy="31" r="0.7" fill="#ffffff"/>
+          <ellipse cx="33.5" cy="29.5" rx="3.6" ry="4.3" fill="#221711"/>
           <circle cx="32.5" cy="28.2" r="1.4" fill="#ffffff"/>
-          <circle cx="34.7" cy="31" r="0.7" fill="#ffffff"/>
+          <circle cx="34.8" cy="31" r="0.7" fill="#ffffff"/>
         </g>
       ` : `
         <path d="M 20 29.5 Q 23.5 32 26.5 29.5" stroke="#221711" stroke-width="1.9" fill="none" stroke-linecap="round"/>
@@ -2275,18 +2334,28 @@ function renderDogSvg(c, isNight, isAwake = false, isResearching = false) {
         </g>
       ` : ""}
 
-      <ellipse cx="28.5" cy="33.8" rx="2.4" ry="1.6" fill="#221711"/>
-      <circle cx="27.8" cy="33.3" r="0.6" fill="#ffffff" opacity="0.8"/>
+      <!-- Burun ve Ağız / Dil -->
+      <ellipse cx="28.5" cy="33.8" rx="2.5" ry="1.7" fill="#221711"/>
+      <circle cx="27.8" cy="33.3" r="0.7" fill="#ffffff" opacity="0.85"/>
       ${isAwake ? `
-        <path d="M 27.5 35.8 Q 28.5 39.5 29.5 35.8" fill="#f88e9e" stroke="#221711" stroke-width="0.8"/>
+        <path d="M 26.8 35.5 Q 28.5 37.2 30.2 35.5" stroke="#221711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+        <path d="M 27.2 36.2 C 27.2 39 29.8 39 29.8 36.2 Z" fill="#f88e9e" stroke="#221711" stroke-width="0.6"/>
       ` : `
         <path d="M 26.8 35.5 Q 28.5 37 30.2 35.5" stroke="#221711" stroke-width="1.3" fill="none" stroke-linecap="round"/>
       `}
 
+      <!-- Patiler -->
       <ellipse cx="23" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
       <ellipse cx="34" cy="43.5" rx="6.5" ry="3.5" fill="${c.primary}"/>
       <ellipse cx="23" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
       <ellipse cx="34" cy="44.2" rx="2.5" ry="1.5" fill="${c.belly}"/>
+      <!-- Pati Pati Noktaları -->
+      <circle cx="21" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
+      <circle cx="23" cy="41.8" r="0.7" fill="#d48888" opacity="0.8"/>
+      <circle cx="25" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
+      <circle cx="32" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
+      <circle cx="34" cy="41.8" r="0.7" fill="#d48888" opacity="0.8"/>
+      <circle cx="36" cy="42.5" r="0.7" fill="#d48888" opacity="0.8"/>
     </svg>
   `;
 }
@@ -2294,29 +2363,47 @@ function renderDogSvg(c, isNight, isAwake = false, isResearching = false) {
 function renderRabbitSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="rabbit-svg" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="48" cy="46" rx="38" ry="3.5" fill="rgba(0,0,0,0.18)"/>
-      <ellipse class="rabbit-tail" cx="80" cy="36" rx="6.5" ry="6" fill="${c.belly}"/>
+      <!-- Zemin Gölgesi -->
+      <ellipse cx="48" cy="46" rx="39" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Ponpon Kuyruk -->
+      <ellipse class="rabbit-tail" cx="80" cy="36" rx="6.8" ry="6.2" fill="${c.belly}" stroke="${c.dark}" stroke-width="0.5"/>
+
+      <!-- Gövde -->
       <path d="M 22 43 C 16 35 20 22 36 17 C 54 11 74 16 82 28 C 87 36 85 44 78 45 C 64 46 34 46 22 43 Z" fill="${c.primary}"/>
-      <ellipse cx="64" cy="23" rx="8" ry="5.5" fill="${c.dark}" opacity="0.3"/>
-      <ellipse class="rabbit-belly" cx="52" cy="36" rx="16" ry="9" fill="${c.belly}" opacity="0.85"/>
+
+      <!-- Sırt Benek/Gölge -->
+      <ellipse cx="64" cy="23" rx="8.5" ry="5.8" fill="${c.dark}" opacity="0.3"/>
+
+      <!-- Göbek -->
+      <ellipse class="rabbit-belly" cx="52" cy="36" rx="16" ry="9" fill="${c.belly}" opacity="0.88"/>
+
+      <!-- Kafa -->
       <circle cx="27" cy="31" r="13.5" fill="${c.primary}"/>
-      <path d="M 28 20 C 34 8 52 7 60 14 C 54 17 40 18 32 24 Z" fill="${c.primary}"/>
-      <path d="M 33 19 C 39 10 50 10 56 15 C 50 17 40 17 35 21 Z" fill="${c.innerEar || '#fde8ec'}"/>
+
+      <!-- Arka Kulak -->
+      <path d="M 28 20 C 34 7 52 6 60 13 C 54 16 40 18 32 24 Z" fill="${c.primary}"/>
+      <path d="M 33 19 C 39 9 50 9 56 14 C 50 16 40 17 35 21 Z" fill="${c.innerEar || '#fde8ec'}"/>
+
+      <!-- Ön Kulak (Seğiren) -->
       <g class="rabbit-ear-twitch">
-        <path d="M 25 18 C 30 5 48 4 57 11 C 51 15 37 16 29 22 Z" fill="${c.primary}"/>
-        <path d="M 30 17 C 35 7 46 7 53 12 C 47 15 37 15 32 19 Z" fill="${c.innerEar || '#fde8ec'}"/>
+        <path d="M 25 18 C 30 4 48 3 57 10 C 51 14 37 16 29 22 Z" fill="${c.primary}"/>
+        <path d="M 30 17 C 35 6 46 6 53 11 C 47 14 37 15 32 19 Z" fill="${c.innerEar || '#fde8ec'}"/>
       </g>
+
       ${isNight ? renderNightcap() : ""}
+
+      <!-- Allıklar -->
       <ellipse cx="19" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
       <ellipse cx="35" cy="34" rx="3.5" ry="2.2" fill="${c.blush}" opacity="0.65"/>
 
       <!-- Gözler: Uyanık vs Uyuyan -->
       ${isAwake ? `
         <g class="pet-eyes-awake">
-          <ellipse cx="22.5" cy="29.5" rx="3.6" ry="4.2" fill="#28171d"/>
+          <ellipse cx="22.5" cy="29.5" rx="3.6" ry="4.3" fill="#28171d"/>
           <circle cx="21.5" cy="28.2" r="1.4" fill="#ffffff"/>
           <circle cx="23.8" cy="31" r="0.7" fill="#ffffff"/>
-          <ellipse cx="32.5" cy="29.5" rx="3.6" ry="4.2" fill="#28171d"/>
+          <ellipse cx="32.5" cy="29.5" rx="3.6" ry="4.3" fill="#28171d"/>
           <circle cx="31.5" cy="28.2" r="1.4" fill="#ffffff"/>
           <circle cx="33.8" cy="31" r="0.7" fill="#ffffff"/>
         </g>
@@ -2333,6 +2420,7 @@ function renderRabbitSvg(c, isNight, isAwake = false, isResearching = false) {
         </g>
       ` : ""}
 
+      <!-- Tavşan Burnu & Bıyıklar -->
       <g class="rabbit-nose">
         <polygon points="26.5,33.5 29.5,33.5 28,35" fill="#f48ca2"/>
         <path d="M 28 35 L 28 36.5 M 28 36.5 Q 26.5 37.8 25 36.5 M 28 36.5 Q 29.5 37.8 31 36.5" stroke="#251a14" stroke-width="1.2" fill="none" stroke-linecap="round"/>
@@ -2341,8 +2429,16 @@ function renderRabbitSvg(c, isNight, isAwake = false, isResearching = false) {
       <line x1="12" y1="36" x2="20" y2="36" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
       <line x1="35" y1="34.5" x2="43" y2="33" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
       <line x1="35" y1="36" x2="43" y2="36" stroke="#251a14" stroke-width="0.8" stroke-linecap="round" opacity="0.45"/>
-      <ellipse cx="23" cy="43.5" rx="5.5" ry="3" fill="${c.belly}"/>
-      <ellipse cx="32" cy="43.5" rx="5.5" ry="3" fill="${c.belly}"/>
+
+      <!-- Ön Patiler -->
+      <ellipse cx="23" cy="43.5" rx="5.5" ry="3.2" fill="${c.belly}"/>
+      <ellipse cx="32" cy="43.5" rx="5.5" ry="3.2" fill="${c.belly}"/>
+      <circle cx="21" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
+      <circle cx="23" cy="42.3" r="0.6" fill="#f48ca2" opacity="0.7"/>
+      <circle cx="25" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
+      <circle cx="30" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
+      <circle cx="32" cy="42.3" r="0.6" fill="#f48ca2" opacity="0.7"/>
+      <circle cx="34" cy="43" r="0.6" fill="#f48ca2" opacity="0.7"/>
     </svg>
   `;
 }
@@ -2350,32 +2446,46 @@ function renderRabbitSvg(c, isNight, isAwake = false, isResearching = false) {
 function renderFoxSvg(c, isNight, isAwake = false, isResearching = false) {
   return `
     <svg viewBox="0 0 96 50" class="fox-svg" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="48" cy="46" rx="40" ry="3.5" fill="rgba(0,0,0,0.18)"/>
+      <!-- Zemin Gölgesi -->
+      <ellipse cx="48" cy="46" rx="41" ry="3.8" fill="rgba(0,0,0,0.22)"/>
+
+      <!-- Kıvrılmış Tilki Gövdesi -->
       <path d="M 22 43 C 17 34 20 20 38 16 C 56 12 76 15 84 26 C 90 35 88 44 82 45 C 68 46 34 46 22 43 Z" fill="${c.primary}"/>
-      <ellipse class="fox-belly" cx="52" cy="35" rx="15" ry="9" fill="${c.belly}" opacity="0.8"/>
+
+      <!-- Göbek -->
+      <ellipse class="fox-belly" cx="52" cy="35" rx="15" ry="9" fill="${c.belly}" opacity="0.82"/>
+
+      <!-- Kocaman Kabarık Kuyruk (Beyaz Uçlu) -->
       <g class="fox-tail">
         <path d="M 76 38 C 92 34 96 16 82 14 C 70 12 50 18 36 28 C 30 33 34 40 44 42 C 58 45 70 42 76 38 Z" fill="${c.primary}"/>
         <path d="M 44 26 C 36 30 34 38 42 41 C 48 42 54 38 52 32 C 50 27 46 26 44 26 Z" fill="${c.belly}"/>
       </g>
+
+      <!-- Kafa & Yanak Beyazlıkları -->
       <circle cx="28" cy="29" r="13" fill="${c.primary}"/>
-      <path d="M 18 30 Q 27 38 34 30 Q 28 35 18 30 Z" fill="${c.belly}"/>
-      <polygon points="15,20 16,6 25,16" fill="${c.dark}"/>
-      <polygon points="17,18 18,9 23,15" fill="${c.innerEar || '#fdd9c4'}"/>
+      <path d="M 17 30 Q 28 39 35 30 Q 28 35 17 30 Z" fill="${c.belly}"/>
+
+      <!-- Sivri Kulaklar -->
+      <polygon points="15,20 16,5 25,16" fill="${c.dark}"/>
+      <polygon points="17,18 18,8 23,15" fill="${c.innerEar || '#fdd9c4'}"/>
       <g class="fox-ear-twitch">
-        <polygon points="27,15 34,5 39,17" fill="${c.dark}"/>
-        <polygon points="29,14 34,8 37,16" fill="${c.innerEar || '#fdd9c4'}"/>
+        <polygon points="27,15 34,4 39,17" fill="${c.dark}"/>
+        <polygon points="29,14 34,7 37,16" fill="${c.innerEar || '#fdd9c4'}"/>
       </g>
+
       ${isNight ? renderNightcap() : ""}
+
+      <!-- Allıklar -->
       <ellipse cx="20" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
       <ellipse cx="36" cy="32.5" rx="3" ry="1.8" fill="${c.blush}" opacity="0.6"/>
 
       <!-- Gözler: Uyanık vs Uyuyan -->
       ${isAwake ? `
         <g class="pet-eyes-awake">
-          <ellipse cx="23.5" cy="28.5" rx="3.2" ry="3.8" fill="#1b120c"/>
+          <ellipse cx="23.5" cy="28.5" rx="3.3" ry="3.9" fill="#1b120c"/>
           <circle cx="22.5" cy="27.4" r="1.3" fill="#ffffff"/>
           <circle cx="24.6" cy="29.8" r="0.6" fill="#ffffff"/>
-          <ellipse cx="32.5" cy="28.5" rx="3.2" ry="3.8" fill="#1b120c"/>
+          <ellipse cx="32.5" cy="28.5" rx="3.3" ry="3.9" fill="#1b120c"/>
           <circle cx="31.5" cy="27.4" r="1.3" fill="#ffffff"/>
           <circle cx="33.6" cy="29.8" r="0.6" fill="#ffffff"/>
         </g>
@@ -2392,7 +2502,8 @@ function renderFoxSvg(c, isNight, isAwake = false, isResearching = false) {
         </g>
       ` : ""}
 
-      <ellipse cx="27.5" cy="33.5" rx="1.8" ry="1.3" fill="#1b120c"/>
+      <!-- Sivri Burun & Patiler -->
+      <ellipse cx="27.5" cy="33.5" rx="1.9" ry="1.4" fill="#1b120c"/>
       <ellipse cx="22" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
       <ellipse cx="30" cy="43.5" rx="5.5" ry="3.5" fill="${c.dark}"/>
     </svg>
@@ -3089,10 +3200,10 @@ document.querySelectorAll(".pet-type-btn").forEach((btn) => {
     if (!PET_CONFIG[nextPet]) return;
     settings.petType = nextPet;
     settings.petColor = PET_CONFIG[nextPet].defaultColor;
-    sfx.playTick();
     saveSettings();
     syncPetSettingsUI();
     updateCozyPetDOM();
+    sfx.playPetInteraction("happy");
     const cfg = PET_CONFIG[nextPet];
     showToast(`${cfg.icon} Masa yoldaşın ${cfg.name} oldu!`);
   });
